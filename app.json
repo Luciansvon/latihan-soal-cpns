@@ -38,8 +38,18 @@
           "icon": "./assets/icon.png",
           "color": "#CC0001"
         }
-      ]
+      ],
+      "expo-updates"
     ],
+    "updates": {
+      "url": "https://u.expo.dev/your-eas-project-id",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "extra": {
       "eas": {
         "projectId": "your-eas-project-id"
