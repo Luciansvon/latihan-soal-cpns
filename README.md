@@ -58,6 +58,16 @@ supabase/
 
 ---
 
+## ⚠️ Sebelum Build: Hindari Kegagalan CI
+
+Tiga hal ini WAJIB, kalau dilewati build GitHub Actions / EAS akan gagal:
+
+1. **Jangan hapus `.npmrc`.** Project pakai React 19 / RN 0.85 dengan konflik peer-dependency. File `.npmrc` (`legacy-peer-deps=true`) memastikan `npm install` & `npm ci` di CI tidak gagal.
+2. **Ganti placeholder project ID.** `app.json` & `eas.json` berisi `your-eas-project-id`. Jalankan `eas init` (lihat di bawah) untuk mengisinya dengan ID asli — `eas build --non-interactive` di CI butuh ini.
+3. **Set GitHub Secrets** (`EXPO_TOKEN`, `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`) sebelum push ke `main`.
+
+---
+
 ## Setup
 
 ### 1. Install dependencies
@@ -66,7 +76,17 @@ supabase/
 npm install
 ```
 
-### 2. Konfigurasi environment
+### 2. Hubungkan ke Expo (ganti placeholder project ID)
+
+```bash
+npm install -g eas-cli
+eas login          # buat akun gratis di expo.dev dulu
+eas init           # otomatis isi projectId asli ke app.json + eas.json
+```
+
+Commit perubahan `app.json`/`eas.json` setelah `eas init`.
+
+### 3. Konfigurasi environment
 
 ```bash
 cp .env.example .env
@@ -78,13 +98,13 @@ EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-### 3. Setup Supabase
+### 4. Setup Supabase
 
 - Buat project di [supabase.com](https://supabase.com)
 - Jalankan `supabase/migrations/001_initial_schema.sql` di SQL Editor Supabase
 - Aktifkan Email Auth di Authentication > Providers
 
-### 4. Jalankan dev server
+### 5. Jalankan dev server
 
 ```bash
 npx expo start
@@ -94,26 +114,39 @@ Scan QR dengan Expo Go, atau tekan `a` untuk Android emulator.
 
 ---
 
-## Build APK
+## Build APK & OTA Update (via GitHub Actions)
 
-Untuk distribusi personal (sideload):
+Build dan update jalan otomatis lewat GitHub Actions — tidak perlu jalankan EAS manual dari terminal.
 
-```bash
-npm install -g eas-cli
-eas login
-eas build:configure
-eas build --platform android --profile preview
-```
+### Setup Secrets (sekali saja)
+
+`Settings → Secrets and variables → Actions → New repository secret`:
+
+| Secret | Dari mana |
+|---|---|
+| `EXPO_TOKEN` | expo.dev → Account Settings → Access Tokens → Create |
+| `EXPO_PUBLIC_SUPABASE_URL` | Supabase → Settings → API |
+| `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API |
+
+### Download APK
+
+1. Push ke `main` (atau jalankan workflow **Build APK** manual di tab Actions).
+2. Tunggu build selesai (~10–15 menit).
+3. Buka **Actions → run terakhir → Artifacts → `latihan-soal-cpns-xxxx`** → download `.apk`.
+4. Install ke HP (aktifkan "Install dari sumber tidak dikenal").
 
 ### Update Tanpa Reinstall (OTA)
 
-Setelah APK terinstall, update cukup dengan:
+Untuk perubahan kode JS biasa, **tidak perlu build APK baru**: push ke `main` → workflow **OTA Update** otomatis jalankan `eas update`. APK yang terinstall akan download update saat dibuka & apply di restart berikutnya.
+
+**Rebuild APK hanya perlu** saat ada perubahan native (tambah plugin Expo baru, ganti versi SDK).
+
+### Build manual (alternatif, dari lokal)
 
 ```bash
+eas build --platform android --profile preview --output ./app.apk
 eas update --branch preview --message "deskripsi update"
 ```
-
-App akan download update otomatis saat dibuka, apply di restart berikutnya.
 
 ---
 

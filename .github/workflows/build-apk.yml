@@ -1,10 +1,9 @@
 name: Build APK
 
 on:
-  # Build otomatis setiap push ke main
-  push:
-    branches: [main]
-  # Atau trigger manual dari GitHub UI
+  # Build APK manual saja (dari tab Actions → Run workflow).
+  # Sengaja TIDAK trigger tiap push: full native build makan kuota
+  # EAS build yang terbatas. Untuk update kode biasa, pakai OTA (ota-update.yml).
   workflow_dispatch:
 
 jobs:
