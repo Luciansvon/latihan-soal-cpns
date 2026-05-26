@@ -33,6 +33,8 @@ export type LatihanStackParams = {
     packId?: string;
     subtopic?: string;
     questionCount?: number;
+    /** Jika true, finalize akan tandai daily challenge sebagai done */
+    isDailyChallenge?: boolean;
   };
   SessionResult: { sessionId: string };
   SkimTrainer: undefined;

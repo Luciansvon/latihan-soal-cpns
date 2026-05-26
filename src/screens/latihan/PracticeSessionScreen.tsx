@@ -22,6 +22,7 @@ import { uuidv4 } from '../../utils/uuid';
 import { useStore } from '../../store';
 import { supabase } from '../../services/supabase';
 import { GamificationService } from '../../services/GamificationService';
+import { DailyChallengeService } from '../../services/DailyChallengeService';
 
 const EXAM_COLORS: Record<string, string> = {
   CPNS: Colors.cpns,
@@ -32,7 +33,7 @@ const EXAM_COLORS: Record<string, string> = {
 const DEFAULT_QUESTION_COUNT = 10;
 
 export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<'PracticeSession'>) {
-  const { examType, subject, packId, subtopic, questionCount } = route.params;
+  const { examType, subject, packId, subtopic, questionCount, isDailyChallenge } = route.params;
   const userId = useStore((s) => s.userId);
   const isOnline = useStore((s) => s.isOnline);
   const setXPAndLevel = useStore((s) => s.setXPAndLevel);
@@ -213,12 +214,21 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
         // gamification failure is non-fatal — session sudah tersimpan
       }
 
+      // Tandai daily challenge selesai kalau sesi ini berasal dari challenge
+      if (isDailyChallenge && userId) {
+        try {
+          await DailyChallengeService.markDone(userId);
+        } catch {
+          // non-fatal
+        }
+      }
+
       navigation.replace('SessionResult', { sessionId: sessionIdRef.current });
     } catch (e: any) {
       Alert.alert('Gagal menyimpan', e?.message ?? 'Terjadi kesalahan tak terduga.');
       setSubmitting(false);
     }
-  }, [userId, submitting, captureTimeForCurrent, questions, selected, examType, subject, navigation]);
+  }, [userId, submitting, captureTimeForCurrent, questions, selected, examType, subject, navigation, isDailyChallenge, setXPAndLevel, updateStreakStore]);
 
   const confirmEarlyExit = () => {
     if (Object.keys(selected).length === 0) {

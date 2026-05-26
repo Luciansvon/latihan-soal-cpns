@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import { EXAM_CONFIGS, SUBJECT_LABELS, type ExamType, type SubjectType } from '../../types/exam.types';
 import type { LatihanScreenProps } from '../../navigation/types';
+import { useStore } from '../../store';
+import { useProgressData } from '../../hooks/useProgressData';
+import {
+  DailyChallengeService,
+  DAILY_CHALLENGE_SIZE,
+  type DailyChallengeState,
+} from '../../services/DailyChallengeService';
 
 const EXAM_TABS: ExamType[] = ['CPNS', 'TNI', 'POLRI'];
 
@@ -34,9 +41,34 @@ const SUBJECT_ICONS: Partial<Record<SubjectType, keyof typeof Ionicons.glyphMap>
 
 export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHome'>) {
   const [activeExam, setActiveExam] = useState<ExamType>('CPNS');
+  const userId = useStore((s) => s.userId);
+  const profile = useStore((s) => s.profile);
+
+  const progress = useProgressData({ userId });
+  const [dailyState, setDailyState] = useState<DailyChallengeState | null>(null);
+
+  useEffect(() => {
+    if (!userId || progress.loading) return;
+    DailyChallengeService.getTodayState(
+      userId,
+      progress.accuracyBySubject,
+      profile?.targetExam ?? 'CPNS'
+    ).then(setDailyState).catch(() => setDailyState(null));
+  }, [userId, profile?.targetExam, progress.loading, progress.accuracyBySubject]);
 
   const config = EXAM_CONFIGS[activeExam];
   const accentColor = EXAM_COLORS[activeExam];
+
+  const handleStartDaily = async () => {
+    if (!dailyState || !dailyState.subject || !dailyState.examType || !userId) return;
+    await DailyChallengeService.markStarted(userId, dailyState);
+    navigation.navigate('PracticeSession', {
+      examType: dailyState.examType,
+      subject: dailyState.subject,
+      questionCount: DAILY_CHALLENGE_SIZE,
+      isDailyChallenge: true,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -111,6 +143,50 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
             Lihat Semua Paket {config.label}
           </Text>
         </TouchableOpacity>
+
+        {/* Tantangan Harian — micro-dosing 5 soal/hari fokus subject prioritas */}
+        {dailyState ? (
+          <TouchableOpacity
+            style={[
+              styles.dailyCard,
+              dailyState.done && styles.dailyCardDone,
+            ]}
+            activeOpacity={dailyState.done ? 1 : 0.85}
+            disabled={dailyState.done}
+            onPress={handleStartDaily}
+          >
+            <View
+              style={[
+                styles.dailyIconBox,
+                { backgroundColor: (dailyState.done ? Colors.success : Colors.warning) + '15' },
+              ]}
+            >
+              <Ionicons
+                name={dailyState.done ? 'checkmark-circle' : 'flash'}
+                size={22}
+                color={dailyState.done ? Colors.success : Colors.warning}
+              />
+            </View>
+            <View style={styles.dailyBody}>
+              <Text style={styles.dailyTitle}>
+                Tantangan Harian{dailyState.done ? ' ·' : ''}
+                {dailyState.done ? (
+                  <Text style={styles.dailyDoneTag}> SELESAI</Text>
+                ) : (
+                  ''
+                )}
+              </Text>
+              <Text style={styles.dailyDesc}>
+                {dailyState.done
+                  ? 'Sudah selesai hari ini. Sampai jumpa besok!'
+                  : `${DAILY_CHALLENGE_SIZE} soal ${SUBJECT_LABELS[dailyState.subject!] ?? dailyState.subject} — ${dailyState.reason}`}
+              </Text>
+            </View>
+            {!dailyState.done ? (
+              <Ionicons name="chevron-forward" size={18} color={Colors.gray400} />
+            ) : null}
+          </TouchableOpacity>
+        ) : null}
 
         {/* Skim trainer entry — fitur neuroedukatif untuk lawan reading fatigue */}
         <TouchableOpacity
@@ -220,6 +296,38 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   allSubjectsBtnText: { fontSize: 14, fontWeight: '700' },
+
+  dailyCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginTop: 14,
+    borderLeftWidth: 4,
+    borderLeftColor: Colors.warning,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  dailyCardDone: {
+    borderLeftColor: Colors.success,
+    backgroundColor: Colors.success + '08',
+  },
+  dailyIconBox: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dailyBody: { flex: 1 },
+  dailyTitle: { fontSize: 14, fontWeight: '800', color: Colors.textPrimary },
+  dailyDoneTag: { fontSize: 10, fontWeight: '800', color: Colors.success, letterSpacing: 0.5 },
+  dailyDesc: { fontSize: 11, color: Colors.textSecondary, marginTop: 2, lineHeight: 16 },
 
   skimCard: {
     backgroundColor: Colors.white,
