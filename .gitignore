@@ -42,3 +42,11 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# IDE / editor
+.vscode/
+.idea/
+*.iml
+
+# Claude Code local config
+.claude/settings.local.json
