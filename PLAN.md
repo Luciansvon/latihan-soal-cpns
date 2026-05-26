@@ -35,12 +35,12 @@
 - [x] `supabase/seed/004_polri_questions.sql` — 50 POLRI ✓
 - [x] Total 250 soal, semua punya `difficulty_rank`, diverifikasi end-to-end di Postgres 16 (schema + migration 002 + 4 seed jalan bersih, idempotent) ✓
 - [x] Fix bug navigasi exam card di BerandaScreen + pack UUID di CategoryListScreen ✓
+- [x] `src/constants/tryoutTemplates.ts` — sumber tunggal config tryout (CPNS/TNI/POLRI) ✓
+- [x] `src/screens/tryout/TryoutSessionScreen.tsx` — load soal nyata per seksi, timer + auto-submit, flag, grid navigasi, hitung skor + simpan sesi TRYOUT ✓
+- [x] `src/screens/tryout/TryoutResultScreen.tsx` — sub-skor per seksi nyata + lulus/tidak vs ambang batas ✓
+- [x] `src/screens/tryout/TryoutList + TryoutDetail` — pakai template bersama ✓ (verified: tsc + expo export Hermes)
 
 ### 🟡 PLACEHOLDER (UI shell ada, logika belum nyambung)
-- [ ] `src/screens/beranda/BerandaScreen.tsx` — XP/streak dari Zustand (berfungsi), tapi tombol exam card **tidak ada navigasi** ke CategoryList/LatihanHome
-- [ ] `src/screens/tryout/TryoutSessionScreen.tsx` — timer berfungsi, tapi **soal masih placeholder** (hardcoded, tidak fetch data nyata)
-- [ ] `src/screens/tryout/TryoutListScreen.tsx` — template list hardcoded (tidak dari Supabase), tombol "Mulai" belum ada
-- [ ] `src/screens/tryout/TryoutResultScreen.tsx` — `PLACEHOLDER_SECTIONS` hardcoded, bukan hasil sesi nyata
 - [ ] `src/screens/progress/ProgressDashboardScreen.tsx` — `hasSessions = false` hardcoded, tidak query Supabase
 - [ ] `src/screens/progress/HistoryListScreen.tsx` — `hasSessions = false` hardcoded, empty state terus
 - [ ] `src/screens/progress/SessionDetailScreen.tsx` — `placeholderData` mock, tidak ambil dari DB
@@ -80,19 +80,12 @@
 
 **Acceptance:** buka app → pilih TWK → soal nyata muncul → jawab → skor tersimpan di Supabase.
 
-### TAHAP 2 — Tryout (setelah soal ada)
-**Tujuan:** simulasi SKD fullscreen dengan timer + sub-skor TWK/TIU/TKP dari data nyata.
+### TAHAP 2 — Tryout ✅ SELESAI
+1. ✅ `TryoutSessionScreen.tsx` — load soal nyata per seksi, render QuestionCard+OptionButton, timer + auto-submit, flag + grid navigasi, simpan sesi TRYOUT ke Supabase.
+2. ✅ `TryoutResultScreen.tsx` — sub-skor per seksi dari jawaban nyata via ScoreCalculator + status lulus/tidak vs ambang batas.
+3. ✅ `TryoutList` + `TryoutDetail` pakai `src/constants/tryoutTemplates.ts` (config statis, jumlah soal disesuaikan stok seed).
 
-1. Implement `TryoutSessionScreen.tsx`:
-   - Load soal dari Supabase berdasarkan `tryout_templates` (atau hardcode: 30 TWK + 35 TIU + 45 TKP).
-   - Render soal dengan `QuestionCard` + `OptionButton` (komponen yang sudah ada).
-   - Simpan jawaban di state, tidak ada reveal pembahasan selama berjalan.
-   - Auto-submit saat timer 0, atau manual submit via konfirmasi.
-   - Kirim ke `TryoutResultScreen` dengan data sesi nyata.
-2. `TryoutResultScreen.tsx` — ganti `PLACEHOLDER_SECTIONS` dengan kalkulasi dari jawaban nyata pakai `ScoreCalculator`.
-3. `TryoutListScreen.tsx` — fetch dari `tryout_templates` Supabase (atau gunakan config statis dulu).
-
-**Acceptance:** selesaikan tryout SKD → sub-skor TWK/TIU/TKP benar + status lolos/tidak per seksi.
+**Acceptance:** ✅ selesaikan tryout → sub-skor per seksi + status lolos/tidak. Diverifikasi tsc + expo export (Hermes).
 
 ### TAHAP 3 — Progress (data nyata)
 1. `ProgressDashboardScreen.tsx` — query `practice_sessions` user dari Supabase, hitung akurasi per kategori.
