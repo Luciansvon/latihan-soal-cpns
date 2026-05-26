@@ -5,11 +5,11 @@ import {
 import { Colors } from '../../constants/colors';
 import { LEARNING_STYLE_QUESTIONS } from '../../constants/learningStyleQuestions';
 import { calculateLearningStyle, type AnswerMap } from '../../utils/LearningStyleEngine';
-import type { AuthScreenProps } from '../../navigation/types';
+import type { OnboardingScreenProps } from '../../navigation/types';
 
 const TOTAL = LEARNING_STYLE_QUESTIONS.length;
 
-export function LearningStyleQuizScreen({ navigation }: AuthScreenProps<'LearningStyleQuiz'>) {
+export function LearningStyleQuizScreen({ navigation }: OnboardingScreenProps<'LearningStyleQuiz'>) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerMap>({});
   const fadeAnim = useRef(new Animated.Value(1)).current;

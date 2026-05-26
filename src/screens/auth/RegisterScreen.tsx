@@ -40,8 +40,8 @@ export function RegisterScreen({ navigation }: AuthScreenProps<'Register'>) {
       Alert.alert('Pendaftaran gagal', error.message);
       return;
     }
-    // Navigate to onboarding after successful register
-    navigation.navigate('Onboarding');
+    // After successful signup, RootNavigator akan auto-route ke OnboardingStack
+    // via gate (isAuthenticated && !profile.learningStyle).
   }
 
   return (

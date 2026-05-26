@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { EXAM_CONFIGS } from '../../types/exam.types';
-import type { AuthScreenProps } from '../../navigation/types';
+import type { OnboardingScreenProps } from '../../navigation/types';
 import type { ExamType } from '../../types/exam.types';
 import { supabase } from '../../services/supabase';
 
@@ -14,7 +14,7 @@ const PROVINCES = [
   'Kalimantan Timur', 'Bali', 'Lainnya',
 ];
 
-export function OnboardingScreen({ navigation }: AuthScreenProps<'Onboarding'>) {
+export function OnboardingScreen({ navigation }: OnboardingScreenProps<'Onboarding'>) {
   const [selectedExam, setSelectedExam] = useState<ExamType>('CPNS');
   const [selectedProvince, setSelectedProvince] = useState('');
   const [loading, setLoading] = useState(false);

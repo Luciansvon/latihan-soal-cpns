@@ -50,3 +50,8 @@ yarn-error.*
 
 # Claude Code local config
 .claude/settings.local.json
+
+# Raw asset archives (besar, biasanya source material yang akan di-process terpisah)
+*.7z
+*.zip
+*.tar.gz
