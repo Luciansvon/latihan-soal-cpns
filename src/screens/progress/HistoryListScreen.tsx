@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,15 +6,82 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { Colors } from '../../constants/colors';
+import { SUBJECT_LABELS } from '../../types/exam.types';
+import { fetchUserSessions, type SessionRow } from '../../services/sessionQueries';
+import { getScorePercentage } from '../../utils/ScoreCalculator';
 import type { ProgressScreenProps } from '../../navigation/types';
 
 type FilterType = 'ALL' | 'PRACTICE' | 'TRYOUT';
 
+const EXAM_COLORS: Record<string, string> = {
+  CPNS: Colors.cpns, TNI: Colors.tni, POLRI: Colors.polri,
+};
+
+function formatDate(iso?: string): string {
+  if (!iso) return '-';
+  const d = new Date(iso);
+  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function SessionCard({ session, onPress }: { session: SessionRow; onPress: () => void }) {
+  const isTryout = session.sessionType === 'TRYOUT';
+  const pct = getScorePercentage(session.totalScore, session.maxScore);
+  const pctColor = pct >= 80 ? Colors.success : pct >= 60 ? Colors.warning : Colors.error;
+  const accent = EXAM_COLORS[session.examType ?? ''] ?? Colors.primary;
+  const title = isTryout
+    ? `Tryout ${session.examType ?? ''}`
+    : (session.subject ? SUBJECT_LABELS[session.subject] : 'Latihan');
+
+  return (
+    <TouchableOpacity style={styles.sessionCard} activeOpacity={0.85} onPress={onPress}>
+      <View style={[styles.sessionIcon, { backgroundColor: accent + '15' }]}>
+        <Ionicons name={isTryout ? 'timer-outline' : 'create-outline'} size={20} color={accent} />
+      </View>
+      <View style={styles.sessionBody}>
+        <View style={styles.sessionTitleRow}>
+          <Text style={styles.sessionTitle}>{title}</Text>
+          <View style={[styles.typeBadge, { backgroundColor: accent + '15' }]}>
+            <Text style={[styles.typeBadgeText, { color: accent }]}>{isTryout ? 'TRYOUT' : 'LATIHAN'}</Text>
+          </View>
+        </View>
+        <Text style={styles.sessionMeta}>
+          {session.correctCount}/{session.totalQuestions} benar · {formatDate(session.completedAt)}
+        </Text>
+      </View>
+      <View style={styles.sessionScore}>
+        <Text style={[styles.sessionPct, { color: pctColor }]}>{pct}%</Text>
+        <Ionicons name="chevron-forward" size={14} color={Colors.gray400} />
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 export function HistoryListScreen({ navigation }: ProgressScreenProps<'HistoryList'>) {
   const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
+  const [sessions, setSessions] = useState<SessionRow[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      (async () => {
+        try {
+          const data = await fetchUserSessions();
+          if (active) setSessions(data);
+        } catch {
+          if (active) setSessions([]);
+        } finally {
+          if (active) setIsLoading(false);
+        }
+      })();
+      return () => { active = false; };
+    }, [])
+  );
 
   const filters: Array<{ key: FilterType; label: string }> = [
     { key: 'ALL', label: 'Semua' },
@@ -22,7 +89,8 @@ export function HistoryListScreen({ navigation }: ProgressScreenProps<'HistoryLi
     { key: 'TRYOUT', label: 'Tryout' },
   ];
 
-  const hasSessions = false;
+  const filtered = sessions.filter((s) => activeFilter === 'ALL' || s.sessionType === activeFilter);
+  const hasSessions = filtered.length > 0;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -60,9 +128,20 @@ export function HistoryListScreen({ navigation }: ProgressScreenProps<'HistoryLi
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {hasSessions ? (
-          // Session list will go here
-          <View />
+        {isLoading ? (
+          <View style={styles.emptyState}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+          </View>
+        ) : hasSessions ? (
+          <View style={styles.list}>
+            {filtered.map((s) => (
+              <SessionCard
+                key={s.id}
+                session={s}
+                onPress={() => navigation.navigate('SessionDetail', { sessionId: s.id })}
+              />
+            ))}
+          </View>
         ) : (
           <View style={styles.emptyState}>
             <View style={styles.emptyIconBox}>
@@ -141,6 +220,30 @@ const styles = StyleSheet.create({
   },
 
   scroll: { flexGrow: 1, padding: 20, paddingBottom: 40 },
+
+  list: { gap: 10 },
+  sessionCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  sessionIcon: { width: 42, height: 42, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
+  sessionBody: { flex: 1, gap: 4 },
+  sessionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  sessionTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary, flexShrink: 1 },
+  typeBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 5 },
+  typeBadgeText: { fontSize: 9, fontWeight: '800', letterSpacing: 0.5 },
+  sessionMeta: { fontSize: 12, color: Colors.textSecondary },
+  sessionScore: { alignItems: 'center', flexDirection: 'row', gap: 4 },
+  sessionPct: { fontSize: 16, fontWeight: '800' },
 
   emptyState: {
     flex: 1,

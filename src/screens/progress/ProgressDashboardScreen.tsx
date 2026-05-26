@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,22 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { Colors } from '../../constants/colors';
 import { useStore } from '../../store';
+import { SUBJECT_LABELS } from '../../types/exam.types';
+import { fetchUserSessions, aggregateSubjectAccuracy, type SubjectAccuracy } from '../../services/sessionQueries';
 import type { ProgressScreenProps } from '../../navigation/types';
+
+const SUBJECT_COLORS: Record<string, string> = {
+  TWK: Colors.twk, TIU: Colors.tiu, TKP: Colors.tkp,
+  MATEMATIKA: Colors.math, BAHASA_INDONESIA: Colors.indo,
+  PENGETAHUAN_UMUM: Colors.umum, PENGETAHUAN_HUKUM: Colors.hukum,
+  PSIKOTES: Colors.levelBadge, KEDINASAN: Colors.tni,
+};
 
 interface StatCardProps {
   label: string;
@@ -50,7 +61,30 @@ const statStyles = StyleSheet.create({
 
 export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'ProgressDashboard'>) {
   const { xpTotal, level, streakCurrent, streakLongest } = useStore();
-  const hasSessions = false; // Will be populated once sessions are tracked
+  const [accuracy, setAccuracy] = useState<SubjectAccuracy[]>([]);
+  const [sessionCount, setSessionCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      (async () => {
+        try {
+          const sessions = await fetchUserSessions();
+          if (!active) return;
+          setSessionCount(sessions.length);
+          setAccuracy(aggregateSubjectAccuracy(sessions));
+        } catch {
+          if (active) { setSessionCount(0); setAccuracy([]); }
+        } finally {
+          if (active) setIsLoading(false);
+        }
+      })();
+      return () => { active = false; };
+    }, [])
+  );
+
+  const hasSessions = sessionCount > 0;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -98,18 +132,29 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
         </View>
 
         {/* Accuracy Section */}
-        {hasSessions ? (
+        {isLoading ? (
+          <View style={styles.emptyStateCard}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+            <Text style={styles.emptyDesc}>Memuat statistik...</Text>
+          </View>
+        ) : hasSessions ? (
           <View style={styles.accuracyCard}>
             <Text style={styles.sectionTitle}>Akurasi per Mata Pelajaran</Text>
-            {['TWK', 'TIU', 'TKP'].map((subject) => (
-              <View key={subject} style={styles.accuracyRow}>
-                <Text style={styles.accuracySubject}>{subject}</Text>
-                <View style={styles.accuracyBar}>
-                  <View style={[styles.accuracyFill, { width: '0%', backgroundColor: Colors.primary }]} />
+            <Text style={styles.accuracyHint}>Dari {sessionCount} sesi yang sudah diselesaikan</Text>
+            {accuracy.length === 0 ? (
+              <Text style={styles.emptyDesc}>Belum ada data per mata pelajaran.</Text>
+            ) : accuracy.map((row) => {
+              const color = SUBJECT_COLORS[row.subject] ?? Colors.primary;
+              return (
+                <View key={row.subject} style={styles.accuracyRow}>
+                  <Text style={styles.accuracySubject}>{SUBJECT_LABELS[row.subject] ?? row.subject}</Text>
+                  <View style={styles.accuracyBar}>
+                    <View style={[styles.accuracyFill, { width: `${row.accuracy}%`, backgroundColor: color }]} />
+                  </View>
+                  <Text style={styles.accuracyPct}>{row.accuracy}%</Text>
                 </View>
-                <Text style={styles.accuracyPct}>0%</Text>
-              </View>
-            ))}
+              );
+            })}
           </View>
         ) : (
           <View style={styles.emptyStateCard}>
@@ -118,7 +163,7 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
             <Text style={styles.emptyDesc}>
               Selesaikan sesi latihan pertamamu untuk melihat statistik akurasi dan perkembangan belajarmu.
             </Text>
-            <TouchableOpacity style={styles.emptyBtn} activeOpacity={0.85}>
+            <TouchableOpacity style={styles.emptyBtn} activeOpacity={0.85} onPress={() => navigation.getParent()?.navigate('Latihan')}>
               <Text style={styles.emptyBtnText}>Mulai Latihan</Text>
             </TouchableOpacity>
           </View>
@@ -213,8 +258,9 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   sectionTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  accuracyRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  accuracySubject: { fontSize: 12, fontWeight: '700', color: Colors.textSecondary, width: 40 },
+  accuracyHint: { fontSize: 11, color: Colors.textMuted, marginTop: -6 },
+  accuracyRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  accuracySubject: { fontSize: 11, fontWeight: '700', color: Colors.textSecondary, width: 88 },
   accuracyBar: {
     flex: 1,
     height: 8,
