@@ -1,18 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
-import type { Database } from '../types/database.types';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
 
-// Custom storage using expo-secure-store for auth tokens
+// Custom storage using expo-secure-store for auth tokens.
 const ExpoSecureStoreAdapter = {
   getItem: (key: string) => SecureStore.getItemAsync(key),
   setItem: (key: string, value: string) => SecureStore.setItemAsync(key, value),
   removeItem: (key: string) => SecureStore.deleteItemAsync(key),
 };
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+// Client is intentionally untyped: a hand-maintained Database generic is
+// fragile across supabase-js versions (resolves table ops to `never`).
+// Row types live in types/database.types.ts for explicit casts at read sites.
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: ExpoSecureStoreAdapter,
     autoRefreshToken: true,

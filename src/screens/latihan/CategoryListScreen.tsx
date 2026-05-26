@@ -36,8 +36,28 @@ const SUBJECT_ICONS: Partial<Record<SubjectType, keyof typeof Ionicons.glyphMap>
   PENGETAHUAN_HUKUM: 'document-text-outline',
 };
 
-// Placeholder packs per subject
-const PACK_COUNT_PER_SUBJECT = 5;
+// Stable UUIDs matching supabase/seed/001_question_packs.sql
+const PACK_IDS: Record<string, Partial<Record<SubjectType, string>>> = {
+  CPNS: {
+    TWK: 'a0000001-0000-0000-0000-000000000001',
+    TIU: 'a0000001-0000-0000-0000-000000000002',
+    TKP: 'a0000001-0000-0000-0000-000000000003',
+  },
+  TNI: {
+    MATEMATIKA: 'b0000001-0000-0000-0000-000000000001',
+    BAHASA_INDONESIA: 'b0000001-0000-0000-0000-000000000002',
+    PENGETAHUAN_UMUM: 'b0000001-0000-0000-0000-000000000003',
+    PSIKOTES: 'b0000001-0000-0000-0000-000000000004',
+    KEDINASAN: 'b0000001-0000-0000-0000-000000000005',
+  },
+  POLRI: {
+    MATEMATIKA: 'c0000001-0000-0000-0000-000000000001',
+    BAHASA_INDONESIA: 'c0000001-0000-0000-0000-000000000002',
+    PENGETAHUAN_UMUM: 'c0000001-0000-0000-0000-000000000003',
+    PSIKOTES: 'c0000001-0000-0000-0000-000000000004',
+    PENGETAHUAN_HUKUM: 'c0000001-0000-0000-0000-000000000005',
+  },
+};
 
 export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'CategoryList'>) {
   const { examType } = route.params;
@@ -81,7 +101,7 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
                 navigation.navigate('PracticeSession', {
                   examType,
                   subject,
-                  packId: 'pack-001',
+                  packId: PACK_IDS[examType]?.[subject] ?? '',
                 })
               }
             >
@@ -93,22 +113,13 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
                 <Text style={styles.subjectName}>{SUBJECT_LABELS[subject]}</Text>
                 <Text style={styles.subjectCode}>{subject}</Text>
 
-                {/* Mini pack row */}
-                <View style={styles.packRow}>
-                  {Array.from({ length: PACK_COUNT_PER_SUBJECT }).map((_, i) => (
-                    <View
-                      key={i}
-                      style={[styles.packDot, { backgroundColor: color + '30', borderColor: color }]}
-                    >
-                      <Text style={[styles.packDotText, { color }]}>{i + 1}</Text>
-                    </View>
-                  ))}
-                </View>
+                <Text style={[styles.packId, { color: Colors.textMuted }]}>
+                  {PACK_IDS[examType]?.[subject] ? '20 soal / sesi' : 'Belum ada soal'}
+                </Text>
               </View>
 
               <View style={styles.subjectRight}>
-                <Text style={[styles.packCountText, { color }]}>{PACK_COUNT_PER_SUBJECT}</Text>
-                <Text style={styles.packCountLabel}>paket</Text>
+                <Ionicons name="play-circle" size={28} color={color} />
                 <Ionicons name="chevron-forward" size={16} color={Colors.gray400} style={{ marginTop: 4 }} />
               </View>
             </TouchableOpacity>
@@ -178,20 +189,9 @@ const styles = StyleSheet.create({
   subjectBody: { flex: 1, gap: 4 },
   subjectName: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
   subjectCode: { fontSize: 11, fontWeight: '600', color: Colors.textSecondary, letterSpacing: 0.5 },
-  packRow: { flexDirection: 'row', gap: 4, marginTop: 4 },
-  packDot: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  packDotText: { fontSize: 10, fontWeight: '700' },
+  packId: { fontSize: 11, marginTop: 2 },
 
-  subjectRight: { alignItems: 'center' },
-  packCountText: { fontSize: 20, fontWeight: '800' },
-  packCountLabel: { fontSize: 10, color: Colors.textMuted },
+  subjectRight: { alignItems: 'center', justifyContent: 'center' },
 
   infoBox: {
     flexDirection: 'row',

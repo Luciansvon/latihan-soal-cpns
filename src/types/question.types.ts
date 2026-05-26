@@ -14,6 +14,7 @@ export interface Question {
   subtopic?: string;
   questionType: QuestionType;
   difficulty: DifficultyLevel;
+  difficultyRank?: number; // 1-10, 1=termudah, 10=tersulit
   questionText: string;
   questionImageUrl?: string;
   options: QuestionOption[];
