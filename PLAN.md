@@ -29,6 +29,12 @@
 - [x] `src/screens/latihan/SessionResultScreen.tsx` — hero card, stats, XP, actions ✓
 - [x] `src/screens/latihan/CategoryListScreen.tsx` — list mata pelajaran, navigate ke PracticeSession ✓
 - [x] `supabase/seed/001_question_packs.sql` — 13 pack rows dengan UUID stabil ✓
+- [x] `supabase/seed/002_cpns_questions.sql` — 50 TWK + 50 TIU ✓
+- [x] `supabase/seed/002_cpns_tkp.sql` — 50 TKP (TKP_SCALE + tkp_scores) ✓
+- [x] `supabase/seed/003_tni_questions.sql` — 50 TNI ✓
+- [x] `supabase/seed/004_polri_questions.sql` — 50 POLRI ✓
+- [x] Total 250 soal, semua punya `difficulty_rank`, diverifikasi end-to-end di Postgres 16 (schema + migration 002 + 4 seed jalan bersih, idempotent) ✓
+- [x] Fix bug navigasi exam card di BerandaScreen + pack UUID di CategoryListScreen ✓
 
 ### 🟡 PLACEHOLDER (UI shell ada, logika belum nyambung)
 - [ ] `src/screens/beranda/BerandaScreen.tsx` — XP/streak dari Zustand (berfungsi), tapi tombol exam card **tidak ada navigasi** ke CategoryList/LatihanHome
@@ -62,15 +68,15 @@
 
 ## Urutan Pengerjaan (dependency-aware)
 
-### TAHAP 1 — Konten Soal (BLOCKER UTAMA — kerjakan ini dulu!)
-**Tanpa soal, semua tahap berikutnya tidak bisa diuji end-to-end.**
+### TAHAP 1 — Konten Soal ✅ SELESAI
+1. ✅ Fix bug BerandaScreen navigasi exam card.
+2. ✅ Fix `packId` hardcoded di `CategoryListScreen` → pakai UUID dari `question_packs`.
+3. ✅ `002_cpns_questions.sql` (50 TWK + 50 TIU), `002_cpns_tkp.sql` (50 TKP), `003_tni_questions.sql` (50), `004_polri_questions.sql` (50).
+4. ✅ Diverifikasi end-to-end di Postgres 16 (schema + migration 002 + 4 seed jalan bersih, idempotent, correct_option valid, tkp_scores 1-5 unik).
 
-1. Fix bug BerandaScreen navigasi exam card (5 menit).
-2. Fix `packId` hardcoded di `CategoryListScreen` → pakai UUID dari `question_packs`.
-3. Buat `supabase/seed/002_cpns_questions.sql` — TWK 200 + TIU 200 + TKP 200 soal.
-4. Buat `supabase/seed/003_tni_questions.sql` — MATEMATIKA 80 + BAHASA_INDO 60 + PU 60 + PSIKOTES 30 + KEDINASAN 20.
-5. Buat `supabase/seed/004_polri_questions.sql` — MATEMATIKA 60 + BAHASA_INDO 50 + PU 50 + PSIKOTES 30 + HUKUM 60.
-6. Jalankan seed di Supabase SQL Editor: 001 → 002 → 003 → 004.
+**Sisa (manual, tanggung jawab user):** jalankan migration 001 + 002, lalu seed 001 → 002_cpns_questions → 002_cpns_tkp → 003 → 004 di Supabase SQL Editor.
+
+**Catatan jumlah soal:** target awal PLAN 200/subjek; saat ini 50/subjek (cukup untuk MVP & testing). Tambah soal lewat seed file baru kapan saja.
 
 **Acceptance:** buka app → pilih TWK → soal nyata muncul → jawab → skor tersimpan di Supabase.
 
