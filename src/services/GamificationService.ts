@@ -42,26 +42,35 @@ export const GamificationService = {
       }
     }
 
-    // 1. Hitung XP
-    const xpEarned = computeXp(session);
+    // 1. Hitung XP base (correct answers + complete bonus)
+    const baseXp = computeXp(session);
+    const xpBeforeBase = (await UserStateRepository.get(session.userId))?.xpTotal ?? 0;
 
-    // 2. Tambah ke local state + hitung level
-    const { newXp, newLevel } = await UserStateRepository.addXP(session.userId, xpEarned);
-    const oldLevel = levelFromXP(newXp - xpEarned);
-    const leveledUp = newLevel > oldLevel;
+    // 2. Tambah base XP ke local state
+    await UserStateRepository.addXP(session.userId, baseXp);
 
     // 3. Update streak
     const streak = await UserStateRepository.updateStreak(session.userId);
 
-    // 4. Cek achievement
+    // 4. Cek achievement — kalau ada unlock, function ini juga addXP(bonus)
+    //    SECARA INTERNAL. Karena itu kita re-read state SETELAH ini supaya
+    //    AwardResult merefleksikan total XP final (base + bonus achievement).
     const unlocked = await checkAchievements(session);
+    const bonusXp = unlocked.reduce((sum, a) => sum + a.xpReward, 0);
 
-    // 5. Push ke Supabase (best-effort)
+    // 5. Re-read final state (after base + bonus)
+    const finalState = await UserStateRepository.get(session.userId);
+    const newXp = finalState?.xpTotal ?? xpBeforeBase + baseXp + bonusXp;
+    const newLevel = finalState?.level ?? levelFromXP(newXp);
+    const oldLevel = levelFromXP(xpBeforeBase);
+    const leveledUp = newLevel > oldLevel;
+
+    // 6. Push ke Supabase (best-effort)
     void pushToServer(session.userId, newXp, newLevel, streak, unlocked);
 
     const result: AwardResult = {
       sessionId: session.id,
-      xpEarned,
+      xpEarned: baseXp + bonusXp, // total earned including achievement bonuses
       newXpTotal: newXp,
       newLevel,
       leveledUp,

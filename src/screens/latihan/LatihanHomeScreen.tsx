@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import { EXAM_CONFIGS, SUBJECT_LABELS, type ExamType, type SubjectType } from '../../types/exam.types';
@@ -49,12 +50,31 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
 
   useEffect(() => {
     if (!userId || progress.loading) return;
+    let cancelled = false;
     DailyChallengeService.getTodayState(
       userId,
       progress.accuracyBySubject,
       profile?.targetExam ?? 'CPNS'
-    ).then(setDailyState).catch(() => setDailyState(null));
+    )
+      .then((s) => {
+        if (!cancelled) setDailyState(s);
+      })
+      .catch(() => {
+        if (!cancelled) setDailyState(null);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [userId, profile?.targetExam, progress.loading, progress.accuracyBySubject]);
+
+  // Refresh progress + daily state SETIAP screen kembali ke focus.
+  // Tanpa ini, setelah user selesaikan daily challenge dan back ke sini,
+  // card "Tantangan Harian" masih tampil "belum done" karena data stale.
+  useFocusEffect(
+    useCallback(() => {
+      void progress.refresh();
+    }, [progress.refresh])
+  );
 
   const config = EXAM_CONFIGS[activeExam];
   const accentColor = EXAM_COLORS[activeExam];

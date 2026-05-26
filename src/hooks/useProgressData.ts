@@ -3,7 +3,7 @@
 // Sumber: SessionRepository + AnswerRepository (SQLite, local-first).
 // Tidak memanggil Supabase langsung — sync ke server dikelola SyncManager.
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SessionRepository, AnswerRepository } from '../db/repositories/SessionRepository';
 import type { PracticeSession } from '../types/session.types';
 import type { SubjectType, SessionType } from '../types/exam.types';
@@ -45,18 +45,27 @@ export function useProgressData(opts: Options): ProgressSnapshot {
   const [accuracyBySubject, setAccuracy] = useState<SubjectAccuracy[]>([]);
   const [recentSessions, setRecentSessions] = useState<PracticeSession[]>([]);
 
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   const refresh = useCallback(async () => {
     if (!userId) {
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
       return;
     }
-    setLoading(true);
+    if (mountedRef.current) setLoading(true);
     try {
       const [stats, raw, sessions] = await Promise.all([
         SessionRepository.getSessionStats(userId),
         AnswerRepository.getAccuracyBySubject(userId),
         SessionRepository.getSessionsByUser(userId, recentLimit),
       ]);
+      if (!mountedRef.current) return;
 
       setTotalSessions(stats.totalSessions);
       setTotalAnswered(stats.totalAnswered);
@@ -78,7 +87,7 @@ export function useProgressData(opts: Options): ProgressSnapshot {
           : sessions.filter((s) => s.sessionType === sessionType);
       setRecentSessions(filteredSessions);
     } finally {
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
     }
   }, [userId, recentLimit, sessionType]);
 
