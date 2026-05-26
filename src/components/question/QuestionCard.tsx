@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { Colors } from '../../constants/colors';
 import type { Question } from '../../types/question.types';
+import { HighlightedText, TKP_BUZZWORDS } from './HighlightedText';
 
 interface Props {
   question: Question;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export function QuestionCard({ question, questionNumber, totalQuestions, accentColor }: Props) {
+  const isTKP = question.subject === 'TKP';
+
   return (
     <View style={styles.card}>
       <View style={styles.headerRow}>
@@ -27,7 +30,16 @@ export function QuestionCard({ question, questionNumber, totalQuestions, accentC
         ) : null}
       </View>
 
-      <Text style={styles.questionText}>{question.questionText}</Text>
+      {isTKP ? (
+        <HighlightedText
+          text={question.questionText}
+          keywords={TKP_BUZZWORDS}
+          style={styles.questionText}
+          highlightColor={accentColor}
+        />
+      ) : (
+        <Text style={styles.questionText}>{question.questionText}</Text>
+      )}
 
       {question.questionImageUrl ? (
         <Image

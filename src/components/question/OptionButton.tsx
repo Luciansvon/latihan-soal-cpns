@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
+import { HighlightedText } from './HighlightedText';
 
 export type OptionState = 'idle' | 'selected' | 'correct' | 'wrong' | 'disabled';
 
@@ -14,9 +15,19 @@ interface Props {
   state: OptionState;
   accentColor: string;
   onPress: () => void;
+  /** Kalau diset, kata-kata dalam list ini di-highlight di teks opsi. */
+  highlightKeywords?: string[];
 }
 
-export function OptionButton({ optionId, text, imageUrl, state, accentColor, onPress }: Props) {
+export function OptionButton({
+  optionId,
+  text,
+  imageUrl,
+  state,
+  accentColor,
+  onPress,
+  highlightKeywords,
+}: Props) {
   const isInteractive = state === 'idle' || state === 'selected';
 
   const handlePress = () => {
@@ -39,7 +50,16 @@ export function OptionButton({ optionId, text, imageUrl, state, accentColor, onP
       </View>
 
       <View style={styles.body}>
-        <Text style={[styles.text, { color: colors.text }]}>{text}</Text>
+        {highlightKeywords && highlightKeywords.length > 0 ? (
+          <HighlightedText
+            text={text}
+            keywords={highlightKeywords}
+            style={[styles.text, { color: colors.text }]}
+            highlightColor={accentColor}
+          />
+        ) : (
+          <Text style={[styles.text, { color: colors.text }]}>{text}</Text>
+        )}
         {imageUrl ? (
           <Image
             source={{ uri: imageUrl }}

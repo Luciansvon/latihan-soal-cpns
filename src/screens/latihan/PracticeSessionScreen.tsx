@@ -381,6 +381,7 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
 // ============================================================================
 import { QuestionCard } from '../../components/question/QuestionCard';
 import { OptionButton, type OptionState } from '../../components/question/OptionButton';
+import { TKP_BUZZWORDS } from '../../components/question/HighlightedText';
 
 interface QuestionViewProps {
   question: Question;
@@ -436,6 +437,7 @@ function QuestionView({
           state={optionState(opt)}
           accentColor={accentColor}
           onPress={() => onSelect(opt.id)}
+          highlightKeywords={isTKP ? TKP_BUZZWORDS : undefined}
         />
       ))}
 

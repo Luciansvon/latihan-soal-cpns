@@ -19,6 +19,7 @@ import { useTryoutSession } from '../../hooks/useTryoutSession';
 import { CountdownTimer } from '../../components/tryout/CountdownTimer';
 import { QuestionCard } from '../../components/question/QuestionCard';
 import { OptionButton } from '../../components/question/OptionButton';
+import { TKP_BUZZWORDS } from '../../components/question/HighlightedText';
 
 export function TryoutSessionScreen({ route, navigation }: TryoutScreenProps<'TryoutSession'>) {
   const { templateId } = route.params;
@@ -159,6 +160,7 @@ export function TryoutSessionScreen({ route, navigation }: TryoutScreenProps<'Tr
                 state={selectedHere === opt.id ? 'selected' : 'idle'}
                 accentColor={accent}
                 onPress={() => session.selectOption(opt.id)}
+                highlightKeywords={current.subject === 'TKP' ? TKP_BUZZWORDS : undefined}
               />
             ))}
           </View>

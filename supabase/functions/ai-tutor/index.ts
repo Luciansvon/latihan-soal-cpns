@@ -227,6 +227,8 @@ function buildMessages(
     ? formatQuestion(question)
     : '(Soal tidak tersedia dalam request.)';
 
+  const subjectStrategy = strategyForSubject(question?.subject);
+
   if (body.mode === 'hint') {
     const level = body.hintLevel ?? 1;
     const levelInstruction =
@@ -236,7 +238,10 @@ function buildMessages(
         ? 'Berikan petunjuk SEDANG. Singgung pendekatan atau rumus tanpa menyebut jawaban langsung.'
         : 'Berikan petunjuk KUAT. Bisa eliminasi 1-2 opsi yang jelas salah, tapi jangan sebut jawaban final.';
     return [
-      { role: 'system', content: `${persona}\n\n${styleHint}\n\n${levelInstruction}\nMaksimum 3 kalimat.` },
+      {
+        role: 'system',
+        content: `${persona}\n\n${styleHint}\n\n${subjectStrategy}\n\n${levelInstruction}\nMaksimum 3 kalimat.`,
+      },
       { role: 'user', content: questionBlock },
     ];
   }
@@ -245,10 +250,50 @@ function buildMessages(
   return [
     {
       role: 'system',
-      content: `${persona}\n\n${styleHint}\n\nTugas: jelaskan jawaban yang benar dengan alur logis. Sebutkan jawaban benarnya di awal, lalu uraikan kenapa. Jika tipe TKP, jelaskan kenapa opsi tertinggi paling baik. Hindari basa-basi. Maksimum 6 kalimat.`,
+      content: `${persona}\n\n${styleHint}\n\n${subjectStrategy}\n\nTugas: jelaskan jawaban yang benar dengan alur logis. Sebutkan jawaban benarnya di awal, lalu uraikan kenapa. Jika tipe TKP, jelaskan kenapa opsi tertinggi paling baik. Hindari basa-basi. Maksimum 6 kalimat.`,
     },
     { role: 'user', content: questionBlock },
   ];
+}
+
+/**
+ * Strategi pengajaran spesifik per subject — turunan langsung dari analisis
+ * TNI Efektif.md (cognitive load + literasi paradoks PISA 2022). Disuntik ke
+ * system prompt agar AI mengikuti pendekatan adaptif sesuai jenis soal.
+ */
+function strategyForSubject(subject?: string): string {
+  switch (subject) {
+    case 'TKP':
+      return [
+        'Untuk TKP: bayangkan dirimu sebagai "Robot Birokrat Sempurna" yang kebal',
+        'emosi pribadi dan ego sektoral. Acuan urutan prioritas opsi: (1) Pelayanan',
+        'Publik, (2) Profesionalisme & Integritas, (3) Jejaring Kerja kolaboratif,',
+        '(4) Anti Radikalisme & loyalitas NKRI. Tekankan kata kunci ini di pembahasan.',
+      ].join(' ');
+    case 'TIU':
+      return [
+        'Untuk TIU: pakai pendekatan micro-dosing — fokus pada 1 trik atau pola',
+        'inti, bukan teori panjang. Berikan 1 langkah kerja konkret. Untuk soal',
+        'figural, ajak siswa membayangkan rotasi/pencerminan secara spasial dulu',
+        'sebelum membaca opsi.',
+      ].join(' ');
+    case 'TWK':
+      return [
+        'Untuk TWK HOTS: ringkas inti narasi soal dalam 1 kalimat (skim-then-extract).',
+        'Petakan kausalitas: peristiwa → nilai kebangsaan yang relevan. Jika cocok,',
+        'kaitkan dengan timeline (mind-map vertikal) supaya retensi lebih lengket.',
+      ].join(' ');
+    case 'MATEMATIKA':
+      return 'Untuk Matematika: tulis 1 langkah kerja per baris. Hindari paragraf panjang. Ucapkan kunci konsep dalam kalimat pendek.';
+    case 'BAHASA_INDONESIA':
+      return 'Untuk Bahasa Indonesia: tunjukkan jejak struktur (subjek-predikat / tesis-argumen) sebelum menyimpulkan.';
+    case 'PSIKOTES':
+      return 'Untuk Psikotes: dorong pengenalan pola (siluet/analogi) cepat, tanpa over-baca instruksi. Konsisten lebih penting dari sempurna.';
+    case 'PENGETAHUAN_HUKUM':
+      return 'Untuk Pengetahuan Hukum: kutip pasal/UU spesifik sebagai jangkar. Jelaskan asas dasar dulu sebelum detail kasus.';
+    default:
+      return 'Sajikan pembahasan ringkas, dengan kalimat pendek dan struktur poin yang mudah dipindai.';
+  }
 }
 
 function buildPersona(examType: string): string {
