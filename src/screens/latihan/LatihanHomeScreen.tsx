@@ -111,6 +111,24 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
             Lihat Semua Paket {config.label}
           </Text>
         </TouchableOpacity>
+
+        {/* Skim trainer entry — fitur neuroedukatif untuk lawan reading fatigue */}
+        <TouchableOpacity
+          style={styles.skimCard}
+          activeOpacity={0.85}
+          onPress={() => navigation.navigate('SkimTrainer')}
+        >
+          <View style={styles.skimIconBox}>
+            <Ionicons name="speedometer-outline" size={22} color={Colors.info} />
+          </View>
+          <View style={styles.skimBody}>
+            <Text style={styles.skimTitle}>Latih Baca Cepat (Skim)</Text>
+            <Text style={styles.skimDesc}>
+              Drill membaca soal TWK di bawah tekanan waktu — lawan reading fatigue HOTS.
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={Colors.gray400} />
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -202,4 +220,32 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   allSubjectsBtnText: { fontSize: 14, fontWeight: '700' },
+
+  skimCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginTop: 14,
+    borderLeftWidth: 4,
+    borderLeftColor: Colors.info,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  skimIconBox: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    backgroundColor: Colors.info + '15',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  skimBody: { flex: 1 },
+  skimTitle: { fontSize: 14, fontWeight: '800', color: Colors.textPrimary },
+  skimDesc: { fontSize: 11, color: Colors.textSecondary, marginTop: 2, lineHeight: 16 },
 });

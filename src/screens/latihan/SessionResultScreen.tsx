@@ -18,9 +18,23 @@ import { XPBar } from '../../components/gamification/XPBar';
 import { AchievementUnlockModal } from '../../components/gamification/AchievementUnlockModal';
 import { ShareService } from '../../services/ShareService';
 import { getScorePercentage } from '../../utils/ScoreCalculator';
+import { useProgressData } from '../../hooks/useProgressData';
+import { recommendSubjects } from '../../utils/recommendation';
+import {
+  dominantVark,
+  getStrategyTip,
+  VARK_LABELS,
+} from '../../constants/learningStrategyMap';
+import { useStore } from '../../store';
+import { SUBJECT_LABELS } from '../../types/exam.types';
 
 export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'SessionResult'>) {
   const { sessionId } = route.params;
+  const userId = useStore((s) => s.userId);
+  const userProfile = useStore((s) => s.profile);
+
+  // Aggregate semua sesi user untuk rekomendasi adaptive
+  const progress = useProgressData({ userId, recentLimit: 50 });
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -167,6 +181,46 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
               : 'Jangan menyerah. Coba lagi untuk hasil yang lebih baik.'}
           </Text>
         </View>
+
+        {/* Adaptive recommendations: kategori prioritas + tip belajar VARK */}
+        {(() => {
+          if (progress.loading) return null;
+          const recs = recommendSubjects(progress.accuracyBySubject, 3);
+          if (recs.length === 0) return null;
+          const vark = dominantVark(userProfile?.learningStyle);
+          const top = recs[0];
+          return (
+            <View style={styles.recoCard}>
+              <View style={styles.recoHeader}>
+                <Ionicons name="bulb" size={18} color={Colors.info} />
+                <Text style={styles.recoTitle}>Saran Belajar Berikutnya</Text>
+              </View>
+              <Text style={styles.recoBody}>
+                Fokus ke{' '}
+                <Text style={styles.recoEm}>
+                  {SUBJECT_LABELS[top.subject] ?? top.subject}
+                </Text>
+                {' '}— {top.reason.toLowerCase()}.
+              </Text>
+              <View style={styles.recoTip}>
+                <Ionicons name="school-outline" size={14} color={Colors.textSecondary} />
+                <Text style={styles.recoTipText}>
+                  Profil <Text style={styles.recoEm}>{VARK_LABELS[vark]}</Text>:{' '}
+                  {getStrategyTip(top.subject, vark)}
+                </Text>
+              </View>
+              {recs.length > 1 ? (
+                <Text style={styles.recoMeta}>
+                  Subject lain yang perlu perhatian:{' '}
+                  {recs
+                    .slice(1)
+                    .map((r) => `${SUBJECT_LABELS[r.subject] ?? r.subject} (${r.pct}%)`)
+                    .join(', ')}
+                </Text>
+              ) : null}
+            </View>
+          );
+        })()}
 
         {/* Per-question dots */}
         <View style={styles.reviewSection}>
@@ -327,6 +381,29 @@ const styles = StyleSheet.create({
   },
   awardHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   awardText: { fontSize: 14, fontWeight: '800', color: Colors.xpGold },
+
+  recoCard: {
+    backgroundColor: '#EFF6FF',
+    borderRadius: 14,
+    padding: 14,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+  },
+  recoHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  recoTitle: { fontSize: 13, fontWeight: '800', color: Colors.info },
+  recoBody: { fontSize: 13, lineHeight: 19, color: Colors.textPrimary },
+  recoEm: { fontWeight: '800' },
+  recoTip: {
+    flexDirection: 'row',
+    gap: 6,
+    backgroundColor: Colors.white,
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'flex-start',
+  },
+  recoTipText: { flex: 1, fontSize: 12, color: Colors.textSecondary, lineHeight: 18 },
+  recoMeta: { fontSize: 11, color: Colors.textMuted, fontStyle: 'italic' },
 
   messageCard: {
     borderRadius: 12,

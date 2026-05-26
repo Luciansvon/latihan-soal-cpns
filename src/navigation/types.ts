@@ -35,6 +35,7 @@ export type LatihanStackParams = {
     questionCount?: number;
   };
   SessionResult: { sessionId: string };
+  SkimTrainer: undefined;
 };
 
 // Tryout stack
