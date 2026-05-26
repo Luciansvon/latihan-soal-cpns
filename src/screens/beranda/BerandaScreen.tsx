@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../../constants/colors';
 import { useStore } from '../../store';
 import { EXAM_CONFIGS, type ExamType } from '../../types/exam.types';
@@ -59,6 +60,7 @@ const EXAM_COLORS: Record<ExamType, string> = {
 
 export function BerandaScreen() {
   const { profile, xpTotal, level, streakCurrent } = useStore();
+  const navigation = useNavigation<any>();
 
   const displayName = profile?.fullName ?? profile?.username ?? 'Pejuang CPNS';
   const hour = new Date().getHours();
@@ -128,6 +130,7 @@ export function BerandaScreen() {
                 key={examType}
                 style={[styles.examCard, { borderColor: EXAM_COLORS[examType] }]}
                 activeOpacity={0.8}
+                onPress={() => navigation.navigate('Latihan', { screen: 'CategoryList', params: { examType } })}
               >
                 <View style={[styles.examBadge, { backgroundColor: EXAM_COLORS[examType] }]}>
                   <Text style={styles.examBadgeText}>{config.label}</Text>
