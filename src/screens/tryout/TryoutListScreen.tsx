@@ -9,51 +9,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
+import { TRYOUT_TEMPLATES, getTryoutQuestionCount } from '../../constants/tryoutTemplates';
 import type { TryoutScreenProps } from '../../navigation/types';
-
-interface TryoutTemplate {
-  id: string;
-  title: string;
-  subtitle: string;
-  questionCount: number;
-  durationMinutes: number;
-  color: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  difficulty: string;
-}
-
-const TRYOUT_TEMPLATES: TryoutTemplate[] = [
-  {
-    id: 'cpns-skd-001',
-    title: 'CPNS SKD Paket 1',
-    subtitle: 'Seleksi Kompetensi Dasar',
-    questionCount: 110,
-    durationMinutes: 100,
-    color: Colors.cpns,
-    icon: 'business-outline',
-    difficulty: 'Standar',
-  },
-  {
-    id: 'tni-001',
-    title: 'TNI Paket 1',
-    subtitle: 'Tes Akademik & Psikotes',
-    questionCount: 80,
-    durationMinutes: 90,
-    color: Colors.tni,
-    icon: 'shield-half-outline',
-    difficulty: 'Sedang',
-  },
-  {
-    id: 'polri-001',
-    title: 'Polri Paket 1',
-    subtitle: 'Tes Akademik & Kedinasan',
-    questionCount: 90,
-    durationMinutes: 90,
-    color: Colors.polri,
-    icon: 'shield-checkmark-outline',
-    difficulty: 'Sedang',
-  },
-];
 
 export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>) {
   return (
@@ -103,7 +60,7 @@ export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>
             <View style={styles.statsRow}>
               <View style={styles.statItem}>
                 <Ionicons name="document-text-outline" size={14} color={Colors.textSecondary} />
-                <Text style={styles.statText}>{template.questionCount} soal</Text>
+                <Text style={styles.statText}>{getTryoutQuestionCount(template)} soal</Text>
               </View>
               <View style={styles.statDot} />
               <View style={styles.statItem}>

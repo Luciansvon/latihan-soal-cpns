@@ -1,45 +1,43 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
+  View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
+import { SUBJECT_LABELS } from '../../types/exam.types';
+import { getTryoutTemplate } from '../../constants/tryoutTemplates';
 import type { TryoutScreenProps } from '../../navigation/types';
 
-interface SectionResult {
-  name: string;
-  score: number;
-  passing: number;
-  correct: number;
-  total: number;
-  color: string;
+const SUBJECT_COLORS: Record<string, string> = {
+  TWK: Colors.twk, TIU: Colors.tiu, TKP: Colors.tkp,
+  MATEMATIKA: Colors.math, BAHASA_INDONESIA: Colors.indo,
+  PENGETAHUAN_UMUM: Colors.umum, PENGETAHUAN_HUKUM: Colors.hukum,
+  PSIKOTES: Colors.levelBadge, KEDINASAN: Colors.tni,
+};
+
+function formatDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return s > 0 ? `${m} menit ${s} detik` : `${m} menit`;
 }
 
-const PLACEHOLDER_SECTIONS: SectionResult[] = [
-  { name: 'TWK', score: 80, passing: 65, correct: 24, total: 30, color: Colors.twk },
-  { name: 'TIU', score: 60, passing: 80, correct: 21, total: 35, color: Colors.tiu },
-  { name: 'TKP', score: 154, passing: 166, correct: 38, total: 45, color: Colors.tkp },
-];
-
 export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'TryoutResult'>) {
-  const { sessionId } = route.params;
+  const { templateId, examType, durationUsedSeconds, sections } = route.params;
+  const template = getTryoutTemplate(templateId);
+  const accentColor = template?.color ?? Colors.primary;
 
-  const totalCorrect = PLACEHOLDER_SECTIONS.reduce((sum, s) => sum + s.correct, 0);
-  const totalQuestions = PLACEHOLDER_SECTIONS.reduce((sum, s) => sum + s.total, 0);
-  const passedSections = PLACEHOLDER_SECTIONS.filter((s) => s.score >= s.passing).length;
-  const isLulus = passedSections === PLACEHOLDER_SECTIONS.length;
+  const totalCorrect = sections.reduce((s, x) => s + x.correct, 0);
+  const totalQuestions = sections.reduce((s, x) => s + x.total, 0);
+  const totalAnswered = sections.reduce((s, x) => s + x.answered, 0);
+  const passedSections = sections.filter((s) => s.passed).length;
+  const isLulus = passedSections === sections.length;
+  const xpEarned = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 200) : 0;
 
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Hasil Tryout</Text>
-        <Text style={styles.sessionId}>ID: {sessionId}</Text>
+        <Text style={styles.sessionId}>{template?.title ?? examType}</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -50,11 +48,7 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
           { backgroundColor: isLulus ? Colors.success + '15' : Colors.error + '12' },
           { borderColor: isLulus ? Colors.success + '40' : Colors.error + '30' },
         ]}>
-          <Ionicons
-            name={isLulus ? 'checkmark-circle' : 'close-circle'}
-            size={32}
-            color={isLulus ? Colors.success : Colors.error}
-          />
+          <Ionicons name={isLulus ? 'checkmark-circle' : 'close-circle'} size={32} color={isLulus ? Colors.success : Colors.error} />
           <View style={styles.resultBannerText}>
             <Text style={[styles.resultTitle, { color: isLulus ? Colors.success : Colors.error }]}>
               {isLulus ? 'LULUS' : 'BELUM LULUS'}
@@ -62,7 +56,7 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
             <Text style={styles.resultDesc}>
               {isLulus
                 ? 'Selamat! Kamu melewati semua ambang batas kelulusan.'
-                : `${passedSections} dari ${PLACEHOLDER_SECTIONS.length} bagian memenuhi nilai passing.`}
+                : `${passedSections} dari ${sections.length} bagian memenuhi nilai passing.`}
             </Text>
           </View>
         </View>
@@ -77,67 +71,52 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
             </View>
             <View style={styles.overallDivider} />
             <View style={styles.overallItem}>
-              <Text style={styles.overallValue}>{totalQuestions - totalCorrect}</Text>
+              <Text style={styles.overallValue}>{totalAnswered - totalCorrect}</Text>
               <Text style={styles.overallLabel}>Salah</Text>
             </View>
             <View style={styles.overallDivider} />
             <View style={styles.overallItem}>
-              <Text style={styles.overallValue}>{totalQuestions}</Text>
-              <Text style={styles.overallLabel}>Total Soal</Text>
+              <Text style={styles.overallValue}>{totalQuestions - totalAnswered}</Text>
+              <Text style={styles.overallLabel}>Kosong</Text>
             </View>
           </View>
+          <Text style={styles.durationText}>Waktu pengerjaan: {formatDuration(durationUsedSeconds)}</Text>
         </View>
 
         {/* Section Results */}
         <View style={styles.sectionsCard}>
           <Text style={styles.cardTitle}>Hasil Per Bagian</Text>
-          {PLACEHOLDER_SECTIONS.map((section, index) => {
-            const isPassing = section.score >= section.passing;
+          {sections.map((section) => {
+            const color = SUBJECT_COLORS[section.subject] ?? accentColor;
+            const denom = Math.max(section.passingScore * 1.5, section.maxScore, 1);
             return (
-              <View key={index} style={styles.sectionItem}>
+              <View key={section.subject} style={styles.sectionItem}>
                 <View style={styles.sectionHeader}>
-                  <View style={[styles.sectionDot, { backgroundColor: section.color }]} />
-                  <Text style={styles.sectionName}>{section.name}</Text>
-                  <View style={[
-                    styles.sectionStatus,
-                    { backgroundColor: isPassing ? Colors.success + '15' : Colors.error + '12' },
-                  ]}>
-                    <Ionicons
-                      name={isPassing ? 'checkmark-circle' : 'close-circle'}
-                      size={12}
-                      color={isPassing ? Colors.success : Colors.error}
-                    />
-                    <Text style={[
-                      styles.sectionStatusText,
-                      { color: isPassing ? Colors.success : Colors.error },
-                    ]}>
-                      {isPassing ? 'Lulus' : 'Tidak Lulus'}
+                  <View style={[styles.sectionDot, { backgroundColor: color }]} />
+                  <Text style={styles.sectionName}>{SUBJECT_LABELS[section.subject]}</Text>
+                  <View style={[styles.sectionStatus, { backgroundColor: section.passed ? Colors.success + '15' : Colors.error + '12' }]}>
+                    <Ionicons name={section.passed ? 'checkmark-circle' : 'close-circle'} size={12} color={section.passed ? Colors.success : Colors.error} />
+                    <Text style={[styles.sectionStatusText, { color: section.passed ? Colors.success : Colors.error }]}>
+                      {section.passed ? 'Lulus' : 'Tidak Lulus'}
                     </Text>
                   </View>
                 </View>
 
                 <View style={styles.sectionScoreRow}>
                   <Text style={styles.sectionScore}>{section.score}</Text>
-                  <Text style={styles.sectionPassing}>/ {section.passing} passing</Text>
+                  <Text style={styles.sectionPassing}>/ {section.passingScore} passing · maks {section.maxScore}</Text>
                 </View>
 
-                {/* Score Bar */}
                 <View style={styles.sectionBarTrack}>
-                  <View
-                    style={[
-                      styles.sectionBarFill,
-                      {
-                        width: `${Math.min((section.score / (section.passing * 1.5)) * 100, 100)}%`,
-                        backgroundColor: isPassing ? section.color : Colors.error,
-                      },
-                    ]}
-                  />
-                  {/* Passing line marker */}
-                  <View style={[styles.passingMark, { left: `${(section.passing / (section.passing * 1.5)) * 100}%` }]} />
+                  <View style={[styles.sectionBarFill, {
+                    width: `${Math.min((section.score / denom) * 100, 100)}%`,
+                    backgroundColor: section.passed ? color : Colors.error,
+                  }]} />
+                  <View style={[styles.passingMark, { left: `${Math.min((section.passingScore / denom) * 100, 100)}%` }]} />
                 </View>
 
                 <Text style={styles.sectionDetail}>
-                  {section.correct} / {section.total} soal benar
+                  {section.correct} / {section.total} soal benar · {section.answered} dijawab
                 </Text>
               </View>
             );
@@ -149,29 +128,29 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
           <Ionicons name="star" size={22} color={Colors.xpGold} />
           <View style={styles.xpInfo}>
             <Text style={styles.xpTitle}>XP dari Tryout</Text>
-            <Text style={styles.xpDesc}>XP dihitung berdasarkan persentase benar</Text>
+            <Text style={styles.xpDesc}>Dihitung dari persentase jawaban benar</Text>
           </View>
-          <Text style={styles.xpValue}>+{Math.round((totalCorrect / totalQuestions) * 200)}</Text>
+          <Text style={styles.xpValue}>+{xpEarned}</Text>
         </View>
 
         {/* Actions */}
         <View style={styles.actions}>
           <TouchableOpacity
-            style={styles.primaryBtn}
+            style={[styles.primaryBtn, { backgroundColor: accentColor }]}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate('TryoutList')}
+            onPress={() => navigation.replace('TryoutDetail', { templateId })}
           >
             <Ionicons name="refresh-outline" size={18} color={Colors.white} />
-            <Text style={styles.primaryBtnText}>Tryout Lagi</Text>
+            <Text style={styles.primaryBtnText}>Ulangi Tryout</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.secondaryBtn}
+            style={[styles.secondaryBtn, { borderColor: accentColor }]}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate('TryoutList')}
+            onPress={() => navigation.popToTop()}
           >
-            <Ionicons name="list-outline" size={18} color={Colors.primary} />
-            <Text style={styles.secondaryBtnText}>Daftar Tryout</Text>
+            <Ionicons name="list-outline" size={18} color={accentColor} />
+            <Text style={[styles.secondaryBtnText, { color: accentColor }]}>Daftar Tryout</Text>
           </TouchableOpacity>
         </View>
 
@@ -229,6 +208,7 @@ const styles = StyleSheet.create({
   overallValue: { fontSize: 28, fontWeight: '900', color: Colors.textPrimary },
   overallLabel: { fontSize: 12, color: Colors.textSecondary },
   overallDivider: { width: 1, height: 50, backgroundColor: Colors.border },
+  durationText: { fontSize: 12, color: Colors.textMuted, textAlign: 'center' },
 
   sectionsCard: {
     backgroundColor: Colors.white,
@@ -295,7 +275,6 @@ const styles = StyleSheet.create({
 
   actions: { gap: 12 },
   primaryBtn: {
-    backgroundColor: Colors.primary,
     borderRadius: 14,
     paddingVertical: 16,
     flexDirection: 'row',
@@ -313,7 +292,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     borderWidth: 1.5,
-    borderColor: Colors.primary,
   },
-  secondaryBtnText: { fontSize: 16, fontWeight: '700', color: Colors.primary },
+  secondaryBtnText: { fontSize: 16, fontWeight: '700' },
 });

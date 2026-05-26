@@ -9,78 +9,27 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
+import { SUBJECT_LABELS } from '../../types/exam.types';
+import { getTryoutTemplate, getTryoutQuestionCount } from '../../constants/tryoutTemplates';
 import type { TryoutScreenProps } from '../../navigation/types';
-
-interface TemplateInfo {
-  title: string;
-  subtitle: string;
-  color: string;
-  questionCount: number;
-  durationMinutes: number;
-  sections: Array<{ name: string; count: number; passing: number }>;
-  description: string;
-}
-
-const TEMPLATE_MAP: Record<string, TemplateInfo> = {
-  'cpns-skd-001': {
-    title: 'CPNS SKD Paket 1',
-    subtitle: 'Seleksi Kompetensi Dasar',
-    color: Colors.cpns,
-    questionCount: 110,
-    durationMinutes: 100,
-    sections: [
-      { name: 'Tes Wawasan Kebangsaan (TWK)', count: 30, passing: 65 },
-      { name: 'Tes Intelegensia Umum (TIU)', count: 35, passing: 80 },
-      { name: 'Tes Karakteristik Pribadi (TKP)', count: 45, passing: 166 },
-    ],
-    description:
-      'Paket tryout CPNS SKD ini disusun sesuai dengan standar Badan Kepegawaian Negara (BKN) dengan distribusi soal dan waktu yang sama dengan ujian sesungguhnya.',
-  },
-  'tni-001': {
-    title: 'TNI Paket 1',
-    subtitle: 'Tes Akademik & Psikotes',
-    color: Colors.tni,
-    questionCount: 80,
-    durationMinutes: 90,
-    sections: [
-      { name: 'Matematika', count: 20, passing: 60 },
-      { name: 'Bahasa Indonesia', count: 20, passing: 60 },
-      { name: 'Pengetahuan Umum', count: 20, passing: 60 },
-      { name: 'Psikotes', count: 20, passing: 70 },
-    ],
-    description: 'Paket tryout TNI mencakup semua materi tes akademik dan psikotes yang digunakan dalam seleksi Tentara Nasional Indonesia.',
-  },
-  'polri-001': {
-    title: 'Polri Paket 1',
-    subtitle: 'Tes Akademik & Kedinasan',
-    color: Colors.polri,
-    questionCount: 90,
-    durationMinutes: 90,
-    sections: [
-      { name: 'Matematika', count: 20, passing: 60 },
-      { name: 'Bahasa Indonesia', count: 20, passing: 60 },
-      { name: 'Pengetahuan Umum', count: 20, passing: 60 },
-      { name: 'Pengetahuan Hukum', count: 15, passing: 55 },
-      { name: 'Psikotes', count: 15, passing: 65 },
-    ],
-    description: 'Paket tryout Polri mencakup semua materi tes yang digunakan dalam seleksi Kepolisian Republik Indonesia.',
-  },
-};
-
-const FALLBACK_TEMPLATE: TemplateInfo = {
-  title: 'Tryout',
-  subtitle: 'Detail',
-  color: Colors.primary,
-  questionCount: 0,
-  durationMinutes: 0,
-  sections: [],
-  description: 'Detail tryout tidak tersedia.',
-};
 
 export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'TryoutDetail'>) {
   const { templateId } = route.params;
-  const template = TEMPLATE_MAP[templateId] ?? FALLBACK_TEMPLATE;
-  const accentColor = template.color;
+  const tpl = getTryoutTemplate(templateId);
+  const accentColor = tpl?.color ?? Colors.primary;
+
+  const template = {
+    title: tpl?.title ?? 'Tryout',
+    subtitle: tpl?.subtitle ?? 'Detail',
+    questionCount: tpl ? getTryoutQuestionCount(tpl) : 0,
+    durationMinutes: tpl?.durationMinutes ?? 0,
+    description: tpl?.description ?? 'Detail tryout tidak tersedia.',
+    sections: (tpl?.sections ?? []).map((s) => ({
+      name: SUBJECT_LABELS[s.subject],
+      count: s.questionCount,
+      passing: s.passingScore,
+    })),
+  };
 
   return (
     <SafeAreaView style={styles.safe}>

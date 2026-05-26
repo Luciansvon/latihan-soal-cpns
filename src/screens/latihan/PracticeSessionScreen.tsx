@@ -11,6 +11,7 @@ import { supabase } from '../../services/supabase';
 import { QuestionCard } from '../../components/question/QuestionCard';
 import { OptionButton } from '../../components/question/OptionButton';
 import type { OptionState } from '../../components/question/OptionButton';
+import { mapQuestionRow } from '../../utils/mapQuestionRow';
 import type { Question } from '../../types/question.types';
 import type { LatihanScreenProps } from '../../navigation/types';
 
@@ -23,26 +24,6 @@ interface AnswerRecord {
   selectedOption: string;
   isCorrect: boolean;
   scoreEarned: number;
-}
-
-function mapRow(row: any): Question {
-  return {
-    id: row.id,
-    packId: row.pack_id,
-    examType: row.exam_type,
-    subject: row.subject,
-    subtopic: row.subtopic ?? undefined,
-    questionType: row.question_type,
-    difficulty: row.difficulty,
-    difficultyRank: row.difficulty_rank ?? undefined,
-    questionText: row.question_text,
-    questionImageUrl: row.question_image_url ?? undefined,
-    options: Array.isArray(row.options) ? row.options : JSON.parse(row.options ?? '[]'),
-    correctOption: row.correct_option,
-    tkpScores: row.tkp_scores ?? undefined,
-    explanationText: row.explanation_text ?? undefined,
-    tags: row.tags ?? undefined,
-  };
 }
 
 export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<'PracticeSession'>) {
@@ -85,7 +66,7 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
       }
 
       const shuffled = [...data].sort(() => Math.random() - 0.5).slice(0, questionCount);
-      setQuestions(shuffled.map(mapRow));
+      setQuestions(shuffled.map(mapQuestionRow));
     } catch {
       setError('Gagal memuat soal. Periksa koneksi internet.');
     } finally {

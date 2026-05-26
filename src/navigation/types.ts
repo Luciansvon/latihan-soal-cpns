@@ -48,11 +48,27 @@ export type LatihanStackParams = {
 };
 
 // Tryout stack
+export type TryoutSectionResult = {
+  subject: SubjectType;
+  score: number;
+  maxScore: number;
+  correct: number;
+  answered: number;
+  total: number;
+  passingScore: number;
+  passed: boolean;
+};
+
 export type TryoutStackParams = {
   TryoutList: undefined;
   TryoutDetail: { templateId: string };
   TryoutSession: { templateId: string };
-  TryoutResult: { sessionId: string };
+  TryoutResult: {
+    templateId: string;
+    examType: ExamType;
+    durationUsedSeconds: number;
+    sections: TryoutSectionResult[];
+  };
 };
 
 // Progress stack
