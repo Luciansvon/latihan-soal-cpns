@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,128 +6,186 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
+import type { TryoutTemplate, ExamType } from '../../types/exam.types';
+import { supabase } from '../../services/supabase';
+import { useStore } from '../../store';
 
-interface TryoutTemplate {
-  id: string;
-  title: string;
-  subtitle: string;
-  questionCount: number;
-  durationMinutes: number;
-  color: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  difficulty: string;
-}
+const EXAM_COLORS: Record<ExamType, string> = {
+  CPNS: Colors.cpns,
+  TNI: Colors.tni,
+  POLRI: Colors.polri,
+};
 
-const TRYOUT_TEMPLATES: TryoutTemplate[] = [
-  {
-    id: 'cpns-skd-001',
-    title: 'CPNS SKD Paket 1',
-    subtitle: 'Seleksi Kompetensi Dasar',
-    questionCount: 110,
-    durationMinutes: 100,
-    color: Colors.cpns,
-    icon: 'business-outline',
-    difficulty: 'Standar',
-  },
-  {
-    id: 'tni-001',
-    title: 'TNI Paket 1',
-    subtitle: 'Tes Akademik & Psikotes',
-    questionCount: 80,
-    durationMinutes: 90,
-    color: Colors.tni,
-    icon: 'shield-half-outline',
-    difficulty: 'Sedang',
-  },
-  {
-    id: 'polri-001',
-    title: 'Polri Paket 1',
-    subtitle: 'Tes Akademik & Kedinasan',
-    questionCount: 90,
-    durationMinutes: 90,
-    color: Colors.polri,
-    icon: 'shield-checkmark-outline',
-    difficulty: 'Sedang',
-  },
-];
+const EXAM_ICONS: Record<ExamType, keyof typeof Ionicons.glyphMap> = {
+  CPNS: 'business-outline',
+  TNI: 'shield-half-outline',
+  POLRI: 'shield-checkmark-outline',
+};
 
 export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>) {
+  const isOnline = useStore((s) => s.isOnline);
+  const [templates, setTemplates] = useState<TryoutTemplate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setError(null);
+    try {
+      const { data, error } = await supabase
+        .from('tryout_templates')
+        .select('*')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false });
+      if (error) throw new Error(error.message);
+      setTemplates((data ?? []).map(mapTemplate));
+    } catch (e: any) {
+      setError(`Gagal memuat daftar tryout: ${e?.message ?? 'unknown error'}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await load();
+      setLoading(false);
+    })();
+  }, [load]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await load();
+    setRefreshing(false);
+  }, [load]);
+
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Tryout Resmi</Text>
-        <Text style={styles.headerSubtitle}>Simulasi ujian lengkap dengan durasi dan skor resmi</Text>
+        <Text style={styles.headerSubtitle}>Simulasi ujian lengkap dengan durasi & skor</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {!isOnline ? (
+          <View style={styles.offlineBanner}>
+            <Ionicons name="cloud-offline-outline" size={18} color={Colors.warning} />
+            <Text style={styles.offlineText}>
+              Mode offline. Daftar tryout mungkin tidak terbaru.
+            </Text>
+          </View>
+        ) : null}
 
-        {/* Info Banner */}
-        <View style={styles.infoBanner}>
-          <Ionicons name="information-circle-outline" size={18} color={Colors.info} />
-          <Text style={styles.infoText}>
-            Tryout meniru kondisi ujian sesungguhnya. Pastikan kamu siap sebelum memulai.
-          </Text>
-        </View>
+        {loading ? (
+          <View style={styles.centerBox}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+            <Text style={styles.loadingText}>Memuat daftar tryout…</Text>
+          </View>
+        ) : error ? (
+          <View style={styles.errorBox}>
+            <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity style={styles.retryBtn} onPress={onRefresh}>
+              <Text style={styles.retryBtnText}>Coba lagi</Text>
+            </TouchableOpacity>
+          </View>
+        ) : templates.length === 0 ? (
+          <View style={styles.emptyBox}>
+            <Ionicons name="hourglass-outline" size={48} color={Colors.textMuted} />
+            <Text style={styles.emptyTitle}>Belum ada tryout tersedia</Text>
+            <Text style={styles.emptyDesc}>
+              Admin belum mempublish paket tryout. Coba kembali nanti atau pull-to-refresh.
+            </Text>
+          </View>
+        ) : (
+          <>
+            <Text style={styles.sectionTitle}>{templates.length} paket tersedia</Text>
+            {templates.map((tpl) => {
+              const color = EXAM_COLORS[tpl.examType] ?? Colors.primary;
+              const icon = EXAM_ICONS[tpl.examType] ?? 'document-text-outline';
+              const totalQuestions = tpl.sections.reduce((s, sec) => s + sec.questionCount, 0);
+              return (
+                <TouchableOpacity
+                  key={tpl.id}
+                  style={[styles.card, { borderLeftColor: color }]}
+                  activeOpacity={0.85}
+                  onPress={() => navigation.navigate('TryoutDetail', { templateId: tpl.id })}
+                >
+                  <View style={styles.cardHeader}>
+                    <View style={[styles.iconBox, { backgroundColor: color + '18' }]}>
+                      <Ionicons name={icon} size={24} color={color} />
+                    </View>
+                    <View style={styles.cardTitleGroup}>
+                      <Text style={styles.cardTitle}>{tpl.title}</Text>
+                      {tpl.description ? (
+                        <Text style={styles.cardSubtitle} numberOfLines={1}>
+                          {tpl.description}
+                        </Text>
+                      ) : null}
+                    </View>
+                    <View style={[styles.examBadge, { backgroundColor: color + '18' }]}>
+                      <Text style={[styles.examBadgeText, { color }]}>{tpl.examType}</Text>
+                    </View>
+                  </View>
 
-        <Text style={styles.sectionTitle}>Pilih Paket Tryout</Text>
+                  <View style={styles.statsRow}>
+                    <View style={styles.statItem}>
+                      <Ionicons name="document-text-outline" size={13} color={Colors.textSecondary} />
+                      <Text style={styles.statText}>{totalQuestions} soal</Text>
+                    </View>
+                    <View style={styles.statDot} />
+                    <View style={styles.statItem}>
+                      <Ionicons name="time-outline" size={13} color={Colors.textSecondary} />
+                      <Text style={styles.statText}>{tpl.durationMinutes} menit</Text>
+                    </View>
+                    <View style={styles.statDot} />
+                    <View style={styles.statItem}>
+                      <Ionicons name="layers-outline" size={13} color={Colors.textSecondary} />
+                      <Text style={styles.statText}>{tpl.sections.length} bagian</Text>
+                    </View>
+                  </View>
 
-        {TRYOUT_TEMPLATES.map((template) => (
-          <TouchableOpacity
-            key={template.id}
-            style={[styles.tryoutCard, { borderLeftColor: template.color }]}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate('TryoutDetail', { templateId: template.id })}
-          >
-            {/* Card Header */}
-            <View style={styles.cardHeader}>
-              <View style={[styles.iconBox, { backgroundColor: template.color + '18' }]}>
-                <Ionicons name={template.icon} size={26} color={template.color} />
-              </View>
-              <View style={styles.cardTitleGroup}>
-                <Text style={styles.cardTitle}>{template.title}</Text>
-                <Text style={styles.cardSubtitle}>{template.subtitle}</Text>
-              </View>
-              <View style={[styles.difficultyBadge, { backgroundColor: template.color + '18' }]}>
-                <Text style={[styles.difficultyText, { color: template.color }]}>
-                  {template.difficulty}
-                </Text>
-              </View>
-            </View>
-
-            {/* Stats Row */}
-            <View style={styles.statsRow}>
-              <View style={styles.statItem}>
-                <Ionicons name="document-text-outline" size={14} color={Colors.textSecondary} />
-                <Text style={styles.statText}>{template.questionCount} soal</Text>
-              </View>
-              <View style={styles.statDot} />
-              <View style={styles.statItem}>
-                <Ionicons name="time-outline" size={14} color={Colors.textSecondary} />
-                <Text style={styles.statText}>{template.durationMinutes} menit</Text>
-              </View>
-            </View>
-
-            <View style={styles.cardFooter}>
-              <Text style={[styles.startText, { color: template.color }]}>Lihat Detail</Text>
-              <Ionicons name="chevron-forward" size={16} color={template.color} />
-            </View>
-          </TouchableOpacity>
-        ))}
-
-        {/* Coming Soon */}
-        <View style={styles.comingSoonCard}>
-          <Ionicons name="hourglass-outline" size={20} color={Colors.textMuted} />
-          <Text style={styles.comingSoonText}>Paket tryout baru akan segera hadir</Text>
-        </View>
-
+                  <View style={styles.cardFooter}>
+                    <Text style={[styles.startText, { color }]}>Lihat Detail</Text>
+                    <Ionicons name="chevron-forward" size={16} color={color} />
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+function mapTemplate(row: any): TryoutTemplate {
+  return {
+    id: row.id,
+    examType: row.exam_type,
+    title: row.title,
+    description: row.description ?? undefined,
+    durationMinutes: row.duration_minutes,
+    passingScore: row.passing_score ?? undefined,
+    sections: (row.sections ?? []).map((s: any) => ({
+      subject: s.subject,
+      questionCount: s.questionCount ?? s.question_count,
+      durationMinutes: s.durationMinutes ?? s.duration_minutes,
+      passingScore: s.passingScore ?? s.passing_score,
+    })),
+    isFree: row.is_free,
+    isPublished: row.is_published,
+    createdAt: row.created_at,
+  };
 }
 
 const styles = StyleSheet.create({
@@ -145,22 +203,44 @@ const styles = StyleSheet.create({
   headerSubtitle: { fontSize: 13, color: Colors.textSecondary, marginTop: 2 },
 
   scroll: { padding: 20, gap: 14, paddingBottom: 40 },
+  sectionTitle: { fontSize: 13, fontWeight: '600', color: Colors.textSecondary },
 
-  infoBanner: {
+  offlineBanner: {
     flexDirection: 'row',
-    gap: 10,
-    backgroundColor: '#EFF6FF',
-    borderRadius: 12,
-    padding: 14,
+    gap: 8,
+    backgroundColor: '#FFFBEB',
+    borderRadius: 10,
+    padding: 12,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
-    alignItems: 'flex-start',
+    borderColor: '#FDE68A',
+    alignItems: 'center',
   },
-  infoText: { flex: 1, fontSize: 13, color: Colors.info, lineHeight: 20 },
+  offlineText: { flex: 1, fontSize: 12, color: Colors.warning, fontWeight: '500' },
 
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: Colors.textPrimary },
+  centerBox: { alignItems: 'center', gap: 12, paddingVertical: 48 },
+  loadingText: { fontSize: 13, color: Colors.textSecondary },
 
-  tryoutCard: {
+  errorBox: { alignItems: 'center', gap: 12, paddingVertical: 32 },
+  errorText: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
+  retryBtn: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  retryBtnText: { fontSize: 13, fontWeight: '700', color: Colors.white },
+
+  emptyBox: { alignItems: 'center', gap: 8, paddingVertical: 48 },
+  emptyTitle: { fontSize: 15, fontWeight: '700', color: Colors.textPrimary, marginTop: 6 },
+  emptyDesc: {
+    fontSize: 13,
+    color: Colors.textSecondary,
+    textAlign: 'center',
+    paddingHorizontal: 24,
+    lineHeight: 20,
+  },
+
+  card: {
     backgroundColor: Colors.white,
     borderRadius: 16,
     padding: 18,
@@ -181,31 +261,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardTitleGroup: { flex: 1 },
-  cardTitle: { fontSize: 16, fontWeight: '800', color: Colors.textPrimary },
+  cardTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary },
   cardSubtitle: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
-  difficultyBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  difficultyText: { fontSize: 11, fontWeight: '700' },
+  examBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  examBadgeText: { fontSize: 11, fontWeight: '700' },
 
   statsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    paddingTop: 4,
+    gap: 8,
+    paddingTop: 6,
     borderTopWidth: 1,
     borderTopColor: Colors.gray100,
+    flexWrap: 'wrap',
   },
   statItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  statText: { fontSize: 13, color: Colors.textSecondary },
-  statDot: {
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
-    backgroundColor: Colors.gray300,
-  },
+  statText: { fontSize: 12, color: Colors.textSecondary },
+  statDot: { width: 3, height: 3, borderRadius: 1.5, backgroundColor: Colors.gray300 },
 
   cardFooter: {
     flexDirection: 'row',
@@ -214,18 +286,4 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   startText: { fontSize: 13, fontWeight: '700' },
-
-  comingSoonCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    backgroundColor: Colors.white,
-    borderRadius: 14,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    borderStyle: 'dashed',
-  },
-  comingSoonText: { fontSize: 13, color: Colors.textMuted, fontWeight: '500' },
 });

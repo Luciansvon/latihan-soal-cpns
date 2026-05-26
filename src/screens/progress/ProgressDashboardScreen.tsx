@@ -6,11 +6,15 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import { useStore } from '../../store';
 import type { ProgressScreenProps } from '../../navigation/types';
+import { useProgressData } from '../../hooks/useProgressData';
+import { AccuracyChart } from '../../components/charts/AccuracyChart';
 
 interface StatCardProps {
   label: string;
@@ -49,19 +53,28 @@ const statStyles = StyleSheet.create({
 });
 
 export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'ProgressDashboard'>) {
-  const { xpTotal, level, streakCurrent, streakLongest } = useStore();
-  const hasSessions = false; // Will be populated once sessions are tracked
+  const userId = useStore((s) => s.userId);
+  const xpTotal = useStore((s) => s.xpTotal);
+  const level = useStore((s) => s.level);
+  const streakCurrent = useStore((s) => s.streakCurrent);
+  const streakLongest = useStore((s) => s.streakLongest);
+
+  const progress = useProgressData({ userId });
 
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Progress Belajar</Text>
         <Text style={styles.headerSubtitle}>Pantau perkembanganmu dari waktu ke waktu</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={progress.loading} onRefresh={progress.refresh} />
+        }
+      >
         {/* Gamification Stats */}
         <View style={styles.statsRow}>
           <StatCard label="Level" value={level} icon="ribbon-outline" color={Colors.levelBadge} />
@@ -82,8 +95,6 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
               <Text style={styles.streakLabel}>Streak Terpanjang</Text>
             </View>
           </View>
-
-          {/* Streak Days Placeholder */}
           <View style={styles.streakWeek}>
             {['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'].map((day, i) => {
               const isActive = i < (streakCurrent % 7);
@@ -97,32 +108,49 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
           </View>
         </View>
 
-        {/* Accuracy Section */}
-        {hasSessions ? (
-          <View style={styles.accuracyCard}>
-            <Text style={styles.sectionTitle}>Akurasi per Mata Pelajaran</Text>
-            {['TWK', 'TIU', 'TKP'].map((subject) => (
-              <View key={subject} style={styles.accuracyRow}>
-                <Text style={styles.accuracySubject}>{subject}</Text>
-                <View style={styles.accuracyBar}>
-                  <View style={[styles.accuracyFill, { width: '0%', backgroundColor: Colors.primary }]} />
-                </View>
-                <Text style={styles.accuracyPct}>0%</Text>
-              </View>
-            ))}
-          </View>
-        ) : (
+        {/* Session summary */}
+        <View style={styles.summaryCard}>
+          <Text style={styles.sectionTitle}>Ringkasan Sesi</Text>
+          {progress.loading ? (
+            <ActivityIndicator color={Colors.primary} />
+          ) : (
+            <View style={styles.summaryRow}>
+              <SummaryStat label="Sesi" value={progress.totalSessions} />
+              <SummaryDivider />
+              <SummaryStat label="Soal Dijawab" value={progress.totalAnswered} />
+              <SummaryDivider />
+              <SummaryStat
+                label="Akurasi"
+                value={
+                  progress.totalAnswered > 0
+                    ? `${Math.round((progress.totalCorrect / progress.totalAnswered) * 100)}%`
+                    : '—'
+                }
+              />
+            </View>
+          )}
+        </View>
+
+        {/* Accuracy chart */}
+        <View style={styles.accuracyCard}>
+          <Text style={styles.sectionTitle}>Akurasi per Mata Pelajaran</Text>
+          {progress.loading ? (
+            <ActivityIndicator color={Colors.primary} />
+          ) : (
+            <AccuracyChart data={progress.accuracyBySubject} />
+          )}
+        </View>
+
+        {/* Empty CTA when truly nothing */}
+        {!progress.loading && progress.totalSessions === 0 ? (
           <View style={styles.emptyStateCard}>
-            <Ionicons name="bar-chart-outline" size={52} color={Colors.gray300} />
-            <Text style={styles.emptyTitle}>Belum ada data</Text>
+            <Ionicons name="bar-chart-outline" size={48} color={Colors.gray300} />
+            <Text style={styles.emptyTitle}>Mulai sesi pertama</Text>
             <Text style={styles.emptyDesc}>
-              Selesaikan sesi latihan pertamamu untuk melihat statistik akurasi dan perkembangan belajarmu.
+              Selesaikan satu sesi latihan untuk melihat statistik dan riwayat di sini.
             </Text>
-            <TouchableOpacity style={styles.emptyBtn} activeOpacity={0.85}>
-              <Text style={styles.emptyBtnText}>Mulai Latihan</Text>
-            </TouchableOpacity>
           </View>
-        )}
+        ) : null}
 
         {/* History Quick Link */}
         <TouchableOpacity
@@ -136,15 +164,31 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
             </View>
             <View>
               <Text style={styles.historyLinkTitle}>Riwayat Sesi</Text>
-              <Text style={styles.historyLinkDesc}>Lihat semua sesi latihan & tryout</Text>
+              <Text style={styles.historyLinkDesc}>
+                {progress.recentSessions.length > 0
+                  ? `${progress.recentSessions.length} sesi tersimpan`
+                  : 'Lihat semua sesi latihan & tryout'}
+              </Text>
             </View>
           </View>
           <Ionicons name="chevron-forward" size={18} color={Colors.textMuted} />
         </TouchableOpacity>
-
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+function SummaryStat({ label, value }: { label: string; value: string | number }) {
+  return (
+    <View style={styles.summaryItem}>
+      <Text style={styles.summaryValue}>{value}</Text>
+      <Text style={styles.summaryLabel}>{label}</Text>
+    </View>
+  );
+}
+
+function SummaryDivider() {
+  return <View style={styles.summaryDivider} />;
 }
 
 const styles = StyleSheet.create({
@@ -182,10 +226,7 @@ const styles = StyleSheet.create({
   streakLabel: { fontSize: 12, color: Colors.textSecondary },
   streakDivider: { width: 1, height: 50, backgroundColor: Colors.border },
 
-  streakWeek: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+  streakWeek: { flexDirection: 'row', justifyContent: 'space-around' },
   streakDayItem: { alignItems: 'center', gap: 6 },
   streakDayDot: {
     width: 24,
@@ -201,6 +242,23 @@ const styles = StyleSheet.create({
   },
   streakDayLabel: { fontSize: 10, color: Colors.textSecondary },
 
+  summaryCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+    padding: 18,
+    gap: 14,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  summaryRow: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' },
+  summaryItem: { alignItems: 'center', gap: 4 },
+  summaryValue: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary },
+  summaryLabel: { fontSize: 11, color: Colors.textSecondary },
+  summaryDivider: { width: 1, height: 36, backgroundColor: Colors.border },
+
   accuracyCard: {
     backgroundColor: Colors.white,
     borderRadius: 16,
@@ -213,24 +271,13 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   sectionTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  accuracyRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  accuracySubject: { fontSize: 12, fontWeight: '700', color: Colors.textSecondary, width: 40 },
-  accuracyBar: {
-    flex: 1,
-    height: 8,
-    backgroundColor: Colors.gray100,
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  accuracyFill: { height: '100%', borderRadius: 4 },
-  accuracyPct: { fontSize: 12, fontWeight: '600', color: Colors.textSecondary, width: 34, textAlign: 'right' },
 
   emptyStateCard: {
     backgroundColor: Colors.white,
     borderRadius: 16,
     padding: 32,
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -238,20 +285,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   emptyTitle: { fontSize: 16, fontWeight: '700', color: Colors.textPrimary, marginTop: 4 },
-  emptyDesc: {
-    fontSize: 13,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  emptyBtn: {
-    marginTop: 8,
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 10,
-  },
-  emptyBtnText: { fontSize: 14, fontWeight: '700', color: Colors.white },
+  emptyDesc: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
 
   historyLink: {
     backgroundColor: Colors.white,

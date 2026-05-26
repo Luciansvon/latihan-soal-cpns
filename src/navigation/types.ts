@@ -30,7 +30,7 @@ export type LatihanStackParams = {
   PracticeSession: {
     examType: ExamType;
     subject: SubjectType;
-    packId: string;
+    packId?: string;
     subtopic?: string;
     questionCount?: number;
   };

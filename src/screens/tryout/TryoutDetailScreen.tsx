@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,153 +6,157 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
+import type { ExamType, TryoutTemplate } from '../../types/exam.types';
+import { SUBJECT_LABELS } from '../../types/exam.types';
+import { supabase } from '../../services/supabase';
 
-interface TemplateInfo {
-  title: string;
-  subtitle: string;
-  color: string;
-  questionCount: number;
-  durationMinutes: number;
-  sections: Array<{ name: string; count: number; passing: number }>;
-  description: string;
-}
-
-const TEMPLATE_MAP: Record<string, TemplateInfo> = {
-  'cpns-skd-001': {
-    title: 'CPNS SKD Paket 1',
-    subtitle: 'Seleksi Kompetensi Dasar',
-    color: Colors.cpns,
-    questionCount: 110,
-    durationMinutes: 100,
-    sections: [
-      { name: 'Tes Wawasan Kebangsaan (TWK)', count: 30, passing: 65 },
-      { name: 'Tes Intelegensia Umum (TIU)', count: 35, passing: 80 },
-      { name: 'Tes Karakteristik Pribadi (TKP)', count: 45, passing: 166 },
-    ],
-    description:
-      'Paket tryout CPNS SKD ini disusun sesuai dengan standar Badan Kepegawaian Negara (BKN) dengan distribusi soal dan waktu yang sama dengan ujian sesungguhnya.',
-  },
-  'tni-001': {
-    title: 'TNI Paket 1',
-    subtitle: 'Tes Akademik & Psikotes',
-    color: Colors.tni,
-    questionCount: 80,
-    durationMinutes: 90,
-    sections: [
-      { name: 'Matematika', count: 20, passing: 60 },
-      { name: 'Bahasa Indonesia', count: 20, passing: 60 },
-      { name: 'Pengetahuan Umum', count: 20, passing: 60 },
-      { name: 'Psikotes', count: 20, passing: 70 },
-    ],
-    description: 'Paket tryout TNI mencakup semua materi tes akademik dan psikotes yang digunakan dalam seleksi Tentara Nasional Indonesia.',
-  },
-  'polri-001': {
-    title: 'Polri Paket 1',
-    subtitle: 'Tes Akademik & Kedinasan',
-    color: Colors.polri,
-    questionCount: 90,
-    durationMinutes: 90,
-    sections: [
-      { name: 'Matematika', count: 20, passing: 60 },
-      { name: 'Bahasa Indonesia', count: 20, passing: 60 },
-      { name: 'Pengetahuan Umum', count: 20, passing: 60 },
-      { name: 'Pengetahuan Hukum', count: 15, passing: 55 },
-      { name: 'Psikotes', count: 15, passing: 65 },
-    ],
-    description: 'Paket tryout Polri mencakup semua materi tes yang digunakan dalam seleksi Kepolisian Republik Indonesia.',
-  },
+const EXAM_COLORS: Record<ExamType, string> = {
+  CPNS: Colors.cpns,
+  TNI: Colors.tni,
+  POLRI: Colors.polri,
 };
 
-const FALLBACK_TEMPLATE: TemplateInfo = {
-  title: 'Tryout',
-  subtitle: 'Detail',
-  color: Colors.primary,
-  questionCount: 0,
-  durationMinutes: 0,
-  sections: [],
-  description: 'Detail tryout tidak tersedia.',
-};
+const RULES = [
+  'Tryout tidak dapat dijeda setelah dimulai',
+  'Waktu berjalan terus menerus sampai habis',
+  'Soal otomatis dikumpulkan saat waktu habis',
+  'Pastikan koneksi internet stabil saat memulai',
+];
 
 export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'TryoutDetail'>) {
   const { templateId } = route.params;
-  const template = TEMPLATE_MAP[templateId] ?? FALLBACK_TEMPLATE;
-  const accentColor = template.color;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [template, setTemplate] = useState<TryoutTemplate | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('tryout_templates')
+          .select('*')
+          .eq('id', templateId)
+          .eq('is_published', true)
+          .maybeSingle();
+        if (cancelled) return;
+        if (error) {
+          setError(`Gagal memuat detail: ${error.message}`);
+        } else if (!data) {
+          setError('Template tryout tidak ditemukan atau sudah ditarik.');
+        } else {
+          setTemplate(mapTemplate(data));
+        }
+        setLoading(false);
+      } catch (e: any) {
+        if (cancelled) return;
+        setError(`Gagal memuat detail: ${e?.message ?? 'unknown error'}`);
+        setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [templateId]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.centerBox}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+          <Text style={styles.loadingText}>Memuat detail tryout…</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error || !template) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.centerBox}>
+          <Ionicons name="alert-circle-outline" size={56} color={Colors.error} />
+          <Text style={styles.errorText}>{error ?? 'Template tidak ditemukan.'}</Text>
+          <TouchableOpacity style={styles.primaryBtn} onPress={() => navigation.goBack()}>
+            <Text style={styles.primaryBtnText}>Kembali</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const accent = EXAM_COLORS[template.examType] ?? Colors.primary;
+  const totalQuestions = template.sections.reduce((sum, s) => sum + s.questionCount, 0);
 
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Header */}
-      <View style={[styles.header, { borderBottomColor: accentColor + '30' }]}>
+      <View style={[styles.header, { borderBottomColor: accent + '30' }]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-          <View style={[styles.badge, { backgroundColor: accentColor }]}>
-            <Text style={styles.badgeText}>{template.subtitle.toUpperCase()}</Text>
+          <View style={[styles.badge, { backgroundColor: accent }]}>
+            <Text style={styles.badgeText}>{template.examType}</Text>
           </View>
           <Text style={styles.headerTitle}>{template.title}</Text>
         </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-
-        {/* Stats Cards */}
         <View style={styles.statsRow}>
-          <View style={[styles.statCard, { borderTopColor: accentColor }]}>
-            <Ionicons name="document-text-outline" size={22} color={accentColor} />
-            <Text style={styles.statValue}>{template.questionCount}</Text>
+          <View style={[styles.statCard, { borderTopColor: accent }]}>
+            <Ionicons name="document-text-outline" size={22} color={accent} />
+            <Text style={styles.statValue}>{totalQuestions}</Text>
             <Text style={styles.statLabel}>Total Soal</Text>
           </View>
-          <View style={[styles.statCard, { borderTopColor: accentColor }]}>
-            <Ionicons name="time-outline" size={22} color={accentColor} />
+          <View style={[styles.statCard, { borderTopColor: accent }]}>
+            <Ionicons name="time-outline" size={22} color={accent} />
             <Text style={styles.statValue}>{template.durationMinutes}</Text>
             <Text style={styles.statLabel}>Menit</Text>
           </View>
-          <View style={[styles.statCard, { borderTopColor: accentColor }]}>
-            <Ionicons name="layers-outline" size={22} color={accentColor} />
+          <View style={[styles.statCard, { borderTopColor: accent }]}>
+            <Ionicons name="layers-outline" size={22} color={accent} />
             <Text style={styles.statValue}>{template.sections.length}</Text>
             <Text style={styles.statLabel}>Bagian</Text>
           </View>
         </View>
 
-        {/* Description */}
-        <View style={styles.descCard}>
-          <Text style={styles.descTitle}>Tentang Tryout Ini</Text>
-          <Text style={styles.descText}>{template.description}</Text>
-        </View>
+        {template.description ? (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Tentang Tryout Ini</Text>
+            <Text style={styles.descText}>{template.description}</Text>
+          </View>
+        ) : null}
 
-        {/* Sections */}
-        <View style={styles.sectionsCard}>
-          <Text style={styles.sectionsTitle}>Distribusi Soal</Text>
-          {template.sections.map((section, index) => (
-            <View key={index} style={styles.sectionRow}>
-              <View style={[styles.sectionDot, { backgroundColor: accentColor }]} />
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Distribusi Soal</Text>
+          {template.sections.map((section, i) => (
+            <View key={i} style={styles.sectionRow}>
+              <View style={[styles.sectionDot, { backgroundColor: accent }]} />
               <View style={styles.sectionInfo}>
-                <Text style={styles.sectionName}>{section.name}</Text>
+                <Text style={styles.sectionName}>
+                  {SUBJECT_LABELS[section.subject] ?? section.subject}
+                </Text>
                 <Text style={styles.sectionMeta}>
-                  {section.count} soal · Nilai passing: {section.passing}
+                  {section.questionCount} soal
+                  {section.passingScore ? ` · Passing: ${section.passingScore}` : ''}
                 </Text>
               </View>
             </View>
           ))}
         </View>
 
-        {/* Rules */}
         <View style={styles.rulesCard}>
           <View style={styles.rulesHeader}>
             <Ionicons name="alert-circle-outline" size={18} color={Colors.warning} />
             <Text style={styles.rulesTitle}>Perhatian</Text>
           </View>
           <View style={styles.rulesList}>
-            {[
-              'Tryout tidak dapat dijeda setelah dimulai',
-              'Waktu akan berjalan terus menerus',
-              'Pastikan koneksi internet stabil',
-              'Jawaban otomatis tersimpan',
-            ].map((rule, i) => (
+            {RULES.map((rule, i) => (
               <View key={i} style={styles.ruleItem}>
                 <Text style={styles.ruleBullet}>•</Text>
                 <Text style={styles.ruleText}>{rule}</Text>
@@ -160,13 +164,11 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
             ))}
           </View>
         </View>
-
       </ScrollView>
 
-      {/* Start Button */}
       <View style={styles.footer}>
         <TouchableOpacity
-          style={[styles.startBtn, { backgroundColor: accentColor }]}
+          style={[styles.startBtn, { backgroundColor: accent }]}
           activeOpacity={0.85}
           onPress={() => navigation.navigate('TryoutSession', { templateId })}
         >
@@ -178,8 +180,38 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
   );
 }
 
+function mapTemplate(row: any): TryoutTemplate {
+  return {
+    id: row.id,
+    examType: row.exam_type,
+    title: row.title,
+    description: row.description ?? undefined,
+    durationMinutes: row.duration_minutes,
+    passingScore: row.passing_score ?? undefined,
+    sections: (row.sections ?? []).map((s: any) => ({
+      subject: s.subject,
+      questionCount: s.questionCount ?? s.question_count,
+      durationMinutes: s.durationMinutes ?? s.duration_minutes,
+      passingScore: s.passingScore ?? s.passing_score,
+    })),
+    isFree: row.is_free,
+    isPublished: row.is_published,
+    createdAt: row.created_at,
+  };
+}
+
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+
+  centerBox: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+    gap: 12,
+  },
+  loadingText: { fontSize: 14, color: Colors.textSecondary },
+  errorText: { fontSize: 14, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
 
   header: {
     backgroundColor: Colors.white,
@@ -220,32 +252,20 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 22, fontWeight: '900', color: Colors.textPrimary },
   statLabel: { fontSize: 11, color: Colors.textSecondary, textAlign: 'center' },
 
-  descCard: {
+  card: {
     backgroundColor: Colors.white,
     borderRadius: 16,
     padding: 18,
-    gap: 10,
+    gap: 12,
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  descTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
+  cardTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
   descText: { fontSize: 13, color: Colors.textSecondary, lineHeight: 22 },
 
-  sectionsCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 18,
-    gap: 14,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  sectionsTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
   sectionRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   sectionDot: { width: 8, height: 8, borderRadius: 4, marginTop: 5 },
   sectionInfo: { flex: 1 },
@@ -282,4 +302,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   startBtnText: { fontSize: 16, fontWeight: '800', color: Colors.white },
+
+  primaryBtn: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  primaryBtnText: { fontSize: 14, fontWeight: '700', color: Colors.white },
 });

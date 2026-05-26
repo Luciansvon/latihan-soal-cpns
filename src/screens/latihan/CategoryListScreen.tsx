@@ -81,7 +81,7 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
                 navigation.navigate('PracticeSession', {
                   examType,
                   subject,
-                  packId: 'pack-001',
+                  questionCount: 10,
                 })
               }
             >
