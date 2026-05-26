@@ -33,8 +33,18 @@ export type LatihanStackParams = {
     packId: string;
     subtopic?: string;
     questionCount?: number;
+    practiceMode?: 'normal' | 'interleaved';
   };
-  SessionResult: { sessionId: string };
+  SessionResult: {
+    sessionId: string;
+    score: number;
+    maxScore: number;
+    correct: number;
+    total: number;
+    examType: ExamType;
+    subject: SubjectType;
+    xpEarned: number;
+  };
 };
 
 // Tryout stack

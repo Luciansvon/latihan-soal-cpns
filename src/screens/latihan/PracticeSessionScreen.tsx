@@ -1,45 +1,216 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  ActivityIndicator,
+  View, Text, StyleSheet, SafeAreaView, ScrollView,
+  TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import { EXAM_CONFIGS, SUBJECT_LABELS } from '../../types/exam.types';
+import { calculateAnswerScore, calculateMaxScore } from '../../utils/ScoreCalculator';
+import { supabase } from '../../services/supabase';
+import { QuestionCard } from '../../components/question/QuestionCard';
+import { OptionButton } from '../../components/question/OptionButton';
+import type { OptionState } from '../../components/question/OptionButton';
+import type { Question } from '../../types/question.types';
 import type { LatihanScreenProps } from '../../navigation/types';
 
 const EXAM_COLORS: Record<string, string> = {
-  CPNS: Colors.cpns,
-  TNI: Colors.tni,
-  POLRI: Colors.polri,
+  CPNS: Colors.cpns, TNI: Colors.tni, POLRI: Colors.polri,
 };
 
+interface AnswerRecord {
+  questionId: string;
+  selectedOption: string;
+  isCorrect: boolean;
+  scoreEarned: number;
+}
+
+function mapRow(row: any): Question {
+  return {
+    id: row.id,
+    packId: row.pack_id,
+    examType: row.exam_type,
+    subject: row.subject,
+    subtopic: row.subtopic ?? undefined,
+    questionType: row.question_type,
+    difficulty: row.difficulty,
+    difficultyRank: row.difficulty_rank ?? undefined,
+    questionText: row.question_text,
+    questionImageUrl: row.question_image_url ?? undefined,
+    options: Array.isArray(row.options) ? row.options : JSON.parse(row.options ?? '[]'),
+    correctOption: row.correct_option,
+    tkpScores: row.tkp_scores ?? undefined,
+    explanationText: row.explanation_text ?? undefined,
+    tags: row.tags ?? undefined,
+  };
+}
+
 export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<'PracticeSession'>) {
-  const { examType, subject, packId } = route.params;
+  const { examType, subject, packId, subtopic, questionCount = 20 } = route.params;
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [revealed, setRevealed] = useState(false);
+  const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const startTime = useRef(Date.now());
 
   const accentColor = EXAM_COLORS[examType] ?? Colors.primary;
-  const examConfig = EXAM_CONFIGS[examType];
+  const currentQuestion = questions[currentIndex];
+  const isLast = currentIndex === questions.length - 1;
+  const progress = questions.length > 0 ? (currentIndex + (revealed ? 1 : 0)) / questions.length : 0;
 
   useEffect(() => {
-    // Simulate loading questions
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
+    loadQuestions();
   }, []);
+
+  async function loadQuestions() {
+    try {
+      let query = supabase
+        .from('questions')
+        .select('*')
+        .eq('exam_type', examType)
+        .eq('subject', subject);
+
+      if (subtopic) query = (query as any).eq('subtopic', subtopic);
+
+      const { data, error: err } = await (query as any).limit(questionCount * 2);
+      if (err) throw err;
+      if (!data?.length) {
+        setError('Belum ada soal untuk kategori ini.\nSilakan tunggu konten diupdate.');
+        return;
+      }
+
+      const shuffled = [...data].sort(() => Math.random() - 0.5).slice(0, questionCount);
+      setQuestions(shuffled.map(mapRow));
+    } catch {
+      setError('Gagal memuat soal. Periksa koneksi internet.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function handleSelectOption(opt: string) {
+    if (revealed) return;
+    setSelectedOption(opt);
+    setRevealed(true);
+
+    const result = calculateAnswerScore(currentQuestion, opt, examType);
+    setAnswers(prev => [...prev, {
+      questionId: currentQuestion.id,
+      selectedOption: opt,
+      isCorrect: result.isCorrect,
+      scoreEarned: result.score,
+    }]);
+  }
+
+  const handleNext = useCallback(async () => {
+    if (!isLast) {
+      setCurrentIndex(i => i + 1);
+      setSelectedOption(null);
+      setRevealed(false);
+    } else {
+      await finishSession();
+    }
+  }, [isLast, answers, questions]);
+
+  async function finishSession() {
+    setIsSaving(true);
+    const totalScore = answers.reduce((s, a) => s + a.scoreEarned, 0);
+    const maxScore = calculateMaxScore(questions.length, subject, examType);
+    const correct = answers.filter(a => a.isCorrect).length;
+    const duration = Math.round((Date.now() - startTime.current) / 1000);
+    const xpEarned = correct * 2 + 10;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: session } = await supabase
+          .from('practice_sessions')
+          .insert({
+            user_id: user.id,
+            session_type: 'PRACTICE',
+            exam_type: examType,
+            subject,
+            total_questions: questions.length,
+            answered_count: answers.length,
+            correct_count: correct,
+            total_score: totalScore,
+            max_score: maxScore,
+            duration_seconds: duration,
+            completed: true,
+            started_at: new Date(startTime.current).toISOString(),
+            completed_at: new Date().toISOString(),
+          })
+          .select('id')
+          .single();
+
+        if (session?.id && answers.length > 0) {
+          await supabase.from('user_answers').insert(
+            answers.map(a => ({
+              user_id: user.id,
+              question_id: a.questionId,
+              session_id: session.id,
+              selected_option: a.selectedOption,
+              is_correct: a.isCorrect,
+              score_earned: a.scoreEarned,
+              answered_at: new Date().toISOString(),
+            }))
+          );
+        }
+      }
+    } catch {
+      // Session save failed — still navigate to result
+    } finally {
+      setIsSaving(false);
+    }
+
+    navigation.replace('SessionResult', {
+      sessionId: Date.now().toString(),
+      score: totalScore,
+      maxScore,
+      correct,
+      total: questions.length,
+      examType,
+      subject,
+      xpEarned,
+    });
+  }
+
+  function optionState(optId: string): OptionState {
+    if (!revealed || !selectedOption) return 'idle';
+    if (currentQuestion.questionType === 'TKP_SCALE') {
+      return optId === selectedOption ? 'selected' : 'idle';
+    }
+    if (optId === currentQuestion.correctOption) return 'correct';
+    if (optId === selectedOption) return 'wrong';
+    return 'idle';
+  }
 
   if (isLoading) {
     return (
       <SafeAreaView style={styles.safe}>
-        <View style={styles.loadingContainer}>
+        <View style={styles.center}>
           <ActivityIndicator size="large" color={accentColor} />
           <Text style={styles.loadingText}>Memuat soal...</Text>
-          <Text style={styles.loadingSubtext}>
-            {SUBJECT_LABELS[subject]} · {examConfig.label}
-          </Text>
+          <Text style={styles.loadingSubtext}>{SUBJECT_LABELS[subject]}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.center}>
+          <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity style={[styles.retryBtn, { backgroundColor: accentColor }]} onPress={loadQuestions}>
+            <Text style={styles.retryText}>Coba Lagi</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -48,227 +219,165 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
   return (
     <SafeAreaView style={styles.safe}>
       {/* Header */}
-      <View style={[styles.header, { borderBottomColor: accentColor + '40' }]}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+      <View style={[styles.header, { borderBottomColor: accentColor + '30' }]}>
+        <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()}>
           <Ionicons name="close" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <View style={[styles.examBadge, { backgroundColor: accentColor }]}>
-            <Text style={styles.examBadgeText}>{examConfig.label}</Text>
+            <Text style={styles.examBadgeText}>{EXAM_CONFIGS[examType].label}</Text>
           </View>
           <Text style={styles.headerSubject}>{SUBJECT_LABELS[subject]}</Text>
         </View>
-        <TouchableOpacity style={styles.flagBtn}>
-          <Ionicons name="flag-outline" size={22} color={Colors.textSecondary} />
-        </TouchableOpacity>
+        <View style={styles.iconBtn} />
       </View>
 
-      {/* Progress Bar */}
-      <View style={styles.progressContainer}>
-        <View style={styles.progressTrack}>
-          <View style={[styles.progressFill, { width: '10%', backgroundColor: accentColor }]} />
-        </View>
-        <Text style={styles.progressLabel}>1 / 10</Text>
+      {/* Progress */}
+      <View style={styles.progressBar}>
+        <View style={[styles.progressFill, { width: `${progress * 100}%`, backgroundColor: accentColor }]} />
+      </View>
+      <View style={styles.progressLabelRow}>
+        <Text style={styles.progressLabel}>{currentIndex + 1} / {questions.length}</Text>
+        <Text style={styles.progressLabel}>{Math.round(progress * 100)}%</Text>
       </View>
 
-      {/* Placeholder Question Area */}
-      <View style={styles.content}>
-        <View style={styles.questionCard}>
-          <View style={[styles.questionNumBadge, { backgroundColor: accentColor + '18' }]}>
-            <Text style={[styles.questionNumText, { color: accentColor }]}>Soal 1</Text>
-          </View>
-          <View style={styles.questionPlaceholder}>
-            <Ionicons name="document-text-outline" size={48} color={Colors.gray300} />
-            <Text style={styles.placeholderTitle}>Sesi Latihan</Text>
-            <Text style={styles.placeholderDesc}>
-              Konten soal akan dimuat di sini.{'\n'}
-              Paket: {packId}
-            </Text>
-          </View>
-        </View>
+      {/* Scrollable content */}
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        {currentQuestion && (
+          <>
+            <QuestionCard
+              question={currentQuestion}
+              questionNumber={currentIndex + 1}
+              accentColor={accentColor}
+            />
 
-        {/* Option Placeholders */}
-        {['A', 'B', 'C', 'D', 'E'].map((opt) => (
-          <TouchableOpacity
-            key={opt}
-            style={styles.optionCard}
-            activeOpacity={0.8}
-          >
-            <View style={[styles.optionBullet, { borderColor: accentColor + '60' }]}>
-              <Text style={[styles.optionBulletText, { color: accentColor }]}>{opt}</Text>
+            <View style={styles.optionsGap}>
+              {currentQuestion.options.map(opt => (
+                <OptionButton
+                  key={opt.id}
+                  option={opt}
+                  state={optionState(opt.id)}
+                  accentColor={accentColor}
+                  onPress={() => handleSelectOption(opt.id)}
+                  disabled={revealed}
+                />
+              ))}
             </View>
-            <View style={styles.optionTextPlaceholder} />
-          </TouchableOpacity>
-        ))}
-      </View>
 
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navBtn} activeOpacity={0.8}>
-          <Ionicons name="chevron-back" size={20} color={Colors.textSecondary} />
-          <Text style={styles.navBtnText}>Sebelumnya</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.nextBtn, { backgroundColor: accentColor }]}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate('SessionResult', { sessionId: 'session-001' })}
-        >
-          <Text style={styles.nextBtnText}>Berikutnya</Text>
-          <Ionicons name="chevron-forward" size={20} color={Colors.white} />
-        </TouchableOpacity>
-      </View>
+            {/* Explanation */}
+            {revealed && currentQuestion.explanationText && (
+              <View style={styles.explanationCard}>
+                <View style={styles.explanationHeader}>
+                  <Ionicons name="bulb-outline" size={16} color={Colors.warning} />
+                  <Text style={styles.explanationTitle}>Pembahasan</Text>
+                </View>
+                <Text style={styles.explanationText}>{currentQuestion.explanationText}</Text>
+              </View>
+            )}
+          </>
+        )}
+      </ScrollView>
+
+      {/* Bottom action */}
+      {revealed && (
+        <View style={styles.bottomBar}>
+          <TouchableOpacity
+            style={[styles.nextBtn, { backgroundColor: accentColor }, isSaving && styles.nextBtnDisabled]}
+            onPress={handleNext}
+            disabled={isSaving}
+            activeOpacity={0.85}
+          >
+            {isSaving ? (
+              <ActivityIndicator size="small" color={Colors.white} />
+            ) : (
+              <>
+                <Text style={styles.nextBtnText}>{isLast ? 'Lihat Hasil' : 'Soal Berikutnya'}</Text>
+                <Ionicons name={isLast ? 'trophy-outline' : 'chevron-forward'} size={18} color={Colors.white} />
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bgSecondary },
-
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 16,
-  },
-  loadingText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-    marginTop: 8,
-  },
-  loadingSubtext: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-  },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 16, padding: 32 },
+  loadingText: { fontSize: 17, fontWeight: '700', color: Colors.textPrimary },
+  loadingSubtext: { fontSize: 14, color: Colors.textSecondary },
+  errorText: { fontSize: 15, color: Colors.textSecondary, textAlign: 'center', lineHeight: 22 },
+  retryBtn: { paddingHorizontal: 24, paddingVertical: 12, borderRadius: 10, marginTop: 8 },
+  retryText: { color: Colors.white, fontWeight: '700', fontSize: 14 },
 
   header: {
     backgroundColor: Colors.white,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    gap: 12,
   },
-  backBtn: { width: 36, height: 36, justifyContent: 'center', alignItems: 'center' },
+  iconBtn: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center' },
   headerCenter: { flex: 1, alignItems: 'center', gap: 4 },
-  examBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  examBadgeText: { fontSize: 11, fontWeight: '800', color: Colors.white, letterSpacing: 0.5 },
-  headerSubject: { fontSize: 13, fontWeight: '600', color: Colors.textPrimary },
-  flagBtn: { width: 36, height: 36, justifyContent: 'center', alignItems: 'center' },
+  examBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 6 },
+  examBadgeText: { fontSize: 11, fontWeight: '800', color: Colors.white, letterSpacing: 0.4 },
+  headerSubject: { fontSize: 12, fontWeight: '600', color: Colors.textSecondary },
 
-  progressContainer: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 20,
-    paddingBottom: 12,
+  progressBar: {
+    height: 4,
+    backgroundColor: Colors.gray200,
+  },
+  progressFill: { height: '100%' },
+  progressLabelRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
-  progressTrack: {
-    flex: 1,
-    height: 6,
-    backgroundColor: Colors.gray200,
-    borderRadius: 3,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 3,
-  },
-  progressLabel: { fontSize: 12, fontWeight: '600', color: Colors.textSecondary, minWidth: 40 },
+  progressLabel: { fontSize: 11, color: Colors.textMuted, fontWeight: '600' },
 
-  content: { flex: 1, padding: 20, gap: 12 },
+  scroll: { flex: 1 },
+  scrollContent: { padding: 16, gap: 12, paddingBottom: 24 },
 
-  questionCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 20,
-    gap: 16,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 2,
-  },
-  questionNumBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  questionNumText: { fontSize: 12, fontWeight: '700' },
-  questionPlaceholder: {
-    alignItems: 'center',
-    paddingVertical: 24,
-    gap: 8,
-  },
-  placeholderTitle: { fontSize: 16, fontWeight: '600', color: Colors.textSecondary },
-  placeholderDesc: { fontSize: 13, color: Colors.textMuted, textAlign: 'center', lineHeight: 20 },
+  optionsGap: { gap: 10 },
 
-  optionCard: {
-    backgroundColor: Colors.white,
+  explanationCard: {
+    backgroundColor: Colors.warning + '0E',
     borderRadius: 12,
-    padding: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  optionBullet: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  optionBulletText: { fontSize: 14, fontWeight: '700' },
-  optionTextPlaceholder: {
-    flex: 1,
-    height: 14,
-    backgroundColor: Colors.gray100,
-    borderRadius: 7,
-  },
-
-  bottomNav: {
-    backgroundColor: Colors.white,
-    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: Colors.warning + '40',
     padding: 16,
-    gap: 12,
+    gap: 10,
+  },
+  explanationHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  explanationTitle: { fontSize: 13, fontWeight: '700', color: Colors.warning },
+  explanationText: { fontSize: 14, lineHeight: 22, color: Colors.textPrimary },
+
+  bottomBar: {
+    backgroundColor: Colors.white,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: Colors.border,
   },
-  navBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 14,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: Colors.border,
-  },
-  navBtnText: { fontSize: 14, fontWeight: '600', color: Colors.textSecondary },
   nextBtn: {
-    flex: 2,
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 14,
-    borderRadius: 12,
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 15,
+    borderRadius: 13,
   },
-  nextBtnText: { fontSize: 14, fontWeight: '700', color: Colors.white },
+  nextBtnDisabled: { opacity: 0.7 },
+  nextBtnText: { color: Colors.white, fontWeight: '700', fontSize: 15 },
 });

@@ -1,133 +1,84 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
+  View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
+import { EXAM_CONFIGS, SUBJECT_LABELS } from '../../types/exam.types';
+import { getScorePercentage } from '../../utils/ScoreCalculator';
 import type { LatihanScreenProps } from '../../navigation/types';
 
-export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'SessionResult'>) {
-  const { sessionId } = route.params;
+const EXAM_COLORS: Record<string, string> = {
+  CPNS: Colors.cpns, TNI: Colors.tni, POLRI: Colors.polri,
+};
 
-  // Placeholder stats
-  const score = 75;
-  const correct = 8;
-  const total = 10;
-  const xpEarned = 40;
+export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'SessionResult'>) {
+  const { score, maxScore, correct, total, examType, subject, xpEarned } = route.params;
+
+  const percentage = getScorePercentage(score, maxScore);
+  const accentColor = EXAM_COLORS[examType] ?? Colors.primary;
 
   const scoreColor =
-    score >= 80 ? Colors.success : score >= 60 ? Colors.warning : Colors.error;
+    percentage >= 80 ? Colors.success
+    : percentage >= 60 ? Colors.warning
+    : Colors.error;
+
+  const scoreLabel =
+    percentage >= 80 ? 'Luar Biasa! 🎉'
+    : percentage >= 60 ? 'Bagus! Terus berlatih 💪'
+    : 'Jangan menyerah! Coba lagi 🔥';
 
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Hasil Latihan</Text>
-        <Text style={styles.sessionId}>ID: {sessionId}</Text>
-      </View>
-
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
 
-        {/* Score Circle */}
-        <View style={styles.scoreCard}>
+        {/* Hero card */}
+        <View style={[styles.heroCard, { borderTopColor: accentColor }]}>
+          <View style={[styles.examBadge, { backgroundColor: accentColor }]}>
+            <Text style={styles.examBadgeText}>{EXAM_CONFIGS[examType].label} · {SUBJECT_LABELS[subject]}</Text>
+          </View>
+
           <View style={[styles.scoreCircle, { borderColor: scoreColor }]}>
             <Text style={[styles.scoreNumber, { color: scoreColor }]}>{score}</Text>
-            <Text style={styles.scoreLabel}>Skor</Text>
+            <Text style={styles.scoreMaxText}>dari {maxScore}</Text>
           </View>
 
-          <View style={styles.scoreDetails}>
-            <View style={styles.scoreRow}>
-              <View style={styles.scoreItem}>
-                <Ionicons name="checkmark-circle" size={20} color={Colors.success} />
-                <Text style={styles.scoreItemValue}>{correct}</Text>
-                <Text style={styles.scoreItemLabel}>Benar</Text>
-              </View>
-              <View style={styles.scoreDivider} />
-              <View style={styles.scoreItem}>
-                <Ionicons name="close-circle" size={20} color={Colors.error} />
-                <Text style={styles.scoreItemValue}>{total - correct}</Text>
-                <Text style={styles.scoreItemLabel}>Salah</Text>
-              </View>
-              <View style={styles.scoreDivider} />
-              <View style={styles.scoreItem}>
-                <Ionicons name="help-circle" size={20} color={Colors.textMuted} />
-                <Text style={styles.scoreItemValue}>0</Text>
-                <Text style={styles.scoreItemLabel}>Lewati</Text>
-              </View>
-            </View>
-          </View>
+          <Text style={styles.scoreLabel}>{scoreLabel}</Text>
+          <Text style={[styles.percentageText, { color: scoreColor }]}>{percentage}%</Text>
         </View>
 
-        {/* XP Earned */}
+        {/* Stats row */}
+        <View style={styles.statsRow}>
+          <StatItem icon="checkmark-circle" color={Colors.success} value={correct} label="Benar" />
+          <View style={styles.statDivider} />
+          <StatItem icon="close-circle" color={Colors.error} value={total - correct} label="Salah" />
+          <View style={styles.statDivider} />
+          <StatItem icon="help-circle" color={Colors.gray400} value={total} label="Total" />
+        </View>
+
+        {/* XP earned */}
         <View style={styles.xpCard}>
-          <Ionicons name="star" size={22} color={Colors.xpGold} />
-          <View style={styles.xpInfo}>
-            <Text style={styles.xpTitle}>XP Diperoleh</Text>
-            <Text style={styles.xpDesc}>Terus berlatih untuk mendapatkan lebih banyak XP!</Text>
-          </View>
-          <Text style={styles.xpValue}>+{xpEarned}</Text>
-        </View>
-
-        {/* Performance Message */}
-        <View style={[styles.messageCard, { backgroundColor: scoreColor + '12', borderColor: scoreColor + '30' }]}>
-          <Ionicons
-            name={score >= 80 ? 'trophy-outline' : score >= 60 ? 'thumbs-up-outline' : 'refresh-outline'}
-            size={20}
-            color={scoreColor}
-          />
-          <Text style={[styles.messageText, { color: scoreColor }]}>
-            {score >= 80
-              ? 'Luar biasa! Pertahankan performa ini.'
-              : score >= 60
-              ? 'Cukup baik! Masih ada ruang untuk berkembang.'
-              : 'Jangan menyerah! Coba lagi untuk hasil yang lebih baik.'}
-          </Text>
-        </View>
-
-        {/* Question Review Placeholder */}
-        <View style={styles.reviewSection}>
-          <Text style={styles.reviewTitle}>Ringkasan Jawaban</Text>
-          <View style={styles.reviewGrid}>
-            {Array.from({ length: total }).map((_, i) => {
-              const isCorrect = i < correct;
-              return (
-                <View
-                  key={i}
-                  style={[
-                    styles.reviewDot,
-                    { backgroundColor: isCorrect ? Colors.success : Colors.error },
-                  ]}
-                >
-                  <Text style={styles.reviewDotText}>{i + 1}</Text>
-                </View>
-              );
-            })}
-          </View>
+          <Ionicons name="star" size={20} color={Colors.xpGold} />
+          <Text style={styles.xpText}>+{xpEarned} XP diperoleh dari sesi ini</Text>
         </View>
 
         {/* Actions */}
         <View style={styles.actions}>
           <TouchableOpacity
-            style={styles.primaryBtn}
+            style={[styles.primaryBtn, { backgroundColor: accentColor }]}
+            onPress={() => navigation.popToTop()}
             activeOpacity={0.85}
-            onPress={() => navigation.navigate('LatihanHome')}
           >
-            <Ionicons name="refresh-outline" size={18} color={Colors.white} />
+            <Ionicons name="refresh" size={18} color={Colors.white} />
             <Text style={styles.primaryBtnText}>Latihan Lagi</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.secondaryBtn}
-            activeOpacity={0.85}
             onPress={() => navigation.navigate('LatihanHome')}
+            activeOpacity={0.8}
           >
-            <Ionicons name="home-outline" size={18} color={Colors.primary} />
-            <Text style={styles.secondaryBtnText}>Kembali ke Latihan</Text>
+            <Text style={styles.secondaryBtnText}>Pilih Kategori Lain</Text>
           </TouchableOpacity>
         </View>
 
@@ -136,125 +87,101 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
   );
 }
 
+function StatItem({
+  icon, color, value, label,
+}: { icon: any; color: string; value: number; label: string }) {
+  return (
+    <View style={styles.statItem}>
+      <Ionicons name={icon} size={22} color={color} />
+      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statLabel}>{label}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+  scroll: { padding: 16, gap: 16, paddingBottom: 40 },
 
-  header: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    alignItems: 'center',
-  },
-  headerTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary },
-  sessionId: { fontSize: 11, color: Colors.textMuted, marginTop: 2 },
-
-  scroll: { padding: 20, gap: 16, paddingBottom: 40 },
-
-  scoreCard: {
+  heroCard: {
     backgroundColor: Colors.white,
     borderRadius: 20,
-    padding: 24,
+    padding: 28,
     alignItems: 'center',
-    gap: 20,
+    gap: 12,
+    borderTopWidth: 4,
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.07,
     shadowRadius: 10,
     elevation: 3,
   },
+  examBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  examBadgeText: { fontSize: 11, fontWeight: '700', color: Colors.white },
   scoreCircle: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    borderWidth: 6,
+    borderWidth: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.bgSecondary,
+    marginVertical: 8,
   },
-  scoreNumber: { fontSize: 40, fontWeight: '900', letterSpacing: -1 },
-  scoreLabel: { fontSize: 12, color: Colors.textSecondary, marginTop: -4 },
+  scoreNumber: { fontSize: 36, fontWeight: '800' },
+  scoreMaxText: { fontSize: 12, color: Colors.textMuted, fontWeight: '500' },
+  scoreLabel: { fontSize: 18, fontWeight: '700', color: Colors.textPrimary },
+  percentageText: { fontSize: 14, fontWeight: '600' },
 
-  scoreDetails: { width: '100%' },
-  scoreRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  scoreItem: { alignItems: 'center', gap: 4 },
-  scoreItemValue: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary },
-  scoreItemLabel: { fontSize: 11, color: Colors.textSecondary },
-  scoreDivider: { width: 1, height: 40, backgroundColor: Colors.border },
-
-  xpCard: {
-    backgroundColor: '#FFFBEB',
-    borderRadius: 14,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    borderWidth: 1,
-    borderColor: '#FDE68A',
-  },
-  xpInfo: { flex: 1 },
-  xpTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  xpDesc: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
-  xpValue: { fontSize: 24, fontWeight: '900', color: Colors.xpGold },
-
-  messageCard: {
-    borderRadius: 12,
-    padding: 14,
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'flex-start',
-    borderWidth: 1,
-  },
-  messageText: { flex: 1, fontSize: 13, fontWeight: '500', lineHeight: 20 },
-
-  reviewSection: {
+  statsRow: {
     backgroundColor: Colors.white,
     borderRadius: 16,
-    padding: 18,
-    gap: 14,
+    padding: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  reviewTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  reviewGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  reviewDot: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  reviewDotText: { fontSize: 12, fontWeight: '700', color: Colors.white },
+  statItem: { flex: 1, alignItems: 'center', gap: 4 },
+  statDivider: { width: 1, height: 40, backgroundColor: Colors.border },
+  statValue: { fontSize: 24, fontWeight: '800', color: Colors.textPrimary },
+  statLabel: { fontSize: 12, color: Colors.textSecondary, fontWeight: '500' },
 
-  actions: { gap: 12, marginTop: 4 },
+  xpCard: {
+    backgroundColor: Colors.xpGold + '15',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.xpGold + '50',
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  xpText: { fontSize: 14, fontWeight: '600', color: Colors.gray800 },
+
+  actions: { gap: 10 },
   primaryBtn: {
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
-    paddingVertical: 16,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
+    paddingVertical: 15,
+    borderRadius: 13,
   },
-  primaryBtnText: { fontSize: 16, fontWeight: '700', color: Colors.white },
+  primaryBtnText: { color: Colors.white, fontWeight: '700', fontSize: 15 },
   secondaryBtn: {
-    backgroundColor: Colors.white,
-    borderRadius: 14,
-    paddingVertical: 16,
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 13,
     borderWidth: 1.5,
-    borderColor: Colors.primary,
+    borderColor: Colors.border,
+    backgroundColor: Colors.white,
   },
-  secondaryBtnText: { fontSize: 16, fontWeight: '700', color: Colors.primary },
+  secondaryBtnText: { fontSize: 14, fontWeight: '600', color: Colors.textSecondary },
 });

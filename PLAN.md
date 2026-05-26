@@ -23,15 +23,22 @@
 - [x] Constants: `colors`, `examConfig`, `learningStyleQuestions`, `motivationMessages`
 - [x] Utils: `LearningStyleEngine`, `ScoreCalculator`
 - [x] Zustand store (`src/store/index.ts`), React Navigation lengkap
+- [x] `src/components/question/QuestionCard.tsx` — difficulty badge, sering-keluar badge ✓
+- [x] `src/components/question/OptionButton.tsx` — state idle/selected/correct/wrong ✓
+- [x] `src/screens/latihan/PracticeSessionScreen.tsx` — fetch Supabase, jawab soal, reveal pembahasan, simpan ke `practice_sessions` + `user_answers`, navigate ke Result ✓
+- [x] `src/screens/latihan/SessionResultScreen.tsx` — hero card, stats, XP, actions ✓
+- [x] `src/screens/latihan/CategoryListScreen.tsx` — list mata pelajaran, navigate ke PracticeSession ✓
+- [x] `supabase/seed/001_question_packs.sql` — 13 pack rows dengan UUID stabil ✓
 
 ### 🟡 PLACEHOLDER (UI shell ada, logika belum nyambung)
-- [ ] `src/screens/latihan/PracticeSessionScreen.tsx` — masih teks placeholder
-- [ ] `src/screens/tryout/TryoutSessionScreen.tsx` — masih teks placeholder
-- [ ] `src/screens/tryout/TryoutListScreen.tsx` — template hardcoded + "Coming Soon"
-- [ ] `src/screens/progress/SessionDetailScreen.tsx` — pakai `placeholderData` (mock)
-- [ ] `src/screens/profil/DownloadManagerScreen.tsx` — cuma empty state
-- [ ] `src/screens/beranda/BerandaScreen.tsx` — UI jadi, cek apakah data masih mock
-- [ ] `src/screens/progress/ProgressDashboardScreen.tsx` — UI jadi, cek apakah data masih mock
+- [ ] `src/screens/beranda/BerandaScreen.tsx` — XP/streak dari Zustand (berfungsi), tapi tombol exam card **tidak ada navigasi** ke CategoryList/LatihanHome
+- [ ] `src/screens/tryout/TryoutSessionScreen.tsx` — timer berfungsi, tapi **soal masih placeholder** (hardcoded, tidak fetch data nyata)
+- [ ] `src/screens/tryout/TryoutListScreen.tsx` — template list hardcoded (tidak dari Supabase), tombol "Mulai" belum ada
+- [ ] `src/screens/tryout/TryoutResultScreen.tsx` — `PLACEHOLDER_SECTIONS` hardcoded, bukan hasil sesi nyata
+- [ ] `src/screens/progress/ProgressDashboardScreen.tsx` — `hasSessions = false` hardcoded, tidak query Supabase
+- [ ] `src/screens/progress/HistoryListScreen.tsx` — `hasSessions = false` hardcoded, empty state terus
+- [ ] `src/screens/progress/SessionDetailScreen.tsx` — `placeholderData` mock, tidak ambil dari DB
+- [ ] `src/screens/profil/DownloadManagerScreen.tsx` — empty state saja, tidak ada fungsionalitas
 
 ### ❌ BELUM ADA SAMA SEKALI
 - [ ] `src/services/DownloadService.ts`
@@ -40,88 +47,90 @@
 - [ ] `src/services/AIService.ts` (OpenRouter client wrapper)
 - [ ] `src/services/NotificationService.ts`
 - [ ] `supabase/functions/ai-tutor/index.ts` (folder ada, isi kosong)
-- [ ] Components: `QuestionCard`, `OptionButton`, `StreakRing`, `XPBar`, `ScoreChart`, `AITutorChat`, `AdaptiveExplanation`
+- [ ] Components: `StreakRing`, `ScoreChart`, `AITutorChat`, `AdaptiveExplanation`
 - [ ] `src/constants/learningStrategyMap.ts`
-- [ ] Seed konten soal (min. ~50–100 soal per kategori di Supabase)
+- [ ] Seed soal: `002_cpns_questions.sql` (TWK 200 + TIU 200 + TKP 200), `003_tni_questions.sql` (250 soal), `004_polri_questions.sql` (250 soal)
+
+---
+
+## Bug Kecil yang Harus Difix (sebelum lanjut)
+
+1. **BerandaScreen exam cards tidak bisa diklik** — komponen tidak menerima `navigation` prop, dan `onPress` di exam card kosong. Fix: terima `navigation` dari `useNavigation()` atau tambah prop, lalu navigate ke `LatihanHome` atau langsung ke `CategoryList`.
+2. **CategoryListScreen `packId: 'pack-001'` hardcoded** — seharusnya pakai UUID pack yang benar dari `question_packs` table (sesuai mapping `exam_type + subject` → UUID di seed 001).
 
 ---
 
 ## Urutan Pengerjaan (dependency-aware)
 
-### TAHAP 1 — Latihan Soal (inti, kerjakan dulu)
-**Tujuan:** user bisa pilih kategori → kerjakan soal → lihat pembahasan → skor tersimpan.
+### TAHAP 1 — Konten Soal (BLOCKER UTAMA — kerjakan ini dulu!)
+**Tanpa soal, semua tahap berikutnya tidak bisa diuji end-to-end.**
 
-1. `src/components/question/QuestionCard.tsx` — render stem soal + tipe (MULTIPLE_CHOICE / TKP_SCALE).
-2. `src/components/question/OptionButton.tsx` — opsi A–D (state: idle/selected/correct/wrong) + haptic feedback.
-3. Implement `PracticeSessionScreen.tsx`:
-   - Ambil soal via `QuestionRepository` (SQLite kalau pack sudah di-download) atau fallback Supabase.
-   - Index soal, pilih jawaban, reveal pembahasan setelah jawab.
-   - Hitung skor pakai `ScoreCalculator`.
-   - Simpan sesi + jawaban via `SessionRepository` (set `is_synced = 0`).
-   - Navigate ke `SessionResultScreen` dengan hasil nyata.
-4. Pastikan `CategoryListScreen` + `LatihanHomeScreen` mengirim param kategori yang benar.
+1. Fix bug BerandaScreen navigasi exam card (5 menit).
+2. Fix `packId` hardcoded di `CategoryListScreen` → pakai UUID dari `question_packs`.
+3. Buat `supabase/seed/002_cpns_questions.sql` — TWK 200 + TIU 200 + TKP 200 soal.
+4. Buat `supabase/seed/003_tni_questions.sql` — MATEMATIKA 80 + BAHASA_INDO 60 + PU 60 + PSIKOTES 30 + KEDINASAN 20.
+5. Buat `supabase/seed/004_polri_questions.sql` — MATEMATIKA 60 + BAHASA_INDO 50 + PU 50 + PSIKOTES 30 + HUKUM 60.
+6. Jalankan seed di Supabase SQL Editor: 001 → 002 → 003 → 004.
 
-**Acceptance:** kerjakan 1 sesi offline → skor benar muncul di Result → row tersimpan di SQLite.
+**Acceptance:** buka app → pilih TWK → soal nyata muncul → jawab → skor tersimpan di Supabase.
 
-### TAHAP 2 — Tryout
-**Tujuan:** simulasi SKD fullscreen dengan timer + sub-skor TWK/TIU/TKP.
+### TAHAP 2 — Tryout (setelah soal ada)
+**Tujuan:** simulasi SKD fullscreen dengan timer + sub-skor TWK/TIU/TKP dari data nyata.
 
-1. `src/components/tryout/CountdownTimer.tsx` — timer mundur, warning saat <5 menit, auto-submit saat habis.
-2. Implement `TryoutSessionScreen.tsx`:
-   - Load `tryout_templates` dari Supabase (100 soal / 90 menit untuk SKD).
-   - Mode fullscreen, tanpa pembahasan selama berjalan, navigasi antar soal + flagging.
-   - Auto-submit saat timer 0.
-3. `TryoutResultScreen.tsx`: sub-skor per seksi + indikator ambang batas (TWK≥65, TIU≥80, TKP≥166).
-4. Ganti `TryoutListScreen` "Coming Soon" → list dari `tryout_templates`.
+1. Implement `TryoutSessionScreen.tsx`:
+   - Load soal dari Supabase berdasarkan `tryout_templates` (atau hardcode: 30 TWK + 35 TIU + 45 TKP).
+   - Render soal dengan `QuestionCard` + `OptionButton` (komponen yang sudah ada).
+   - Simpan jawaban di state, tidak ada reveal pembahasan selama berjalan.
+   - Auto-submit saat timer 0, atau manual submit via konfirmasi.
+   - Kirim ke `TryoutResultScreen` dengan data sesi nyata.
+2. `TryoutResultScreen.tsx` — ganti `PLACEHOLDER_SECTIONS` dengan kalkulasi dari jawaban nyata pakai `ScoreCalculator`.
+3. `TryoutListScreen.tsx` — fetch dari `tryout_templates` Supabase (atau gunakan config statis dulu).
 
 **Acceptance:** selesaikan tryout SKD → sub-skor TWK/TIU/TKP benar + status lolos/tidak per seksi.
 
-### TAHAP 3 — Offline Download + Sync
-1. `src/services/DownloadService.ts` — ambil pack dari Supabase → tulis ke SQLite batch 100 → update progress di Zustand `DownloadSlice`.
+### TAHAP 3 — Progress (data nyata)
+1. `ProgressDashboardScreen.tsx` — query `practice_sessions` user dari Supabase, hitung akurasi per kategori.
+2. `HistoryListScreen.tsx` — list session dari Supabase, filter by type.
+3. `SessionDetailScreen.tsx` — fetch sesi dari Supabase by `sessionId`.
+4. (Opsional) `src/components/charts/AccuracyChart.tsx` pakai react-native-gifted-charts.
+
+**Acceptance:** dashboard menampilkan akurasi & riwayat dari sesi nyata (bukan mock).
+
+### TAHAP 4 — Offline Download + Sync
+1. `src/services/DownloadService.ts` — ambil soal dari Supabase → tulis ke SQLite batch 100 → update progress di Zustand.
 2. Implement `DownloadManagerScreen.tsx` — list pack, tombol download, progress bar, status DONE.
 3. `src/services/SyncManager.ts`:
-   - Push semua record `is_synced = 0` (sessions, answers, bookmarks) ke Supabase.
+   - Push semua record `is_synced = 0` ke Supabase.
    - Pull profile/XP/streak (server wins untuk XP).
-   - Trigger saat foreground + reconnect (NetInfo listener sudah ada di `App.tsx`).
+   - Trigger saat foreground + reconnect.
 
-**Acceptance:** offline → latihan → online → sesi ter-sync ke Supabase (cek tabel `practice_sessions`).
+**Acceptance:** offline → latihan dari pack yang didownload → online → sesi ter-sync ke Supabase.
 
-### TAHAP 4 — AI Tutor (OpenRouter)
-1. `supabase/functions/ai-tutor/index.ts` — Edge Function panggil OpenRouter (`https://openrouter.ai/api/v1/chat/completions`). API key dari Supabase Vault (env secret), **jangan** di client. Payload sertakan `learning_style_profile`, `exam_type`, konteks soal.
-2. `src/services/AIService.ts` — wrapper panggil Edge Function (model-agnostic).
-3. `src/constants/learningStrategyMap.ts` — mapping profil VARK/Honey-Mumford → strategi konkret per kategori.
+### TAHAP 5 — AI Tutor (OpenRouter)
+1. `supabase/functions/ai-tutor/index.ts` — Edge Function panggil OpenRouter. API key dari Supabase Vault (env secret), **jangan** di client.
+2. `src/services/AIService.ts` — wrapper panggil Edge Function.
+3. `src/constants/learningStrategyMap.ts` — mapping profil VARK → strategi per kategori.
 4. `src/components/ai/AdaptiveExplanation.tsx` — render pembahasan sesuai profil gaya belajar.
-5. `src/components/ai/AITutorChat.tsx` — chat persona "Pak Guru" (bukan ChatGPT clone).
+5. `src/components/ai/AITutorChat.tsx` — chat persona "Pak Guru".
 6. Hint bertahap 3 level + rate limit 10 request/hari.
 
 **Acceptance:** buka soal → minta penjelasan AI → keluar pembahasan adaptif sesuai profil. Cek bundle Hermes tetap lolos (`expo export`).
 
-### TAHAP 5 — Progress (data nyata)
-1. Ganti mock di `ProgressDashboardScreen` + `SessionDetailScreen` + `HistoryListScreen` dengan agregasi dari SQLite/Supabase.
-2. `src/components/charts/AccuracyChart.tsx` (react-native-gifted-charts) — akurasi per kategori.
-
-**Acceptance:** dashboard menampilkan akurasi & riwayat dari sesi nyata.
-
 ### TAHAP 6 — Gamifikasi (nice-to-have)
 1. `src/services/GamificationService.ts` — award XP, hitung level (`N²×100`), update streak, cek achievement.
-2. Components: `StreakRing`, `XPBar`, modal achievement unlock (confetti).
-3. Sambungkan ke akhir sesi latihan/tryout di Beranda.
-4. Daily challenge (10 soal/hari, reset 23:59).
+2. Sambungkan ke akhir sesi latihan/tryout + daily challenge.
 
 ### TAHAP 7 — Polish (opsional, setelah 1–5 jalan)
-- Adaptive practice (prioritas kategori <60% akurasi), custom tryout, notif lokal streak (`NotificationService` + expo-notifications), share hasil ke WhatsApp (teks).
+- Adaptive practice (prioritas kategori <60% akurasi), notif lokal streak, share hasil ke WhatsApp (teks).
 
 ---
-
-## Konten Soal (blocker untuk testing nyata)
-- [ ] Seed `question_packs` + `questions` di Supabase (min. 50–100 soal/kategori: TWK, TIU, TKP, TNI, Polri).
-- Tanpa ini, Tahap 1–5 tidak bisa diuji end-to-end dengan data nyata.
 
 ## Setup Manual (di luar kode — tanggung jawab user)
 - [ ] `eas init` → ganti placeholder `your-eas-project-id` di `app.json` + `eas.json`.
 - [ ] Set GitHub Secrets: `EXPO_TOKEN`, `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`.
 - [ ] Set OpenRouter API key di Supabase Vault (untuk Edge Function `ai-tutor`).
 - [ ] Jalankan `supabase/migrations/001_initial_schema.sql` di SQL Editor Supabase + aktifkan Email Auth.
+- [ ] Jalankan seed: 001 (packs) → 002 (CPNS) → 003 (TNI) → 004 (Polri) di SQL Editor.
 
 ## Aturan Scoring (referensi — sudah di `ScoreCalculator.ts`)
 | Ujian | Benar | Salah | Catatan |
