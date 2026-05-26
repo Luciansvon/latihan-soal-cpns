@@ -24,9 +24,6 @@
       "channel": "production"
     }
   },
-  "update": {
-    "url": "https://u.expo.dev/your-eas-project-id"
-  },
   "submit": {
     "production": {}
   }

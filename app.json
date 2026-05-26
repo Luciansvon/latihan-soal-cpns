@@ -43,7 +43,7 @@
       "expo-updates"
     ],
     "updates": {
-      "url": "https://u.expo.dev/your-eas-project-id",
+      "url": "https://u.expo.dev/8f6258df-e864-4d0f-b97c-e19f316a1fbe",
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0
@@ -53,7 +53,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "your-eas-project-id"
+        "projectId": "8f6258df-e864-4d0f-b97c-e19f316a1fbe"
       }
     }
   }
