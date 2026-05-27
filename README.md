@@ -1,6 +1,8 @@
-# Latihan Soal CPNS · TNI · Polri
+# Wirago Academy — Latihan CPNS · TNI · Polri
 
-Aplikasi mobile React Native untuk membantu persiapan ujian masuk CPNS, TNI, dan Polri. Fitur utama: latihan soal, simulasi tryout, analisis gaya belajar berbasis riset ilmiah, AI tutor adaptif, dan mode offline.
+Aplikasi mobile React Native untuk persiapan ujian masuk CPNS, TNI, dan Polri. **514 soal** real-grade (termasuk 34 soal figural visual) + 6 template tryout, analisis gaya belajar berbasis riset ilmiah, AI tutor adaptif, dan mode offline.
+
+> APK release: lihat tab [Actions → Build APK → run terakhir → Artifacts](https://github.com/Luciansvon/latihan-soal-cpns/actions/workflows/build-apk.yml).
 
 ---
 
@@ -60,11 +62,11 @@ supabase/
 
 ## ⚠️ Sebelum Build: Hindari Kegagalan CI
 
-Tiga hal ini WAJIB, kalau dilewati build GitHub Actions / EAS akan gagal:
+Project ini sudah ter-link ke proyek EAS (`projectId` di `app.json`). Yang masih perlu kamu set sendiri kalau fork:
 
 1. **Jangan hapus `.npmrc`.** Project pakai React 19 / RN 0.85 dengan konflik peer-dependency. File `.npmrc` (`legacy-peer-deps=true`) memastikan `npm install` & `npm ci` di CI tidak gagal.
-2. **Ganti placeholder project ID.** `app.json` & `eas.json` berisi `your-eas-project-id`. Jalankan `eas init` (lihat di bawah) untuk mengisinya dengan ID asli — `eas build --non-interactive` di CI butuh ini.
-3. **Set GitHub Secrets** (`EXPO_TOKEN`, `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`) sebelum push ke `main`.
+2. **Re-`eas init`** kalau fork — `app.json` saat ini link ke akun `kudaliarjeparas-organization` (projectId `8f6258df-…`). Fork perlu init ulang ke EAS account masing-masing.
+3. **GitHub Secrets** (`EXPO_TOKEN`, `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`) — wajib di `Settings → Secrets and variables → Actions`.
 
 ---
 
@@ -130,10 +132,12 @@ Build dan update jalan otomatis lewat GitHub Actions — tidak perlu jalankan EA
 
 ### Download APK
 
-1. Push ke `main` (atau jalankan workflow **Build APK** manual di tab Actions).
-2. Tunggu build selesai (~10–15 menit).
-3. Buka **Actions → run terakhir → Artifacts → `latihan-soal-cpns-xxxx`** → download `.apk`.
-4. Install ke HP (aktifkan "Install dari sumber tidak dikenal").
+1. Push ke branch yang trigger workflow (atau jalankan **Build APK** manual di tab Actions).
+2. Tunggu build EAS selesai (~15–20 menit).
+3. Buka **Actions → run terakhir → Job summary** → copy URL EAS artifact (atau klik `expo.dev` build link untuk download via web).
+4. Install ke HP (aktifkan "Install dari sumber tidak dikenal" di Settings).
+
+> **APK berbahaya warning**: Google Play Protect akan flag semua APK sideload. Solusi: tap "Install anyway" / "Install tanpa scan", atau publish via Play Console Internal Testing ($25 one-time) untuk hilangkan permanen.
 
 ### Update Tanpa Reinstall (OTA)
 
@@ -177,14 +181,19 @@ Hasil profil digunakan untuk menyesuaikan pembahasan AI, rekomendasi strategi be
 
 | Fitur | Status |
 |---|---|
-| Auth (Login/Register) | ✅ Selesai |
-| Onboarding + Kuis Gaya Belajar | ✅ Selesai |
-| Database Schema (Supabase + SQLite) | ✅ Selesai |
-| Navigasi lengkap | ✅ Selesai |
-| Practice Session (render soal) | 🚧 In Progress |
-| Tryout fullscreen timer | 🚧 In Progress |
-| Download offline packs | 🚧 In Progress |
-| Sync Manager (offline→online) | 🚧 In Progress |
-| AI Tutor (OpenRouter) | 🚧 In Progress |
-| Progress dashboard + charts | 🚧 In Progress |
-| Gamifikasi (XP, streak, badge) | 📋 Planned |
+| Auth (Login/Register/Reset Password) | ✅ Selesai |
+| Onboarding + Kuis Gaya Belajar (12 pertanyaan VARK) | ✅ Selesai |
+| Database Schema (Supabase + SQLite + RLS) | ✅ Selesai |
+| Practice Session (render + scoring + explanation) | ✅ Selesai |
+| Tryout fullscreen timer + skor per seksi | ✅ Selesai |
+| Download offline packs + SQLite sync | ✅ Selesai |
+| Bank Soal CPNS 180 (TWK 50, TIU 89 termasuk 34 figural, TKP 75) | ✅ Selesai |
+| Bank Soal TNI 150 + Polri 150 | ✅ Selesai |
+| 6 Template Tryout (CPNS SKD, TNI Akademik, Polri Akademik) | ✅ Selesai |
+| Soal Figural (SVG inline, data URI) | ✅ Selesai |
+| Gamifikasi (XP, streak, badge, daily challenge) | ✅ Selesai |
+| Progress dashboard + akurasi per kategori | ✅ Selesai |
+| Branding Wirago Academy (icon + splash + adaptive) | ✅ Selesai |
+| CI/CD: GitHub Actions Build APK + OTA Update | ✅ Selesai |
+| AI Tutor (OpenRouter via Edge Function) | 🚧 Planned |
+| Distribusi via Play Store Internal Testing | 📋 Planned |

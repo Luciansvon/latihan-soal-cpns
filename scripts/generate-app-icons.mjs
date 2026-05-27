@@ -59,21 +59,36 @@ async function main() {
     .toFile(path.join(ASSETS, 'android-icon-background.png'));
   console.log('✓ android-icon-background.png (solid cream)');
 
-  // 4. splash-icon.png — full logo (eagle + text) padded ke 1024x1024
-  // Source 2816x1536 → fit ke max 1024 wide, lalu pad vertical ke 1024 square
-  const splashBuf = await sharp(SRC)
-    .resize({ width: 1024, fit: 'inside' })
+  // 4. splash-icon.png — 1024x1024 dengan eagle DOMINAN + nama di bawah
+  // Strategi: eagle besar di tengah (800x800), wordmark "Wirago Academy" di bawahnya
+  // supaya tetap recognizable di HP tinggi (contain mode di splash gak ke-pad jelek)
+  const SPLASH_EAGLE_SIZE = 700;
+  const SPLASH_EAGLE_TOP = 60;
+  const eagleSplash = await sharp(SRC)
+    .extract(EAGLE_CROP)
+    .resize(SPLASH_EAGLE_SIZE, SPLASH_EAGLE_SIZE, { fit: 'contain', background: BG })
     .png()
     .toBuffer();
-  const splashMeta = await sharp(splashBuf).metadata();
-  const topPad = Math.floor((1024 - splashMeta.height) / 2);
+  const WORDMARK_CROP = { left: 500, top: 980, width: 1816, height: 350 };
+  const wordmarkSplash = await sharp(SRC)
+    .extract(WORDMARK_CROP)
+    .resize({ width: 760, fit: 'inside' })
+    .png()
+    .toBuffer();
+  const wordmarkMeta = await sharp(wordmarkSplash).metadata();
+  const eagleLeft = Math.floor((1024 - SPLASH_EAGLE_SIZE) / 2);
+  const wordmarkLeft = Math.floor((1024 - wordmarkMeta.width) / 2);
+  const wordmarkTop = SPLASH_EAGLE_TOP + SPLASH_EAGLE_SIZE + 40;
   await sharp({
     create: { width: 1024, height: 1024, channels: 4, background: BG },
   })
-    .composite([{ input: splashBuf, left: 0, top: topPad }])
+    .composite([
+      { input: eagleSplash, left: eagleLeft, top: SPLASH_EAGLE_TOP },
+      { input: wordmarkSplash, left: wordmarkLeft, top: wordmarkTop },
+    ])
     .png({ quality: 100 })
     .toFile(path.join(ASSETS, 'splash-icon.png'));
-  console.log(`✓ splash-icon.png (1024x1024, ${splashMeta.width}x${splashMeta.height} centered)`);
+  console.log(`✓ splash-icon.png (1024x1024, eagle ${SPLASH_EAGLE_SIZE} + wordmark ${wordmarkMeta.width}x${wordmarkMeta.height})`);
 
   // 5. wirago-logo.png — full original aspect, 1024 wide untuk in-app
   await sharp(SRC)
