@@ -81,7 +81,7 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
           setError(
             isOnline
               ? `Belum ada soal untuk ${SUBJECT_LABELS[subject]}. Coba kategori lain atau tunggu admin menambah konten.`
-              : 'Mode offline: belum ada paket terdownload untuk kategori ini. Download dulu di menu Profil â†’ Download Manager.'
+              : 'Mode offline: belum ada paket terdownload untuk kategori ini. Download dulu di menu Profil → Download Manager.'
           );
           setLoading(false);
           return;
@@ -211,7 +211,7 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
         setXPAndLevel(award.newXpTotal, award.newLevel);
         updateStreakStore(award.streakCurrent, award.streakLongest);
       } catch {
-        // gamification failure is non-fatal â€” session sudah tersimpan
+        // gamification failure is non-fatal — session sudah tersimpan
       }
 
       // Tandai daily challenge selesai kalau sesi ini berasal dari challenge
@@ -251,7 +251,7 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={accentColor} />
-          <Text style={styles.loadingTitle}>Memuat soalâ€¦</Text>
+          <Text style={styles.loadingTitle}>Memuat soal…</Text>
           <Text style={styles.loadingDesc}>
             {SUBJECT_LABELS[subject]} Â· {examConfig.label}
           </Text>
@@ -387,7 +387,7 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
 }
 
 // ============================================================================
-// QuestionView â€” render satu soal + opsi + (jika revealed) pembahasan
+// QuestionView — render satu soal + opsi + (jika revealed) pembahasan
 // ============================================================================
 import { QuestionCard } from '../../components/question/QuestionCard';
 import { OptionButton, type OptionState } from '../../components/question/OptionButton';
@@ -420,7 +420,7 @@ function QuestionView({
       if (!revealed) return isSelected ? 'selected' : 'idle';
       // Revealed:
       if (isTKP) {
-        // TKP has no wrong answer â€” highlight only the selected one.
+        // TKP has no wrong answer — highlight only the selected one.
         return isSelected ? 'selected' : 'disabled';
       }
       if (opt.id === question.correctOption) return 'correct';
@@ -499,7 +499,7 @@ function getBestTkpOption(question: Question): string {
 }
 
 // ============================================================================
-// Question fetching â€” SQLite first, fallback Supabase when online + empty
+// Question fetching — SQLite first, fallback Supabase when online + empty
 // ============================================================================
 interface FetchArgs {
   packId?: string;

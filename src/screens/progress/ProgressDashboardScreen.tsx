@@ -79,7 +79,7 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
         <View style={styles.statsRow}>
           <StatCard label="Level" value={level} icon="ribbon-outline" color={Colors.levelBadge} />
           <StatCard label="Total XP" value={xpTotal.toLocaleString('id-ID')} icon="star-outline" color={Colors.xpGold} />
-          <StatCard label="Streak" value={`${streakCurrent}ðŸ”¥`} icon="flame-outline" color={Colors.streakFire} />
+          <StatCard label="Streak" value={`${streakCurrent}🔥`} icon="flame-outline" color={Colors.streakFire} />
         </View>
 
         {/* Streak Detail */}
@@ -124,7 +124,7 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
                 value={
                   progress.totalAnswered > 0
                     ? `${Math.round((progress.totalCorrect / progress.totalAnswered) * 100)}%`
-                    : 'â€”'
+                    : '—'
                 }
               />
             </View>

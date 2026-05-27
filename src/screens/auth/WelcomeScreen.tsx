@@ -12,7 +12,7 @@ export function WelcomeScreen({ navigation }: AuthScreenProps<'Welcome'>) {
       {/* Hero section */}
       <View style={styles.hero}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logoEmoji}>ðŸŽ¯</Text>
+          <Text style={styles.logoEmoji}>🎯</Text>
           <View style={styles.flagAccent} />
         </View>
         <Text style={styles.appName}>Latihan Soal</Text>
@@ -54,11 +54,11 @@ export function WelcomeScreen({ navigation }: AuthScreenProps<'Welcome'>) {
 }
 
 const FEATURES = [
-  { icon: 'ðŸ§ ', label: 'Analisis gaya belajar personal' },
-  { icon: 'ðŸ“š', label: 'Bank soal CPNS, TNI, dan Polri' },
-  { icon: 'â±ï¸', label: 'Simulasi tryout seperti ujian asli' },
-  { icon: 'ðŸ“¶', label: 'Bisa belajar offline' },
-  { icon: 'ðŸ¤–', label: 'AI tutor adaptif' },
+  { icon: '🧠', label: 'Analisis gaya belajar personal' },
+  { icon: '📚', label: 'Bank soal CPNS, TNI, dan Polri' },
+  { icon: '⏱ï¸', label: 'Simulasi tryout seperti ujian asli' },
+  { icon: '📶', label: 'Bisa belajar offline' },
+  { icon: '🤖', label: 'AI tutor adaptif' },
 ];
 
 const styles = StyleSheet.create({

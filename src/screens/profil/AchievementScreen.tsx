@@ -17,7 +17,7 @@ export function AchievementScreen({ navigation }: ProfilScreenProps<'Achievement
       </View>
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.empty}>
-          <Text style={styles.emptyIcon}>ðŸ†</Text>
+          <Text style={styles.emptyIcon}>🏆</Text>
           <Text style={styles.emptyTitle}>Belum ada pencapaian</Text>
           <Text style={styles.emptyDesc}>Selesaikan sesi latihan dan tryout untuk membuka badge.</Text>
         </View>

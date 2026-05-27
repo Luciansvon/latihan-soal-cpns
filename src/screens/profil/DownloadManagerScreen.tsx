@@ -147,7 +147,7 @@ export function DownloadManagerScreen({ navigation }: ProfilScreenProps<'Downloa
         {loading ? (
           <View style={styles.center}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingText}>Memuat daftar paketâ€¦</Text>
+            <Text style={styles.loadingText}>Memuat daftar paket…</Text>
           </View>
         ) : error ? (
           <View style={styles.center}>
@@ -159,7 +159,7 @@ export function DownloadManagerScreen({ navigation }: ProfilScreenProps<'Downloa
           </View>
         ) : packs.length === 0 && downloadedIds.size === 0 ? (
           <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>ðŸ“¦</Text>
+            <Text style={styles.emptyIcon}>📦</Text>
             <Text style={styles.emptyTitle}>Belum ada paket tersedia</Text>
             <Text style={styles.emptyDesc}>
               Admin belum mempublish paket soal. Coba refresh atau kembali nanti.

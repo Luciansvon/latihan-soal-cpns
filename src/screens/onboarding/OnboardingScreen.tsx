@@ -78,7 +78,7 @@ export function OnboardingScreen({ navigation }: OnboardingScreenProps<'Onboardi
               </View>
               {selectedExam === exam.type && (
                 <View style={[styles.checkMark, { backgroundColor: exam.color }]}>
-                  <Text style={styles.checkMarkText}>âœ“</Text>
+                  <Text style={styles.checkMarkText}>✓</Text>
                 </View>
               )}
             </TouchableOpacity>
@@ -110,7 +110,7 @@ export function OnboardingScreen({ navigation }: OnboardingScreenProps<'Onboardi
           disabled={loading}
           activeOpacity={0.85}
         >
-          <Text style={styles.nextBtnText}>{loading ? 'Menyimpan...' : 'Lanjut â†’'}</Text>
+          <Text style={styles.nextBtnText}>{loading ? 'Menyimpan...' : 'Lanjut →'}</Text>
         </TouchableOpacity>
 
       </ScrollView>

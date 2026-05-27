@@ -88,7 +88,7 @@ export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>
         {loading ? (
           <View style={styles.centerBox}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingText}>Memuat daftar tryoutâ€¦</Text>
+            <Text style={styles.loadingText}>Memuat daftar tryout…</Text>
           </View>
         ) : error ? (
           <View style={styles.errorBox}>

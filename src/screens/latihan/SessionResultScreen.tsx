@@ -78,7 +78,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Memuat hasilâ€¦</Text>
+          <Text style={styles.loadingText}>Memuat hasil…</Text>
         </View>
       </SafeAreaView>
     );
@@ -200,7 +200,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
                 <Text style={styles.recoEm}>
                   {SUBJECT_LABELS[top.subject] ?? top.subject}
                 </Text>
-                {' '}â€” {top.reason.toLowerCase()}.
+                {' '}— {top.reason.toLowerCase()}.
               </Text>
               <View style={styles.recoTip}>
                 <Ionicons name="school-outline" size={14} color={Colors.textSecondary} />

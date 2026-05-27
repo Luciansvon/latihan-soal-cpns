@@ -1,7 +1,7 @@
 ﻿// SkimTrainerScreen
 // Latih membaca cepat (skim) ala TWK HOTS: tampilkan stem soal dengan
 // countdown, lalu sembunyikan dan minta jawab opsi. Mensimulasikan tekanan
-// waktu skenario ujian â€” sesuai strategi "skim-then-extract" dari
+// waktu skenario ujian — sesuai strategi "skim-then-extract" dari
 // TNI Efektif.md untuk lawan reading fatigue.
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -144,7 +144,7 @@ export function SkimTrainerScreen({ navigation }: LatihanScreenProps<'SkimTraine
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Menyiapkan soal skimâ€¦</Text>
+          <Text style={styles.loadingText}>Menyiapkan soal skim…</Text>
         </View>
       </SafeAreaView>
     );

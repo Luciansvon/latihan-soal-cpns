@@ -75,7 +75,7 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
               setTemplate(mapTemplate(data));
             }
           } catch {
-            // Ignore â€” template lookup is optional decoration
+            // Ignore — template lookup is optional decoration
           }
         }
         setLoading(false);
@@ -95,7 +95,7 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Memuat hasil tryoutâ€¦</Text>
+          <Text style={styles.loadingText}>Memuat hasil tryout…</Text>
         </View>
       </SafeAreaView>
     );

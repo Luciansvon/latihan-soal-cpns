@@ -40,7 +40,7 @@ export function TryoutSessionScreen({ route, navigation }: TryoutScreenProps<'Tr
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={accent} />
-          <Text style={styles.loadingText}>Memuat tryoutâ€¦</Text>
+          <Text style={styles.loadingText}>Memuat tryout…</Text>
         </View>
       </SafeAreaView>
     );
@@ -65,7 +65,7 @@ export function TryoutSessionScreen({ route, navigation }: TryoutScreenProps<'Tr
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={accent} />
-          <Text style={styles.loadingText}>Menyimpan hasilâ€¦</Text>
+          <Text style={styles.loadingText}>Menyimpan hasil…</Text>
         </View>
       </SafeAreaView>
     );

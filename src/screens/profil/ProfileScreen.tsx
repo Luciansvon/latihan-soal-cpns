@@ -63,15 +63,15 @@ export function ProfileScreen({ navigation }: ProfilScreenProps<'Profile'>) {
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{streakCurrent}</Text>
-            <Text style={styles.statLabel}>ðŸ”¥ Streak</Text>
+            <Text style={styles.statLabel}>🔥 Streak</Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{level}</Text>
-            <Text style={styles.statLabel}>â­ Level</Text>
+            <Text style={styles.statLabel}>⭐ Level</Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{profile?.targetExam ?? '-'}</Text>
-            <Text style={styles.statLabel}>ðŸŽ¯ Target</Text>
+            <Text style={styles.statLabel}>🎯 Target</Text>
           </View>
         </View>
 

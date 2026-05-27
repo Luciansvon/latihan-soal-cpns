@@ -57,7 +57,7 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Memuat detail sesiâ€¦</Text>
+          <Text style={styles.loadingText}>Memuat detail sesi…</Text>
         </View>
       </SafeAreaView>
     );

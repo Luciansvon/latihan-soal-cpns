@@ -81,7 +81,7 @@ export function HistoryListScreen({ navigation }: ProgressScreenProps<'HistoryLi
         {progress.loading ? (
           <View style={styles.centerBox}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingText}>Memuat riwayatâ€¦</Text>
+            <Text style={styles.loadingText}>Memuat riwayat…</Text>
           </View>
         ) : filtered.length === 0 ? (
           <View style={styles.emptyState}>

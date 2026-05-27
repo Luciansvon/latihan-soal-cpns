@@ -53,7 +53,7 @@ export function HasilAnalisisScreen({ route }: OnboardingScreenProps<'HasilAnali
     setSaveError(null);
 
     // Re-bootstrap profile dari Supabase: ambil semua field terbaru (target_exam,
-    // province, learning_style) â†’ upsert ke local + set di Zustand store.
+    // province, learning_style) → upsert ke local + set di Zustand store.
     // Setelah ini, RootNavigator gate (learningStyle != null) akan switch ke MainApp.
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
@@ -107,7 +107,7 @@ export function HasilAnalisisScreen({ route }: OnboardingScreenProps<'HasilAnali
 
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.emoji}>ðŸ§ </Text>
+          <Text style={styles.emoji}>🧠</Text>
           <Text style={styles.title}>Hasil Analisis{'\n'}Gaya Belajarmu</Text>
         </View>
 
@@ -148,7 +148,7 @@ export function HasilAnalisisScreen({ route }: OnboardingScreenProps<'HasilAnali
         <View style={styles.tipsContainer}>
           {summary.studyTips.map((tip, i) => (
             <View key={i} style={styles.tipRow}>
-              <Text style={styles.tipBullet}>â€¢</Text>
+              <Text style={styles.tipBullet}>•</Text>
               <Text style={styles.tipText}>{tip}</Text>
             </View>
           ))}
@@ -159,7 +159,7 @@ export function HasilAnalisisScreen({ route }: OnboardingScreenProps<'HasilAnali
         <View style={styles.tipsContainer}>
           {summary.examStrategies.map((s, i) => (
             <View key={i} style={styles.tipRow}>
-              <Text style={[styles.tipBullet, { color: Colors.primary }]}>â†’</Text>
+              <Text style={[styles.tipBullet, { color: Colors.primary }]}>→</Text>
               <Text style={styles.tipText}>{s}</Text>
             </View>
           ))}
@@ -168,7 +168,7 @@ export function HasilAnalisisScreen({ route }: OnboardingScreenProps<'HasilAnali
         {/* Science note */}
         <View style={styles.scienceNote}>
           <Text style={styles.scienceNoteText}>
-            ðŸ“š Analisis ini berdasarkan VARK Model (Fleming & Mills, 1992) dan Honey & Mumford Learning Styles (1982), dua kerangka gaya belajar yang banyak digunakan dalam penelitian pendidikan.
+            📚 Analisis ini berdasarkan VARK Model (Fleming & Mills, 1992) dan Honey & Mumford Learning Styles (1982), dua kerangka gaya belajar yang banyak digunakan dalam penelitian pendidikan.
           </Text>
         </View>
 
@@ -180,7 +180,7 @@ export function HasilAnalisisScreen({ route }: OnboardingScreenProps<'HasilAnali
           activeOpacity={0.85}
         >
           <Text style={styles.startBtnText}>
-            {saving ? 'Menyimpan...' : 'Mulai Belajar Sekarang! ðŸš€'}
+            {saving ? 'Menyimpan...' : 'Mulai Belajar Sekarang! 🚀'}
           </Text>
         </TouchableOpacity>
 

@@ -77,10 +77,10 @@ export function BerandaScreen() {
         <View style={styles.header}>
           <View>
             <Text style={styles.greeting}>{greeting},</Text>
-            <Text style={styles.username}>{displayName} ðŸ‘‹</Text>
+            <Text style={styles.username}>{displayName} 👋</Text>
           </View>
           <View style={styles.streakBadge}>
-            <Text style={styles.streakFire}>ðŸ”¥</Text>
+            <Text style={styles.streakFire}>🔥</Text>
             <Text style={styles.streakCount}>{streakCurrent}</Text>
           </View>
         </View>
@@ -114,7 +114,7 @@ export function BerandaScreen() {
             <Ionicons name="trophy" size={22} color={Colors.xpGold} />
             <View style={styles.challengeText}>
               <Text style={styles.challengeTitle}>Daily Challenge</Text>
-              <Text style={styles.challengeDesc}>10 soal acak â€¢ +50 XP bonus</Text>
+              <Text style={styles.challengeDesc}>10 soal acak • +50 XP bonus</Text>
             </View>
           </View>
           <TouchableOpacity style={styles.challengeBtn} activeOpacity={0.8} onPress={goToLatihan}>
