@@ -27,12 +27,32 @@ jobs:
       - name: Setup EAS CLI
         run: npm install -g eas-cli
 
-      - name: Build APK via EAS
-        run: eas build --platform android --profile preview --non-interactive --output ./build/app-preview.apk
+      - name: Build APK via EAS (remote, wait until selesai)
+        run: |
+          eas build \
+            --platform android \
+            --profile preview \
+            --non-interactive \
+            --wait \
+            --json > build-result.json
+          cat build-result.json
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
           EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Download APK dari EAS artifact URL
+        run: |
+          APK_URL=$(jq -r '.[0].artifacts.buildUrl' build-result.json)
+          if [ -z "$APK_URL" ] || [ "$APK_URL" = "null" ]; then
+            echo "::error::Build URL kosong — cek build-result.json"
+            cat build-result.json
+            exit 1
+          fi
+          echo "Downloading APK dari: $APK_URL"
+          mkdir -p build
+          curl -L -o ./build/app-preview.apk "$APK_URL"
+          ls -lh ./build/
 
       - name: Upload APK sebagai artifact
         uses: actions/upload-artifact@v4
