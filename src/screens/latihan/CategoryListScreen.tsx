@@ -1,16 +1,22 @@
-﻿import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
-import { EXAM_CONFIGS, SUBJECT_LABELS, type SubjectType } from '../../types/exam.types';
+import {
+  EXAM_CONFIGS,
+  type SubjectType,
+} from '../../types/exam.types';
 import type { LatihanScreenProps } from '../../navigation/types';
+import type { QuestionPack } from '../../types/question.types';
+import { DownloadService } from '../../services/DownloadService';
 
 const SUBJECT_COLORS: Partial<Record<SubjectType, string>> = {
   TWK: Colors.twk,
@@ -36,8 +42,7 @@ const SUBJECT_ICONS: Partial<Record<SubjectType, keyof typeof Ionicons.glyphMap>
   PENGETAHUAN_HUKUM: 'document-text-outline',
 };
 
-// Placeholder packs per subject
-const PACK_COUNT_PER_SUBJECT = 5;
+type Filter = 'ALL' | SubjectType;
 
 export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'CategoryList'>) {
   const { examType } = route.params;
@@ -50,9 +55,44 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
   };
   const accentColor = examColorMap[examType] ?? Colors.primary;
 
+  const [packs, setPacks] = useState<QuestionPack[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<Filter>('ALL');
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    DownloadService.listAvailablePacks(examType)
+      .then((data) => {
+        if (cancelled) return;
+        setPacks(data);
+        setError(null);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setError(e?.message ?? 'Gagal memuat paket soal');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [examType]);
+
+  const filteredPacks = useMemo(() => {
+    if (filter === 'ALL') return packs;
+    return packs.filter((p) => p.subject === filter);
+  }, [packs, filter]);
+
+  const totalSoal = useMemo(
+    () => filteredPacks.reduce((sum, p) => sum + (p.questionCount || 0), 0),
+    [filteredPacks],
+  );
+
   return (
-    <SafeAreaView style={styles.safe}>
-      {/* Header */}
+    <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
@@ -61,69 +101,144 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
           <View style={[styles.examBadge, { backgroundColor: accentColor }]}>
             <Text style={styles.examBadgeText}>{config.label}</Text>
           </View>
-          <Text style={styles.headerTitle}>Pilih Mata Pelajaran</Text>
+          <Text style={styles.headerTitle}>Pilih Paket Soal</Text>
           <Text style={styles.headerSubtitle}>{config.description}</Text>
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={styles.sectionLabel}>{config.subjects.length} mata pelajaran tersedia</Text>
-
-        {config.subjects.map((subject: SubjectType) => {
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.tabRow}
+      >
+        <FilterTab
+          label="Semua"
+          active={filter === 'ALL'}
+          accentColor={accentColor}
+          onPress={() => setFilter('ALL')}
+        />
+        {config.subjects.map((subject) => {
           const color = SUBJECT_COLORS[subject] ?? accentColor;
-          const iconName = SUBJECT_ICONS[subject] ?? 'document-text-outline';
           return (
-            <TouchableOpacity
+            <FilterTab
               key={subject}
-              style={styles.subjectCard}
-              activeOpacity={0.8}
-              onPress={() =>
-                navigation.navigate('PracticeSession', {
-                  examType,
-                  subject,
-                  questionCount: 10,
-                })
-              }
-            >
-              <View style={[styles.iconBox, { backgroundColor: color + '18' }]}>
-                <Ionicons name={iconName} size={24} color={color} />
-              </View>
-
-              <View style={styles.subjectBody}>
-                <Text style={styles.subjectName}>{SUBJECT_LABELS[subject]}</Text>
-                <Text style={styles.subjectCode}>{subject}</Text>
-
-                {/* Mini pack row */}
-                <View style={styles.packRow}>
-                  {Array.from({ length: PACK_COUNT_PER_SUBJECT }).map((_, i) => (
-                    <View
-                      key={i}
-                      style={[styles.packDot, { backgroundColor: color + '30', borderColor: color }]}
-                    >
-                      <Text style={[styles.packDotText, { color }]}>{i + 1}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-
-              <View style={styles.subjectRight}>
-                <Text style={[styles.packCountText, { color }]}>{PACK_COUNT_PER_SUBJECT}</Text>
-                <Text style={styles.packCountLabel}>paket</Text>
-                <Ionicons name="chevron-forward" size={16} color={Colors.gray400} style={{ marginTop: 4 }} />
-              </View>
-            </TouchableOpacity>
+              label={subject}
+              active={filter === subject}
+              accentColor={color}
+              onPress={() => setFilter(subject)}
+            />
           );
         })}
+      </ScrollView>
 
-        {/* Info box */}
-        <View style={styles.infoBox}>
-          <Ionicons name="information-circle-outline" size={16} color={Colors.info} />
-          <Text style={styles.infoText}>
-            Setiap paket berisi 10â€“20 soal. Kamu bisa mengulang paket yang sama berkali-kali.
-          </Text>
-        </View>
+      <View style={styles.listMeta}>
+        <Text style={styles.metaText}>
+          {filteredPacks.length} paket • {totalSoal} soal
+        </Text>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        {loading ? (
+          <View style={styles.center}>
+            <ActivityIndicator color={accentColor} />
+            <Text style={styles.centerText}>Memuat paket soal...</Text>
+          </View>
+        ) : error ? (
+          <View style={styles.center}>
+            <Ionicons name="alert-circle-outline" size={36} color={Colors.error} />
+            <Text style={styles.centerText}>{error}</Text>
+          </View>
+        ) : filteredPacks.length === 0 ? (
+          <View style={styles.center}>
+            <Ionicons name="document-text-outline" size={36} color={Colors.gray400} />
+            <Text style={styles.centerText}>Belum ada paket di filter ini.</Text>
+          </View>
+        ) : (
+          filteredPacks.map((pack) => {
+            const color = SUBJECT_COLORS[pack.subject] ?? accentColor;
+            const iconName = SUBJECT_ICONS[pack.subject] ?? 'document-text-outline';
+            return (
+              <TouchableOpacity
+                key={pack.id}
+                style={styles.packCard}
+                activeOpacity={0.85}
+                onPress={() =>
+                  navigation.navigate('PracticeSession', {
+                    examType,
+                    subject: pack.subject,
+                    packId: pack.id,
+                    questionCount: Math.max(1, pack.questionCount || 10),
+                  })
+                }
+              >
+                <View style={[styles.iconBox, { backgroundColor: color + '18' }]}>
+                  <Ionicons name={iconName} size={22} color={color} />
+                </View>
+                <View style={styles.packBody}>
+                  <View style={styles.titleRow}>
+                    <Text style={[styles.subjectChip, { backgroundColor: color + '20', color }]}>
+                      {pack.subject}
+                    </Text>
+                  </View>
+                  <Text style={styles.packTitle} numberOfLines={2}>
+                    {pack.title}
+                  </Text>
+                  {pack.description ? (
+                    <Text style={styles.packDesc} numberOfLines={2}>
+                      {pack.description}
+                    </Text>
+                  ) : null}
+                </View>
+                <View style={styles.packRight}>
+                  <Text style={[styles.packCount, { color }]}>{pack.questionCount || '-'}</Text>
+                  <Text style={styles.packCountLabel}>soal</Text>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={16}
+                    color={Colors.gray400}
+                    style={{ marginTop: 4 }}
+                  />
+                </View>
+              </TouchableOpacity>
+            );
+          })
+        )}
+
+        {!loading && filteredPacks.length > 0 ? (
+          <View style={styles.infoBox}>
+            <Ionicons name="information-circle-outline" size={16} color={Colors.info} />
+            <Text style={styles.infoText}>
+              Tap paket untuk mulai latihan. Kamu bisa mengulang paket yang sama berkali-kali.
+            </Text>
+          </View>
+        ) : null}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function FilterTab({
+  label,
+  active,
+  accentColor,
+  onPress,
+}: {
+  label: string;
+  active: boolean;
+  accentColor: string;
+  onPress: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      style={[
+        styles.filterTab,
+        active && { backgroundColor: accentColor, borderColor: accentColor },
+      ]}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      <Text style={[styles.filterTabText, active && styles.filterTabTextActive]}>{label}</Text>
+    </TouchableOpacity>
   );
 }
 
@@ -134,10 +249,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
-    gap: 12,
+    gap: 8,
   },
   backBtn: { width: 36, height: 36, justifyContent: 'center' },
   headerText: { gap: 4 },
@@ -152,46 +267,79 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, letterSpacing: -0.3 },
   headerSubtitle: { fontSize: 13, color: Colors.textSecondary },
 
-  scroll: { padding: 20, gap: 12, paddingBottom: 40 },
-  sectionLabel: { fontSize: 12, fontWeight: '600', color: Colors.textSecondary, letterSpacing: 0.3 },
-
-  subjectCard: {
+  tabRow: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    gap: 8,
     backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+  },
+  filterTab: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    backgroundColor: Colors.white,
+  },
+  filterTabText: { fontSize: 12, fontWeight: '700', color: Colors.textSecondary },
+  filterTabTextActive: { color: Colors.white },
+
+  listMeta: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 8,
+  },
+  metaText: { fontSize: 12, color: Colors.textMuted, fontWeight: '600' },
+
+  scroll: { paddingHorizontal: 20, paddingBottom: 40, gap: 10 },
+
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+    gap: 10,
+  },
+  centerText: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', paddingHorizontal: 20 },
+
+  packCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    gap: 12,
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 5,
+    shadowRadius: 4,
     elevation: 1,
   },
   iconBox: {
-    width: 50,
-    height: 50,
-    borderRadius: 14,
+    width: 42,
+    height: 42,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  subjectBody: { flex: 1, gap: 4 },
-  subjectName: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  subjectCode: { fontSize: 11, fontWeight: '600', color: Colors.textSecondary, letterSpacing: 0.5 },
-  packRow: { flexDirection: 'row', gap: 4, marginTop: 4 },
-  packDot: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  packBody: { flex: 1, gap: 4 },
+  titleRow: { flexDirection: 'row' },
+  subjectChip: {
+    alignSelf: 'flex-start',
+    fontSize: 10,
+    fontWeight: '700',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    overflow: 'hidden',
   },
-  packDotText: { fontSize: 10, fontWeight: '700' },
+  packTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary, lineHeight: 18 },
+  packDesc: { fontSize: 11, color: Colors.textSecondary, lineHeight: 15 },
 
-  subjectRight: { alignItems: 'center' },
-  packCountText: { fontSize: 20, fontWeight: '800' },
-  packCountLabel: { fontSize: 10, color: Colors.textMuted },
+  packRight: { alignItems: 'center', minWidth: 40 },
+  packCount: { fontSize: 20, fontWeight: '800' },
+  packCountLabel: { fontSize: 9, color: Colors.textMuted },
 
   infoBox: {
     flexDirection: 'row',
@@ -201,7 +349,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1,
     borderColor: '#BFDBFE',
-    marginTop: 4,
+    marginTop: 6,
   },
   infoText: { flex: 1, fontSize: 12, color: Colors.info, lineHeight: 18 },
 });
