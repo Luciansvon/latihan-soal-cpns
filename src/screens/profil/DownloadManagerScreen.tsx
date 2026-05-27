@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { ProfilScreenProps } from '../../navigation/types';
@@ -147,7 +147,7 @@ export function DownloadManagerScreen({ navigation }: ProfilScreenProps<'Downloa
         {loading ? (
           <View style={styles.center}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingText}>Memuat daftar paket…</Text>
+            <Text style={styles.loadingText}>Memuat daftar paketâ€¦</Text>
           </View>
         ) : error ? (
           <View style={styles.center}>
@@ -159,7 +159,7 @@ export function DownloadManagerScreen({ navigation }: ProfilScreenProps<'Downloa
           </View>
         ) : packs.length === 0 && downloadedIds.size === 0 ? (
           <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>📦</Text>
+            <Text style={styles.emptyIcon}>ðŸ“¦</Text>
             <Text style={styles.emptyTitle}>Belum ada paket tersedia</Text>
             <Text style={styles.emptyDesc}>
               Admin belum mempublish paket soal. Coba refresh atau kembali nanti.
@@ -186,8 +186,8 @@ export function DownloadManagerScreen({ navigation }: ProfilScreenProps<'Downloa
                     <View style={styles.packMain}>
                       <Text style={styles.packTitle}>{pack.title}</Text>
                       <Text style={styles.packSubtitle}>
-                        {SUBJECT_LABELS[pack.subject] ?? pack.subject} · {pack.questionCount} soal
-                        {pack.fileSizeKb ? ` · ${formatKb(pack.fileSizeKb)}` : ''}
+                        {SUBJECT_LABELS[pack.subject] ?? pack.subject} Â· {pack.questionCount} soal
+                        {pack.fileSizeKb ? ` Â· ${formatKb(pack.fileSizeKb)}` : ''}
                       </Text>
                       {pack.description ? (
                         <Text style={styles.packDesc} numberOfLines={2}>

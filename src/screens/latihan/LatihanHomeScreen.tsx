@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
@@ -164,7 +164,7 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
           </Text>
         </TouchableOpacity>
 
-        {/* Tantangan Harian — micro-dosing 5 soal/hari fokus subject prioritas */}
+        {/* Tantangan Harian â€” micro-dosing 5 soal/hari fokus subject prioritas */}
         {dailyState ? (
           <TouchableOpacity
             style={[
@@ -189,7 +189,7 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
             </View>
             <View style={styles.dailyBody}>
               <Text style={styles.dailyTitle}>
-                Tantangan Harian{dailyState.done ? ' ·' : ''}
+                Tantangan Harian{dailyState.done ? ' Â·' : ''}
                 {dailyState.done ? (
                   <Text style={styles.dailyDoneTag}> SELESAI</Text>
                 ) : (
@@ -199,7 +199,7 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
               <Text style={styles.dailyDesc}>
                 {dailyState.done
                   ? 'Sudah selesai hari ini. Sampai jumpa besok!'
-                  : `${DAILY_CHALLENGE_SIZE} soal ${SUBJECT_LABELS[dailyState.subject!] ?? dailyState.subject} — ${dailyState.reason}`}
+                  : `${DAILY_CHALLENGE_SIZE} soal ${SUBJECT_LABELS[dailyState.subject!] ?? dailyState.subject} â€” ${dailyState.reason}`}
               </Text>
             </View>
             {!dailyState.done ? (
@@ -208,7 +208,7 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
           </TouchableOpacity>
         ) : null}
 
-        {/* Skim trainer entry — fitur neuroedukatif untuk lawan reading fatigue */}
+        {/* Skim trainer entry â€” fitur neuroedukatif untuk lawan reading fatigue */}
         <TouchableOpacity
           style={styles.skimCard}
           activeOpacity={0.85}
@@ -220,7 +220,7 @@ export function LatihanHomeScreen({ navigation }: LatihanScreenProps<'LatihanHom
           <View style={styles.skimBody}>
             <Text style={styles.skimTitle}>Latih Baca Cepat (Skim)</Text>
             <Text style={styles.skimDesc}>
-              Drill membaca soal TWK di bawah tekanan waktu — lawan reading fatigue HOTS.
+              Drill membaca soal TWK di bawah tekanan waktu â€” lawan reading fatigue HOTS.
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={18} color={Colors.gray400} />

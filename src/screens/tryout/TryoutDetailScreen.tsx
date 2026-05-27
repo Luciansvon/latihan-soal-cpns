@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
@@ -69,7 +69,7 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Memuat detail tryout…</Text>
+          <Text style={styles.loadingText}>Memuat detail tryoutâ€¦</Text>
         </View>
       </SafeAreaView>
     );
@@ -143,7 +143,7 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
                 </Text>
                 <Text style={styles.sectionMeta}>
                   {section.questionCount} soal
-                  {section.passingScore ? ` · Passing: ${section.passingScore}` : ''}
+                  {section.passingScore ? ` Â· Passing: ${section.passingScore}` : ''}
                 </Text>
               </View>
             </View>
@@ -158,7 +158,7 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
           <View style={styles.rulesList}>
             {RULES.map((rule, i) => (
               <View key={i} style={styles.ruleItem}>
-                <Text style={styles.ruleBullet}>•</Text>
+                <Text style={styles.ruleBullet}>â€¢</Text>
                 <Text style={styles.ruleText}>{rule}</Text>
               </View>
             ))}

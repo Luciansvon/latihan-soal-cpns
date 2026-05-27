@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { LatihanScreenProps } from '../../navigation/types';
@@ -78,7 +78,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Memuat hasil…</Text>
+          <Text style={styles.loadingText}>Memuat hasilâ€¦</Text>
         </View>
       </SafeAreaView>
     );
@@ -117,7 +117,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Hasil Latihan</Text>
         <Text style={styles.headerSubtitle}>
-          {session.examType} · {session.subject ?? '-'}
+          {session.examType} Â· {session.subject ?? '-'}
         </Text>
       </View>
 
@@ -154,7 +154,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
             <View style={styles.awardHeader}>
               <Ionicons name="star" size={20} color={Colors.xpGold} />
               <Text style={styles.awardText}>
-                +{award.xpEarned} XP{award.leveledUp ? ' · Naik level!' : ''}
+                +{award.xpEarned} XP{award.leveledUp ? ' Â· Naik level!' : ''}
               </Text>
             </View>
             <XPBar xpTotal={award.newXpTotal} level={award.newLevel} />
@@ -200,7 +200,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
                 <Text style={styles.recoEm}>
                   {SUBJECT_LABELS[top.subject] ?? top.subject}
                 </Text>
-                {' '}— {top.reason.toLowerCase()}.
+                {' '}â€” {top.reason.toLowerCase()}.
               </Text>
               <View style={styles.recoTip}>
                 <Ionicons name="school-outline" size={14} color={Colors.textSecondary} />

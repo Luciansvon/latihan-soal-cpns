@@ -1,14 +1,14 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { ProgressScreenProps } from '../../navigation/types';
@@ -81,7 +81,7 @@ export function HistoryListScreen({ navigation }: ProgressScreenProps<'HistoryLi
         {progress.loading ? (
           <View style={styles.centerBox}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingText}>Memuat riwayat…</Text>
+            <Text style={styles.loadingText}>Memuat riwayatâ€¦</Text>
           </View>
         ) : filtered.length === 0 ? (
           <View style={styles.emptyState}>
@@ -137,8 +137,8 @@ function SessionRow({
           ) : null}
         </View>
         <Text style={styles.sessionMeta}>
-          {dateStr} · {session.correctCount}/{session.answeredCount} benar
-          {session.durationSeconds ? ` · ${Math.round(session.durationSeconds / 60)}m` : ''}
+          {dateStr} Â· {session.correctCount}/{session.answeredCount} benar
+          {session.durationSeconds ? ` Â· ${Math.round(session.durationSeconds / 60)}m` : ''}
         </Text>
       </View>
 

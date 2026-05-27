@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
@@ -88,7 +88,7 @@ export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>
         {loading ? (
           <View style={styles.centerBox}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingText}>Memuat daftar tryout…</Text>
+            <Text style={styles.loadingText}>Memuat daftar tryoutâ€¦</Text>
           </View>
         ) : error ? (
           <View style={styles.errorBox}>

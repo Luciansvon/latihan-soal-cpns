@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
@@ -11,6 +10,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
@@ -40,7 +40,7 @@ export function TryoutSessionScreen({ route, navigation }: TryoutScreenProps<'Tr
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={accent} />
-          <Text style={styles.loadingText}>Memuat tryout…</Text>
+          <Text style={styles.loadingText}>Memuat tryoutâ€¦</Text>
         </View>
       </SafeAreaView>
     );
@@ -65,7 +65,7 @@ export function TryoutSessionScreen({ route, navigation }: TryoutScreenProps<'Tr
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={accent} />
-          <Text style={styles.loadingText}>Menyimpan hasil…</Text>
+          <Text style={styles.loadingText}>Menyimpan hasilâ€¦</Text>
         </View>
       </SafeAreaView>
     );
@@ -138,7 +138,7 @@ export function TryoutSessionScreen({ route, navigation }: TryoutScreenProps<'Tr
         </Text>
       </View>
       <Text style={styles.subStat}>
-        Terjawab: {session.answeredCount} · Ditandai: {session.flaggedQuestions.size}
+        Terjawab: {session.answeredCount} Â· Ditandai: {session.flaggedQuestions.size}
       </Text>
 
       {/* Content */}

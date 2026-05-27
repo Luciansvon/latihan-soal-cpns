@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
@@ -75,7 +75,7 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
               setTemplate(mapTemplate(data));
             }
           } catch {
-            // Ignore — template lookup is optional decoration
+            // Ignore â€” template lookup is optional decoration
           }
         }
         setLoading(false);
@@ -95,7 +95,7 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Memuat hasil tryout…</Text>
+          <Text style={styles.loadingText}>Memuat hasil tryoutâ€¦</Text>
         </View>
       </SafeAreaView>
     );
@@ -187,7 +187,7 @@ export function TryoutResultScreen({ route, navigation }: TryoutScreenProps<'Try
             <View style={styles.awardHeader}>
               <Ionicons name="star" size={20} color={Colors.xpGold} />
               <Text style={styles.awardText}>
-                +{award.xpEarned} XP{award.leveledUp ? ' · Naik level!' : ''}
+                +{award.xpEarned} XP{award.leveledUp ? ' Â· Naik level!' : ''}
               </Text>
             </View>
             <XPBar xpTotal={award.newXpTotal} level={award.newLevel} />

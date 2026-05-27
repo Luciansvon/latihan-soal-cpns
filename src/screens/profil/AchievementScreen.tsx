@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+﻿import React from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { ProfilScreenProps } from '../../navigation/types';
@@ -16,7 +17,7 @@ export function AchievementScreen({ navigation }: ProfilScreenProps<'Achievement
       </View>
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.empty}>
-          <Text style={styles.emptyIcon}>🏆</Text>
+          <Text style={styles.emptyIcon}>ðŸ†</Text>
           <Text style={styles.emptyTitle}>Belum ada pencapaian</Text>
           <Text style={styles.emptyDesc}>Selesaikan sesi latihan dan tryout untuk membuka badge.</Text>
         </View>

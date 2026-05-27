@@ -1,12 +1,12 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import { EXAM_CONFIGS, SUBJECT_LABELS, type SubjectType } from '../../types/exam.types';
@@ -119,7 +119,7 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
         <View style={styles.infoBox}>
           <Ionicons name="information-circle-outline" size={16} color={Colors.info} />
           <Text style={styles.infoText}>
-            Setiap paket berisi 10–20 soal. Kamu bisa mengulang paket yang sama berkali-kali.
+            Setiap paket berisi 10â€“20 soal. Kamu bisa mengulang paket yang sama berkali-kali.
           </Text>
         </View>
       </ScrollView>

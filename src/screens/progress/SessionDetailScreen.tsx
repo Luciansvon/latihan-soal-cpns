@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { ProgressScreenProps } from '../../navigation/types';
@@ -57,7 +57,7 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Memuat detail sesi…</Text>
+          <Text style={styles.loadingText}>Memuat detail sesiâ€¦</Text>
         </View>
       </SafeAreaView>
     );
@@ -156,7 +156,7 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
                     {SUBJECT_LABELS[subject] ?? subject}
                   </Text>
                   <Text style={styles.sectionStat}>
-                    {score.correct}/{score.total} · skor {score.score}
+                    {score.correct}/{score.total} Â· skor {score.score}
                   </Text>
                 </View>
               )
@@ -235,7 +235,7 @@ function formatDateTime(ts: number): string {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
   const hh = String(d.getHours()).padStart(2, '0');
   const mm = String(d.getMinutes()).padStart(2, '0');
-  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} · ${hh}:${mm}`;
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} Â· ${hh}:${mm}`;
 }
 
 const styles = StyleSheet.create({

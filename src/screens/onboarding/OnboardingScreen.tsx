@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,
+  View, Text, StyleSheet, TouchableOpacity, ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/colors';
 import { EXAM_CONFIGS } from '../../types/exam.types';
 import type { OnboardingScreenProps } from '../../navigation/types';
@@ -77,7 +78,7 @@ export function OnboardingScreen({ navigation }: OnboardingScreenProps<'Onboardi
               </View>
               {selectedExam === exam.type && (
                 <View style={[styles.checkMark, { backgroundColor: exam.color }]}>
-                  <Text style={styles.checkMarkText}>✓</Text>
+                  <Text style={styles.checkMarkText}>âœ“</Text>
                 </View>
               )}
             </TouchableOpacity>
@@ -109,7 +110,7 @@ export function OnboardingScreen({ navigation }: OnboardingScreenProps<'Onboardi
           disabled={loading}
           activeOpacity={0.85}
         >
-          <Text style={styles.nextBtnText}>{loading ? 'Menyimpan...' : 'Lanjut →'}</Text>
+          <Text style={styles.nextBtnText}>{loading ? 'Menyimpan...' : 'Lanjut â†’'}</Text>
         </TouchableOpacity>
 
       </ScrollView>

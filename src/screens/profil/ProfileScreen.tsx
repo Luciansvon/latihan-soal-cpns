@@ -1,7 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Alert,
+  View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import { supabase } from '../../services/supabase';
@@ -43,7 +44,7 @@ export function ProfileScreen({ navigation }: ProfilScreenProps<'Profile'>) {
           </View>
           <Text style={styles.name}>{profile?.fullName ?? profile?.username ?? 'Pejuang'}</Text>
           <View style={styles.levelBadge}>
-            <Text style={styles.levelBadgeText}>Lv.{level} · {levelTitle}</Text>
+            <Text style={styles.levelBadgeText}>Lv.{level} Â· {levelTitle}</Text>
           </View>
         </View>
 
@@ -62,15 +63,15 @@ export function ProfileScreen({ navigation }: ProfilScreenProps<'Profile'>) {
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{streakCurrent}</Text>
-            <Text style={styles.statLabel}>🔥 Streak</Text>
+            <Text style={styles.statLabel}>ðŸ”¥ Streak</Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{level}</Text>
-            <Text style={styles.statLabel}>⭐ Level</Text>
+            <Text style={styles.statLabel}>â­ Level</Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{profile?.targetExam ?? '-'}</Text>
-            <Text style={styles.statLabel}>🎯 Target</Text>
+            <Text style={styles.statLabel}>ðŸŽ¯ Target</Text>
           </View>
         </View>
 

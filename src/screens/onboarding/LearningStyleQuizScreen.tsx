@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Animated,
+  View, Text, StyleSheet, TouchableOpacity, ScrollView, Animated,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/colors';
 import { LEARNING_STYLE_QUESTIONS } from '../../constants/learningStyleQuestions';
 import { calculateLearningStyle, type AnswerMap } from '../../utils/LearningStyleEngine';
@@ -105,7 +106,7 @@ export function LearningStyleQuizScreen({ navigation }: OnboardingScreenProps<'L
           disabled={currentIndex === 0}
           activeOpacity={0.7}
         >
-          <Text style={styles.prevBtnText}>← Kembali</Text>
+          <Text style={styles.prevBtnText}>â† Kembali</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -115,7 +116,7 @@ export function LearningStyleQuizScreen({ navigation }: OnboardingScreenProps<'L
           activeOpacity={0.85}
         >
           <Text style={styles.nextBtnText}>
-            {currentIndex === TOTAL - 1 ? 'Lihat Hasil 🎯' : 'Berikutnya →'}
+            {currentIndex === TOTAL - 1 ? 'Lihat Hasil ðŸŽ¯' : 'Berikutnya â†’'}
           </Text>
         </TouchableOpacity>
       </View>

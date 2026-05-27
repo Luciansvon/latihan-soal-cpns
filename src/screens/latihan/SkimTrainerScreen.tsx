@@ -1,7 +1,7 @@
-// SkimTrainerScreen
+﻿// SkimTrainerScreen
 // Latih membaca cepat (skim) ala TWK HOTS: tampilkan stem soal dengan
 // countdown, lalu sembunyikan dan minta jawab opsi. Mensimulasikan tekanan
-// waktu skenario ujian — sesuai strategi "skim-then-extract" dari
+// waktu skenario ujian â€” sesuai strategi "skim-then-extract" dari
 // TNI Efektif.md untuk lawan reading fatigue.
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -9,11 +9,11 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/colors';
 import type { LatihanScreenProps } from '../../navigation/types';
@@ -144,7 +144,7 @@ export function SkimTrainerScreen({ navigation }: LatihanScreenProps<'SkimTraine
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerBox}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Menyiapkan soal skim…</Text>
+          <Text style={styles.loadingText}>Menyiapkan soal skimâ€¦</Text>
         </View>
       </SafeAreaView>
     );
@@ -175,7 +175,7 @@ export function SkimTrainerScreen({ navigation }: LatihanScreenProps<'SkimTraine
           <Ionicons name="speedometer-outline" size={56} color={Colors.primary} />
           <Text style={styles.doneTitle}>Sesi Skim Selesai</Text>
           <Text style={styles.doneDesc}>
-            {correct}/{results.length} benar · akurasi {accuracy}% · rata-rata{' '}
+            {correct}/{results.length} benar Â· akurasi {accuracy}% Â· rata-rata{' '}
             {avgSec}s baca per soal.
           </Text>
           <View style={styles.doneTipBox}>
@@ -217,7 +217,7 @@ export function SkimTrainerScreen({ navigation }: LatihanScreenProps<'SkimTraine
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>Latih Baca Cepat (Skim)</Text>
           <Text style={styles.headerSub}>
-            Soal {currentIdx + 1} / {total} ·{' '}
+            Soal {currentIdx + 1} / {total} Â·{' '}
             {phase === 'reading' ? `Baca: ${secondsLeft}s` : 'Pilih jawaban'}
           </Text>
         </View>
