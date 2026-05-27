@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../constants/colors';
 import type { MainTabParams, LatihanStackParams, TryoutStackParams, ProgressStackParams, ProfilStackParams } from './types';
 
@@ -86,6 +87,10 @@ function ProfilNavigator() {
 }
 
 export function MainTabNavigator() {
+  const insets = useSafeAreaInsets();
+  // Tambahin inset bottom (gesture navigation bar) ke padding & height tab bar
+  // supaya gak ketutupan tombol home/back Android.
+  const bottomInset = Platform.OS === 'ios' ? Math.max(insets.bottom, 20) : insets.bottom;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -99,9 +104,9 @@ export function MainTabNavigator() {
           backgroundColor: Colors.white,
           borderTopColor: Colors.border,
           borderTopWidth: 1,
-          paddingBottom: Platform.OS === 'ios' ? 20 : 8,
+          paddingBottom: bottomInset + 8,
           paddingTop: 8,
-          height: Platform.OS === 'ios' ? 85 : 65,
+          height: 65 + bottomInset,
         },
         tabBarLabelStyle: {
           fontSize: 11,

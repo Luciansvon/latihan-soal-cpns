@@ -55,3 +55,7 @@ yarn-error.*
 *.7z
 *.zip
 *.tar.gz
+
+# Raw soal foto (hasil ekstrak 7z — source material untuk content mining, sensitif)
+Soal real cpns/
+
