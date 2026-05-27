@@ -106,30 +106,32 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
         </View>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.tabRow}
-      >
-        <FilterTab
-          label="Semua"
-          active={filter === 'ALL'}
-          accentColor={accentColor}
-          onPress={() => setFilter('ALL')}
-        />
-        {config.subjects.map((subject) => {
-          const color = SUBJECT_COLORS[subject] ?? accentColor;
-          return (
-            <FilterTab
-              key={subject}
-              label={subject}
-              active={filter === subject}
-              accentColor={color}
-              onPress={() => setFilter(subject)}
-            />
-          );
-        })}
-      </ScrollView>
+      <View style={styles.tabRowWrapper}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tabRow}
+        >
+          <FilterTab
+            label="Semua"
+            active={filter === 'ALL'}
+            accentColor={accentColor}
+            onPress={() => setFilter('ALL')}
+          />
+          {config.subjects.map((subject) => {
+            const color = SUBJECT_COLORS[subject] ?? accentColor;
+            return (
+              <FilterTab
+                key={subject}
+                label={subject}
+                active={filter === subject}
+                accentColor={color}
+                onPress={() => setFilter(subject)}
+              />
+            );
+          })}
+        </ScrollView>
+      </View>
 
       <View style={styles.listMeta}>
         <Text style={styles.metaText}>
@@ -267,24 +269,36 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, letterSpacing: -0.3 },
   headerSubtitle: { fontSize: 13, color: Colors.textSecondary },
 
-  tabRow: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    gap: 8,
+  tabRowWrapper: {
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
+  tabRow: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
   filterTab: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    minHeight: 36,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    marginRight: 8,
     borderRadius: 20,
     borderWidth: 1.5,
     borderColor: Colors.border,
     backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  filterTabText: { fontSize: 12, fontWeight: '700', color: Colors.textSecondary },
-  filterTabTextActive: { color: Colors.white },
+  filterTabText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    textAlign: 'center',
+    includeFontPadding: false,
+  },
+  filterTabTextActive: { color: '#FFFFFF' },
 
   listMeta: {
     paddingHorizontal: 20,
