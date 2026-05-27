@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Latihan Soal CPNS",
+    "name": "Wirago Academy",
     "slug": "latihan-soal-cpns",
     "owner": "kudaliarjeparas-organization",
     "version": "1.0.0",
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#FAF7F0",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "package": "com.personal.latihansoalcpns",
@@ -39,9 +39,9 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/icon.png",
+          "image": "./assets/splash-icon.png",
           "resizeMode": "contain",
-          "backgroundColor": "#FFFFFF"
+          "backgroundColor": "#FAF7F0"
         }
       ],
       "expo-font"

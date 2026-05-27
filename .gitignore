@@ -59,3 +59,6 @@ yarn-error.*
 # Raw soal foto (hasil ekstrak 7z — source material untuk content mining, sensitif)
 Soal real cpns/
 
+# Source logo (besar, hanya untuk regenerate icon variants via scripts/generate-app-icons.mjs)
+logo_apk.png
+
