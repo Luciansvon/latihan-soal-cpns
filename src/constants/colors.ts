@@ -59,3 +59,43 @@ export const Colors = {
   umum: '#0891B2',   // cyan
   hukum: '#BE185D',  // pink
 } as const;
+
+// "Patriot Edu System" — token Material-3 dari mockup Google Stitch.
+// Dipakai khusus untuk screen yang mengadopsi desain Stitch (Profil, Beranda,
+// Latihan empty state) tanpa mengganti Colors lama agar screen lain tak regresi.
+export const Stitch = {
+  primary: '#ba0013',
+  primaryContainer: '#e31e24',
+  onPrimary: '#ffffff',
+  onPrimaryContainer: '#fffafa',
+  surface: '#f7f9fb',
+  background: '#f7f9fb',
+  surfaceContainerLowest: '#ffffff',
+  surfaceContainerLow: '#f2f4f6',
+  surfaceContainer: '#eceef0',
+  surfaceContainerHigh: '#e6e8ea',
+  surfaceContainerHighest: '#e0e3e5',
+  surfaceVariant: '#e0e3e5',
+  onSurface: '#191c1e',
+  onSurfaceVariant: '#5d3f3c',
+  secondary: '#565e74',
+  secondaryContainer: '#dae2fd',
+  onSecondaryContainer: '#5c647a',
+  outline: '#926f6b',
+  outlineVariant: '#e7bdb8',
+  inverseSurface: '#2d3133',
+  inverseOnSurface: '#eff1f3',
+  tertiary: '#0050d4',
+  error: '#ba1a1a',
+  shadow: '#0f172a',
+} as const;
+
+// Plus Jakarta Sans — family per weight (RN custom font: pakai fontFamily,
+// bukan fontWeight). Dimuat di App.tsx via useFonts.
+export const Fonts = {
+  regular: 'PlusJakartaSans_400Regular',
+  medium: 'PlusJakartaSans_500Medium',
+  semibold: 'PlusJakartaSans_600SemiBold',
+  bold: 'PlusJakartaSans_700Bold',
+  extrabold: 'PlusJakartaSans_800ExtraBold',
+} as const;

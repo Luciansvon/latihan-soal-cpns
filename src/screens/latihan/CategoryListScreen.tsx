@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import { Colors, Stitch, Fonts } from '../../constants/colors';
 import {
   EXAM_CONFIGS,
   type SubjectType,
@@ -151,9 +151,25 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
             <Text style={styles.centerText}>{error}</Text>
           </View>
         ) : filteredPacks.length === 0 ? (
-          <View style={styles.center}>
-            <Ionicons name="document-text-outline" size={36} color={Colors.gray400} />
-            <Text style={styles.centerText}>Belum ada paket di filter ini.</Text>
+          <View style={styles.emptyState}>
+            <View style={styles.emptyIllustration}>
+              <Ionicons name="bulb" size={72} color={Stitch.primary} />
+            </View>
+            <Text style={styles.emptyTitle}>Belum ada paket soal yang dibuka</Text>
+            <Text style={styles.emptyDesc}>
+              Ayo mulai langkah pertamamu! Pilih paket soal persiapan {config.label} yang
+              tersedia dan ukur kemampuanmu sekarang.
+            </Text>
+            <TouchableOpacity
+              style={styles.emptyCta}
+              activeOpacity={0.85}
+              onPress={() => (filter === 'ALL' ? navigation.goBack() : setFilter('ALL'))}
+            >
+              <Text style={styles.emptyCtaText}>
+                {filter === 'ALL' ? 'Pilih Ujian Lain' : 'Lihat Semua Paket'}
+              </Text>
+              <Ionicons name="arrow-forward" size={20} color={Stitch.onPrimary} />
+            </TouchableOpacity>
           </View>
         ) : (
           filteredPacks.map((pack) => {
@@ -316,6 +332,31 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   centerText: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', paddingHorizontal: 20 },
+
+  emptyState: { alignItems: 'center', justifyContent: 'center', paddingVertical: 48, paddingHorizontal: 8 },
+  emptyIllustration: {
+    width: 180, height: 180, borderRadius: 90,
+    backgroundColor: Stitch.surfaceContainerLowest,
+    alignItems: 'center', justifyContent: 'center', marginBottom: 28,
+    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.06, shadowRadius: 40, elevation: 4,
+  },
+  emptyTitle: {
+    fontFamily: Fonts.bold, fontSize: 20, lineHeight: 28,
+    color: Stitch.onSurface, textAlign: 'center', marginBottom: 12,
+  },
+  emptyDesc: {
+    fontFamily: Fonts.regular, fontSize: 14, lineHeight: 20,
+    color: Stitch.secondary, textAlign: 'center', maxWidth: 320, marginBottom: 32,
+  },
+  emptyCta: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    backgroundColor: Stitch.primary, borderRadius: 8,
+    paddingVertical: 16, paddingHorizontal: 32, alignSelf: 'stretch',
+    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
+  },
+  emptyCtaText: { fontFamily: Fonts.semibold, fontSize: 14, color: Stitch.onPrimary, letterSpacing: 0.2 },
 
   packCard: {
     backgroundColor: Colors.white,

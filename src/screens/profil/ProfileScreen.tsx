@@ -1,134 +1,218 @@
-﻿import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert,
+  View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import { Colors, Stitch, Fonts } from '../../constants/colors';
 import { supabase } from '../../services/supabase';
 import { useStore } from '../../store';
 import { getLevelTitle } from '../../types/gamification.types';
 import type { ProfilScreenProps } from '../../navigation/types';
 
+type MenuItem = {
+  label: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  screen: 'Achievement' | 'DownloadManager' | 'Settings';
+};
+
+const MENU_ITEMS: MenuItem[] = [
+  { label: 'Pencapaian', icon: 'trophy-outline', screen: 'Achievement' },
+  { label: 'Download Soal Offline', icon: 'download-outline', screen: 'DownloadManager' },
+  { label: 'Pengaturan Akun', icon: 'person-circle-outline', screen: 'Settings' },
+];
+
 export function ProfileScreen({ navigation }: ProfilScreenProps<'Profile'>) {
   const { profile, xpTotal, level, streakCurrent } = useStore();
+  const [email, setEmail] = useState<string>('');
 
-  async function handleLogout() {
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (active) setEmail(data.user?.email ?? '');
+    });
+    return () => { active = false; };
+  }, []);
+
+  function handleLogout() {
     Alert.alert('Keluar', 'Yakin mau keluar dari akun?', [
       { text: 'Batal', style: 'cancel' },
-      {
-        text: 'Keluar',
-        style: 'destructive',
-        onPress: () => supabase.auth.signOut(),
-      },
+      { text: 'Keluar', style: 'destructive', onPress: () => supabase.auth.signOut() },
     ]);
   }
 
+  const displayName = profile?.fullName ?? profile?.username ?? 'Pejuang';
+  const initial = displayName.charAt(0).toUpperCase();
   const levelTitle = getLevelTitle(level);
-  const xpForNext = Math.pow(level + 1, 2) * 100;
-  const xpForCurrent = Math.pow(level, 2) * 100;
-  const xpProgress = xpTotal - xpForCurrent;
-  const xpNeeded = xpForNext - xpForCurrent;
-  const progressPct = Math.min(xpNeeded > 0 ? xpProgress / xpNeeded : 1, 1);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      {/* Top App Bar */}
+      <View style={styles.appBar}>
+        <Text style={styles.appBarTitle}>Profil</Text>
+      </View>
+
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        {/* Identity card */}
+        <View style={styles.identityCard}>
+          <View style={styles.avatarRing}>
+            {profile?.avatarUrl ? (
+              <Image source={{ uri: profile.avatarUrl }} style={styles.avatarImg} />
+            ) : (
+              <View style={styles.avatarFallback}>
+                <Text style={styles.avatarInitial}>{initial}</Text>
+              </View>
+            )}
+          </View>
+          <Text style={styles.name}>{displayName}</Text>
+          {email ? <Text style={styles.email}>{email}</Text> : null}
 
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {(profile?.fullName ?? profile?.username ?? 'U')[0].toUpperCase()}
-            </Text>
+          <View style={styles.levelChip}>
+            <Ionicons name="ribbon" size={13} color={Stitch.primary} />
+            <Text style={styles.levelChipText}>Lv.{level} · {levelTitle}</Text>
           </View>
-          <Text style={styles.name}>{profile?.fullName ?? profile?.username ?? 'Pejuang'}</Text>
-          <View style={styles.levelBadge}>
-            <Text style={styles.levelBadgeText}>Lv.{level} Â· {levelTitle}</Text>
-          </View>
+
+          <TouchableOpacity
+            style={styles.editBtn}
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('Settings')}
+          >
+            <Ionicons name="pencil" size={16} color={Stitch.primary} />
+            <Text style={styles.editBtnText}>Edit Profil</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* XP Bar */}
-        <View style={styles.xpCard}>
-          <View style={styles.xpRow}>
-            <Text style={styles.xpLabel}>XP</Text>
-            <Text style={styles.xpValue}>{xpTotal.toLocaleString()} / {xpForNext.toLocaleString()}</Text>
-          </View>
-          <View style={styles.xpTrack}>
-            <View style={[styles.xpFill, { width: `${progressPct * 100}%` }]} />
-          </View>
-        </View>
-
-        {/* Stats */}
+        {/* Stats strip */}
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{streakCurrent}</Text>
-            <Text style={styles.statLabel}>🔥 Streak</Text>
+            <Text style={styles.statLabel}>Streak</Text>
           </View>
+          <View style={styles.statDivider} />
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{level}</Text>
-            <Text style={styles.statLabel}>⭐ Level</Text>
+            <Text style={styles.statLabel}>Level</Text>
           </View>
+          <View style={styles.statDivider} />
           <View style={styles.statBox}>
-            <Text style={styles.statValue}>{profile?.targetExam ?? '-'}</Text>
-            <Text style={styles.statLabel}>🎯 Target</Text>
+            <Text style={styles.statValue}>{xpTotal.toLocaleString('id-ID')}</Text>
+            <Text style={styles.statLabel}>XP</Text>
           </View>
         </View>
 
-        {/* Menu */}
-        <View style={styles.menu}>
-          {MENU_ITEMS.map((item) => (
+        {/* Menu list */}
+        <View style={styles.menuCard}>
+          {MENU_ITEMS.map((item, idx) => (
             <TouchableOpacity
               key={item.label}
-              style={styles.menuRow}
-              onPress={() => {
-                if (item.screen) navigation.navigate(item.screen as any);
-                else if (item.action === 'logout') handleLogout();
-              }}
+              style={[styles.menuRow, idx < MENU_ITEMS.length - 1 && styles.menuRowBorder]}
               activeOpacity={0.7}
+              onPress={() => navigation.navigate(item.screen)}
             >
-              <View style={[styles.menuIcon, { backgroundColor: item.color + '20' }]}>
-                <Ionicons name={item.icon as any} size={20} color={item.color} />
+              <View style={styles.menuIcon}>
+                <Ionicons name={item.icon} size={20} color={Stitch.secondary} />
               </View>
               <Text style={styles.menuLabel}>{item.label}</Text>
-              <Ionicons name="chevron-forward" size={16} color={Colors.gray300} />
+              <Ionicons name="chevron-forward" size={20} color={Stitch.onSurfaceVariant} />
             </TouchableOpacity>
           ))}
         </View>
 
+        {/* Logout */}
+        <TouchableOpacity style={styles.logoutBtn} activeOpacity={0.85} onPress={handleLogout}>
+          <Ionicons name="log-out-outline" size={20} color={Stitch.onPrimary} />
+          <Text style={styles.logoutText}>Keluar</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const MENU_ITEMS = [
-  { label: 'Pencapaian', icon: 'trophy-outline', color: Colors.xpGold, screen: 'Achievement' },
-  { label: 'Download Soal Offline', icon: 'download-outline', color: Colors.info, screen: 'DownloadManager' },
-  { label: 'Pengaturan', icon: 'settings-outline', color: Colors.gray500, screen: 'Settings' },
-  { label: 'Keluar', icon: 'log-out-outline', color: Colors.error, action: 'logout' },
-];
-
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.bgSecondary },
-  scroll: { flexGrow: 1, paddingBottom: 32 },
-  header: { alignItems: 'center', paddingVertical: 28, backgroundColor: Colors.white, borderBottomWidth: 1, borderBottomColor: Colors.border },
-  avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: Colors.primary, justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
-  avatarText: { fontSize: 32, fontWeight: '800', color: Colors.white },
-  name: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, marginBottom: 6 },
-  levelBadge: { backgroundColor: Colors.levelBadge + '20', paddingHorizontal: 14, paddingVertical: 4, borderRadius: 20 },
-  levelBadgeText: { fontSize: 13, color: Colors.levelBadge, fontWeight: '700' },
-  xpCard: { backgroundColor: Colors.white, marginHorizontal: 16, marginTop: 16, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: Colors.border },
-  xpRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-  xpLabel: { fontSize: 13, fontWeight: '700', color: Colors.textPrimary },
-  xpValue: { fontSize: 13, color: Colors.textMuted },
-  xpTrack: { height: 8, backgroundColor: Colors.gray100, borderRadius: 4, overflow: 'hidden' },
-  xpFill: { height: '100%', backgroundColor: Colors.xpGold, borderRadius: 4 },
-  statsRow: { flexDirection: 'row', marginHorizontal: 16, marginTop: 12, gap: 12 },
-  statBox: { flex: 1, backgroundColor: Colors.white, borderRadius: 16, padding: 14, alignItems: 'center', borderWidth: 1, borderColor: Colors.border },
-  statValue: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, marginBottom: 2 },
-  statLabel: { fontSize: 11, color: Colors.textMuted, fontWeight: '500' },
-  menu: { backgroundColor: Colors.white, marginHorizontal: 16, marginTop: 16, borderRadius: 16, borderWidth: 1, borderColor: Colors.border, overflow: 'hidden' },
-  menuRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, gap: 14, borderBottomWidth: 1, borderBottomColor: Colors.border },
-  menuIcon: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
-  menuLabel: { flex: 1, fontSize: 15, color: Colors.textPrimary, fontWeight: '500' },
+  safe: { flex: 1, backgroundColor: Stitch.background },
+
+  appBar: {
+    height: 56,
+    backgroundColor: Stitch.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+  },
+  appBarTitle: { fontFamily: Fonts.semibold, fontSize: 18, color: Stitch.onSurface },
+
+  scroll: { padding: 20, gap: 16, paddingBottom: 40 },
+
+  identityCard: {
+    backgroundColor: Stitch.surface,
+    borderRadius: 12,
+    padding: 24,
+    alignItems: 'center',
+    shadowColor: Stitch.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 2,
+  },
+  avatarRing: {
+    width: 96, height: 96, borderRadius: 48,
+    borderWidth: 4, borderColor: Stitch.surfaceContainerLowest,
+    backgroundColor: Stitch.surfaceContainer,
+    overflow: 'hidden', marginBottom: 14,
+    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06, shadowRadius: 6, elevation: 2,
+  },
+  avatarImg: { width: '100%', height: '100%' },
+  avatarFallback: { flex: 1, backgroundColor: Stitch.primary, alignItems: 'center', justifyContent: 'center' },
+  avatarInitial: { fontFamily: Fonts.extrabold, fontSize: 36, color: Stitch.onPrimary },
+
+  name: { fontFamily: Fonts.bold, fontSize: 20, color: Stitch.onSurface },
+  email: { fontFamily: Fonts.regular, fontSize: 14, color: Stitch.onSurfaceVariant, marginTop: 2 },
+
+  levelChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 5,
+    backgroundColor: Stitch.primaryContainer + '14',
+    paddingHorizontal: 12, paddingVertical: 5, borderRadius: 999, marginTop: 10,
+  },
+  levelChipText: { fontFamily: Fonts.semibold, fontSize: 12, color: Stitch.primary },
+
+  editBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    marginTop: 18, paddingHorizontal: 24, paddingVertical: 10,
+    borderRadius: 8, borderWidth: 1, borderColor: Stitch.outlineVariant,
+  },
+  editBtnText: { fontFamily: Fonts.semibold, fontSize: 14, color: Stitch.primary, letterSpacing: 0.2 },
+
+  statsRow: {
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: Stitch.surface, borderRadius: 12, paddingVertical: 16,
+    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05, shadowRadius: 12, elevation: 2,
+  },
+  statBox: { flex: 1, alignItems: 'center', gap: 3 },
+  statDivider: { width: 1, height: 28, backgroundColor: Stitch.outlineVariant + '4D' },
+  statValue: { fontFamily: Fonts.bold, fontSize: 18, color: Stitch.onSurface },
+  statLabel: { fontFamily: Fonts.medium, fontSize: 12, color: Stitch.onSurfaceVariant },
+
+  menuCard: {
+    backgroundColor: Stitch.surface, borderRadius: 12, overflow: 'hidden',
+    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05, shadowRadius: 12, elevation: 2,
+  },
+  menuRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16 },
+  menuRowBorder: { borderBottomWidth: 1, borderBottomColor: Stitch.outlineVariant + '4D' },
+  menuIcon: {
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: Stitch.secondaryContainer,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  menuLabel: { flex: 1, fontFamily: Fonts.regular, fontSize: 16, color: Stitch.onSurface },
+
+  logoutBtn: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    backgroundColor: Stitch.primary, borderRadius: 12, paddingVertical: 15, marginTop: 4,
+    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
+  },
+  logoutText: { fontFamily: Fonts.semibold, fontSize: 14, color: Stitch.onPrimary, letterSpacing: 0.2 },
 });
