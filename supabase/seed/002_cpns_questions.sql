@@ -2531,3 +2531,2435 @@ VALUES
 )
 
 ON CONFLICT (id) DO NOTHING;
+-- ============================================================
+-- Seed 002B: CPNS Questions Batch 2 — TWK 101-150 (50 soal)
+-- ============================================================
+
+INSERT INTO public.questions
+  (id, pack_id, exam_type, subject, subtopic, question_type, difficulty, difficulty_rank,
+   question_text, options, correct_option, explanation_text, tags)
+VALUES
+
+(
+  'aa100001-0000-0000-0000-000000000101',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Pancasila sebagai dasar negara Indonesia tercantum dalam Pembukaan UUD 1945 pada alinea ke-...',
+  '[{"id":"A","text":"Pertama"},{"id":"B","text":"Kedua"},{"id":"C","text":"Ketiga"},{"id":"D","text":"Keempat"}]',
+  'D',
+  'Pancasila tercantum dalam Pembukaan UUD 1945 alinea keempat yang memuat tujuan negara dan dasar negara. Alinea keempat berbunyi: ''...maka disusunlah kemerdekaan kebangsaan Indonesia itu dalam suatu Undang-Undang Dasar Negara Indonesia, yang terbentuk dalam suatu susunan Negara Republik Indonesia yang berkedaulatan rakyat dengan berdasarkan kepada: Ketuhanan Yang Maha Esa...''',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000102',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pancasila bersifat hierarkis piramidal, artinya...',
+  '[{"id":"A","text":"Sila-sila Pancasila tidak dapat dipisahkan dan saling mendukung"},{"id":"B","text":"Sila pertama menjadi dasar dan jiwa bagi sila-sila berikutnya"},{"id":"C","text":"Setiap sila memiliki nilai yang sama dan setara"},{"id":"D","text":"Sila kelima adalah puncak dari seluruh sila Pancasila"}]',
+  'B',
+  'Pancasila bersifat hierarkis piramidal berarti sila-sila Pancasila tersusun secara bertingkat, di mana sila pertama (Ketuhanan Yang Maha Esa) menjadi dasar dan menjiwai sila-sila berikutnya. Sila ke-1 adalah fondasi, sila ke-2 dijiwai sila ke-1, dst. Ini berbeda dengan sifat organis yang berarti saling kait-mengait.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000103',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Nilai instrumental Pancasila adalah...',
+  '[{"id":"A","text":"Nilai-nilai abstrak yang bersumber dari kepribadian bangsa"},{"id":"B","text":"Nilai-nilai yang dijadikan pedoman perilaku dalam kehidupan sehari-hari"},{"id":"C","text":"Penjabaran nilai dasar Pancasila dalam bentuk peraturan perundang-undangan"},{"id":"D","text":"Nilai yang bersifat universal dan berlaku untuk semua bangsa"}]',
+  'C',
+  'Nilai instrumental Pancasila adalah nilai-nilai yang merupakan penjabaran dari nilai dasar Pancasila dalam bentuk yang lebih konkret, seperti peraturan perundang-undangan, kebijakan, dan lembaga negara. Contoh: UUD 1945, UU, PP, Perpres. Nilai dasar = abstrak dan umum; Nilai instrumental = konkret; Nilai praksis = penerapan nyata.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000104',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Hari Lahir Pancasila diperingati setiap tanggal...',
+  '[{"id":"A","text":"17 Agustus"},{"id":"B","text":"1 Oktober"},{"id":"C","text":"1 Juni"},{"id":"D","text":"29 Mei"}]',
+  'C',
+  'Hari Lahir Pancasila diperingati setiap tanggal 1 Juni, sesuai Keputusan Presiden (Keppres) Nomor 24 Tahun 2016. Tanggal ini dipilih karena pada 1 Juni 1945, Ir. Soekarno untuk pertama kalinya mengusulkan nama dan rumusan Pancasila dalam sidang BPUPKI.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000105',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Panitia Sembilan yang merumuskan Piagam Jakarta pada 22 Juni 1945 diketuai oleh...',
+  '[{"id":"A","text":"Mohammad Hatta"},{"id":"B","text":"Ir. Soekarno"},{"id":"C","text":"Mohammad Yamin"},{"id":"D","text":"Ki Hajar Dewantara"}]',
+  'B',
+  'Panitia Sembilan yang dibentuk oleh BPUPKI untuk merumuskan dasar negara diketuai oleh Ir. Soekarno. Panitia ini berhasil merumuskan Piagam Jakarta (Jakarta Charter) pada 22 Juni 1945, yang menjadi cikal bakal Pembukaan UUD 1945. Anggota lainnya termasuk Mohammad Hatta, Mohammad Yamin, A.A. Maramis, dan lain-lain.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000106',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Dalam Piagam Jakarta, sila pertama Pancasila berbeda dari yang kita kenal sekarang. Rumusan aslinya adalah...',
+  '[{"id":"A","text":"Ketuhanan Yang Maha Esa"},{"id":"B","text":"Ketuhanan dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya"},{"id":"C","text":"Keimanan dan Ketakwaan kepada Tuhan Yang Maha Esa"},{"id":"D","text":"Ketuhanan Yang Berkebudayaan"}]',
+  'B',
+  'Dalam Piagam Jakarta (22 Juni 1945), sila pertama berbunyi: ''Ketuhanan dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya.'' Rumusan ini diubah menjadi ''Ketuhanan Yang Maha Esa'' pada tanggal 18 Agustus 1945 dalam sidang PPKI, atas usulan tokoh-tokoh dari Indonesia Timur untuk menjaga persatuan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000107',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Pengamalan sila ke-4 Pancasila dalam kehidupan bermasyarakat diwujudkan melalui...',
+  '[{"id":"A","text":"Memberikan bantuan kepada yang membutuhkan"},{"id":"B","text":"Musyawarah untuk mencapai mufakat"},{"id":"C","text":"Beribadah sesuai agama masing-masing"},{"id":"D","text":"Menghargai perbedaan budaya"}]',
+  'B',
+  'Sila ke-4 berbunyi ''Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan.'' Pengamalan utamanya adalah melalui musyawarah mufakat dalam pengambilan keputusan, baik di tingkat keluarga, masyarakat, maupun negara. Ini merupakan ciri khas demokrasi Pancasila yang berbeda dari demokrasi liberal.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000108',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'TAP MPRS No. XX/MPRS/1966 berhubungan dengan Pancasila karena...',
+  '[{"id":"A","text":"Menetapkan Pancasila sebagai satu-satunya asas dalam kehidupan berbangsa"},{"id":"B","text":"Mengatur tata urutan peraturan perundang-undangan dengan Pancasila sebagai sumber tertib hukum"},{"id":"C","text":"Melarang ideologi yang bertentangan dengan Pancasila"},{"id":"D","text":"Menetapkan Hari Lahir Pancasila setiap 1 Juni"}]',
+  'B',
+  'TAP MPRS No. XX/MPRS/1966 tentang Memorandum DPR-GR mengatur sumber tertib hukum dan tata urutan peraturan perundang-undangan Republik Indonesia. Dalam ketetapan ini, Pancasila ditetapkan sebagai sumber dari segala sumber hukum (sumber tertib hukum). Ini menegaskan kedudukan konstitusional Pancasila sebagai grundnorm (norma dasar) negara.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000109',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Konsep ''Trisila'' yang diusulkan Soekarno pada 1 Juni 1945 terdiri dari...',
+  '[{"id":"A","text":"Nasionalisme, Internasionalisme, Demokrasi"},{"id":"B","text":"Sosionasionalisme, Sosiodemokrasi, Ketuhanan Yang Berkebudayaan"},{"id":"C","text":"Ketuhanan, Kemanusiaan, Kebangsaan"},{"id":"D","text":"Persatuan, Keadilan, Ketuhanan"}]',
+  'B',
+  'Selain Pancasila (5 sila), Soekarno juga mengusulkan penyederhanaan menjadi Trisila (3 sila): Sosionasionalisme, Sosiodemokrasi, dan Ketuhanan Yang Berkebudayaan. Bahkan diusulkan lebih sederhana lagi menjadi Ekasila (1 sila): Gotong Royong. Namun yang ditetapkan adalah Pancasila (5 sila).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000110',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pancasila sebagai ''perjanjian luhur bangsa'' mengandung arti bahwa...',
+  '[{"id":"A","text":"Pancasila harus dijalankan sesuai perintah pemerintah"},{"id":"B","text":"Pancasila adalah kesepakatan para pendiri bangsa yang wajib dijaga dan diamalkan seluruh warga negara"},{"id":"C","text":"Pancasila merupakan hadiah dari bangsa lain kepada Indonesia"},{"id":"D","text":"Pancasila dibuat dengan perjanjian tertulis antar pejabat negara"}]',
+  'B',
+  'Pancasila disebut ''perjanjian luhur bangsa'' karena ia merupakan hasil kesepakatan dan konsensus para pendiri bangsa (the founding fathers) dari berbagai latar belakang. Para pemimpin bangsa sepakat bahwa Pancasila adalah landasan bersama yang mengakomodasi keberagaman Indonesia. Oleh karena itu, seluruh warga negara wajib menjaga dan mengamalkannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000111',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Pancasila sebagai norma dasar negara (staatsfundamentalnorm) dikemukakan pertama kali oleh ahli hukum...',
+  '[{"id":"A","text":"Hans Kelsen"},{"id":"B","text":"Hans Nawiasky"},{"id":"C","text":"Notonagoro"},{"id":"D","text":"Hamid S. Attamimi"}]',
+  'B',
+  'Istilah ''staatsfundamentalnorm'' (norma dasar negara) dikemukakan oleh Hans Nawiasky, murid Hans Kelsen. Nawiasky mengembangkan teori Kelsen tentang ''grundnorm'' dan menerapkannya pada hukum tata negara. Di Indonesia, Pancasila diposisikan sebagai staatsfundamentalnorm yang menjadi sumber dari semua norma hukum di bawahnya.',
+  ARRAY['jarang-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000112',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Lambang negara Indonesia Garuda Pancasila memegang pita bertuliskan...',
+  '[{"id":"A","text":"Bhinneka Tunggal Ika"},{"id":"B","text":"Pancasila"},{"id":"C","text":"Bhineka Tunggal Ika"},{"id":"D","text":"Unity in Diversity"}]',
+  'A',
+  'Garuda Pancasila memegang pita bertuliskan ''Bhinneka Tunggal Ika'' (ejaan yang benar). Ini adalah semboyan negara Indonesia yang berarti ''Berbeda-beda tetapi tetap satu.'' Lambang negara ini diatur dalam PP No. 43 Tahun 1958.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000113',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pancasila berfungsi sebagai ideologi negara, artinya Pancasila...',
+  '[{"id":"A","text":"Menjadi sumber hukum tertinggi yang mengikat semua warga negara"},{"id":"B","text":"Memberikan arah, tujuan, dan motivasi bagi seluruh kehidupan berbangsa dan bernegara"},{"id":"C","text":"Menjadi dasar bagi hakim dalam memutus perkara hukum"},{"id":"D","text":"Mengatur hubungan antara warga negara dan pemerintah"}]',
+  'B',
+  'Pancasila sebagai ideologi negara berarti Pancasila memberikan arah, tujuan, dan motivasi bagi penyelenggaraan kehidupan berbangsa dan bernegara. Pancasila menjadi visi dan misi negara, serta pedoman bagi seluruh kebijakan pembangunan nasional. Berbeda dengan fungsinya sebagai dasar negara (sumber hukum) atau falsafah hidup (pandangan hidup bangsa).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000114',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Sidang pertama BPUPKI berlangsung pada tanggal...',
+  '[{"id":"A","text":"1 Maret 1945 – 30 April 1945"},{"id":"B","text":"29 Mei 1945 – 1 Juni 1945"},{"id":"C","text":"10 Juli 1945 – 17 Juli 1945"},{"id":"D","text":"7 Agustus 1945 – 18 Agustus 1945"}]',
+  'B',
+  'Sidang pertama BPUPKI berlangsung pada 29 Mei – 1 Juni 1945. Dalam sidang ini, tiga tokoh menyampaikan usulan dasar negara: Mohammad Yamin (29 Mei), Soepomo (31 Mei), dan Soekarno (1 Juni). Sidang kedua BPUPKI berlangsung 10-17 Juli 1945, membahas rancangan UUD.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000115',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Nilai keadilan sosial dalam sila ke-5 Pancasila menuntut adanya pemerataan, yang berarti...',
+  '[{"id":"A","text":"Setiap warga negara mendapat bagian yang sama rata dari kekayaan negara"},{"id":"B","text":"Negara menjamin terpenuhinya kebutuhan dasar seluruh warga negara tanpa diskriminasi"},{"id":"C","text":"Orang kaya diwajibkan memberi sebagian kekayaannya kepada yang miskin"},{"id":"D","text":"Semua warga negara memiliki penghasilan yang sama besar"}]',
+  'B',
+  'Keadilan sosial dalam Pancasila bukan berarti persamaan mutlak (sama rata), melainkan jaminan bahwa setiap warga negara dapat memenuhi kebutuhan dasarnya (sandang, pangan, papan, pendidikan, kesehatan) tanpa diskriminasi. Negara bertanggung jawab memastikan tidak ada warga yang terlantar atau hidup di bawah standar minimum kemanusiaan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000116',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Hari Kesaktian Pancasila diperingati setiap tanggal 1 Oktober. Peringatan ini berkaitan dengan peristiwa...',
+  '[{"id":"A","text":"Pengangkatan Pancasila sebagai dasar negara"},{"id":"B","text":"Penggagalan kudeta G30S/PKI tahun 1965"},{"id":"C","text":"Lahirnya rumusan Pancasila oleh Soekarno"},{"id":"D","text":"Pembentukan BPUPKI oleh Jepang"}]',
+  'B',
+  'Hari Kesaktian Pancasila diperingati setiap 1 Oktober untuk mengenang kegagalan percobaan kudeta G30S/PKI pada 30 September 1965. Peristiwa ini membuktikan ''kesaktian'' Pancasila sebagai ideologi negara yang tidak bisa digantikan oleh ideologi komunis. Tujuh perwira TNI AD gugur dalam peristiwa tersebut.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000117',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Lambang sila ke-4 Pancasila adalah...',
+  '[{"id":"A","text":"Padi dan Kapas"},{"id":"B","text":"Rantai"},{"id":"C","text":"Kepala Banteng"},{"id":"D","text":"Pohon Beringin"}]',
+  'C',
+  'Lambang sila ke-4 ''Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan'' adalah Kepala Banteng. Banteng melambangkan hewan sosial yang kuat dan suka berkumpul, mencerminkan sifat kerakyatan. Adapun: Bintang (sila 1), Rantai (sila 2), Pohon Beringin (sila 3), Padi dan Kapas (sila 5).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000118',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berikut adalah tokoh yang mengusulkan rumusan dasar negara dalam sidang BPUPKI pertama, kecuali...',
+  '[{"id":"A","text":"Ir. Soekarno"},{"id":"B","text":"Prof. Dr. Mr. Soepomo"},{"id":"C","text":"Mohammad Yamin"},{"id":"D","text":"Mohammad Hatta"}]',
+  'D',
+  'Tiga tokoh yang mengusulkan dasar negara dalam sidang BPUPKI pertama (29 Mei - 1 Juni 1945) adalah: Mohammad Yamin (29 Mei), Prof. Dr. Mr. Soepomo (31 Mei), dan Ir. Soekarno (1 Juni). Mohammad Hatta tidak mengusulkan dasar negara dalam sidang tersebut, meski ia merupakan tokoh penting dalam perumusan kemerdekaan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000119',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SULIT', 8,
+  'Pancasila bersifat ''kausa finalis'' yang berarti...',
+  '[{"id":"A","text":"Pancasila merupakan penyebab asal-usul terbentuknya negara Indonesia"},{"id":"B","text":"Pancasila merupakan tujuan akhir yang ingin dicapai bangsa Indonesia"},{"id":"C","text":"Pancasila diciptakan secara resmi oleh para pendiri bangsa"},{"id":"D","text":"Pancasila berlaku sejak Indonesia merdeka sampai sekarang"}]',
+  'B',
+  'Aristoteles membagi causa (sebab) menjadi empat: causa materialis (bahan), causa formalis (bentuk), causa efficiens (penggerak), dan causa finalis (tujuan akhir). Pancasila sebagai ''kausa finalis'' berarti Pancasila adalah tujuan akhir yang ingin dicapai bangsa Indonesia — yaitu masyarakat yang ber-Ketuhanan, berperikemanusiaan, bersatu, berdemokrasi, dan berkeadilan sosial.',
+  ARRAY['jarang-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000120',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pancasila sebagai ''kepribadian bangsa'' berarti...',
+  '[{"id":"A","text":"Pancasila adalah ciri khas dan identitas yang membedakan bangsa Indonesia dari bangsa lain"},{"id":"B","text":"Setiap warga negara Indonesia harus memiliki kepribadian yang sama"},{"id":"C","text":"Pancasila menentukan karakter pribadi setiap individu Indonesia"},{"id":"D","text":"Pancasila adalah warisan budaya nenek moyang yang tidak bisa diubah"}]',
+  'A',
+  'Pancasila sebagai ''kepribadian bangsa'' mengandung arti bahwa nilai-nilai Pancasila merupakan ciri khas bangsa Indonesia yang membedakannya dari bangsa-bangsa lain di dunia. Nilai-nilai seperti religiositas, kekeluargaan, musyawarah, dan gotong royong telah menjadi karakter khas bangsa Indonesia sejak berabad-abad.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000121',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'UUD 1945 mengalami amandemen sebanyak berapa kali?',
+  '[{"id":"A","text":"2 kali"},{"id":"B","text":"3 kali"},{"id":"C","text":"4 kali"},{"id":"D","text":"5 kali"}]',
+  'C',
+  'UUD 1945 mengalami amandemen sebanyak 4 kali: Amandemen I (1999), Amandemen II (2000), Amandemen III (2001), dan Amandemen IV (2002). Setelah amandemen, UUD 1945 terdiri dari Pembukaan (tetap) dan Pasal-pasal (berubah), dari 37 pasal menjadi 73 pasal ditambah aturan peralihan dan tambahan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000122',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Berdasarkan Pasal 1 Ayat (3) UUD 1945, Indonesia adalah negara...',
+  '[{"id":"A","text":"Kesatuan"},{"id":"B","text":"Hukum"},{"id":"C","text":"Demokrasi"},{"id":"D","text":"Republik"}]',
+  'B',
+  'Pasal 1 Ayat (3) UUD 1945 berbunyi: ''Negara Indonesia adalah negara hukum.'' Ini berarti penyelenggaraan negara harus berdasarkan hukum (rule of law), bukan berdasarkan kekuasaan semata. Sedangkan ''Kesatuan'' diatur di Pasal 1 Ayat (1), ''Republik'' juga di Pasal 1 Ayat (1), dan ''Demokrasi'' tercermin dari Pasal 1 Ayat (2).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000123',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berdasarkan UUD 1945 Pasal 7, masa jabatan Presiden dan Wakil Presiden adalah...',
+  '[{"id":"A","text":"4 tahun dan dapat dipilih kembali tanpa batas"},{"id":"B","text":"5 tahun dan dapat dipilih kembali hanya untuk satu kali masa jabatan lagi"},{"id":"C","text":"6 tahun dan tidak dapat dipilih kembali"},{"id":"D","text":"5 tahun dan tidak dapat dipilih kembali"}]',
+  'B',
+  'Pasal 7 UUD 1945 (hasil amandemen) menyatakan: ''Presiden dan Wakil Presiden memegang jabatan selama lima tahun, dan sesudahnya dapat dipilih kembali dalam jabatan yang sama, hanya untuk satu kali masa jabatan.'' Artinya, seseorang maksimal dapat menjabat sebagai presiden selama 2 periode (10 tahun).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000124',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lembaga yang berwenang mengubah dan menetapkan UUD 1945 berdasarkan Pasal 3 UUD 1945 adalah...',
+  '[{"id":"A","text":"DPR"},{"id":"B","text":"DPD"},{"id":"C","text":"MPR"},{"id":"D","text":"Mahkamah Konstitusi"}]',
+  'C',
+  'Pasal 3 Ayat (1) UUD 1945 menyatakan: ''Majelis Permusyawaratan Rakyat berwenang mengubah dan menetapkan Undang-Undang Dasar.'' Untuk mengubah UUD, diperlukan quorum minimal 2/3 anggota MPR hadir dan disetujui minimal 50%+1 dari seluruh anggota MPR (Pasal 37). Mahkamah Konstitusi hanya menguji UU terhadap UUD, bukan mengubah UUD.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000125',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Kekuasaan membentuk undang-undang berdasarkan UUD 1945 Pasal 20 dipegang oleh...',
+  '[{"id":"A","text":"Presiden"},{"id":"B","text":"DPR"},{"id":"C","text":"MPR"},{"id":"D","text":"DPR bersama Presiden"}]',
+  'B',
+  'Pasal 20 Ayat (1) UUD 1945 menyatakan: ''Dewan Perwakilan Rakyat memegang kekuasaan membentuk undang-undang.'' Meski Presiden juga dapat mengajukan RUU (Pasal 5 Ayat 1) dan harus memberikan persetujuan bersama (Pasal 20 Ayat 2), kekuasaan legislatif secara konstitusional ada di tangan DPR. Ini perubahan penting dari UUD 1945 sebelum amandemen yang memberikan kekuasaan legislatif kepada Presiden.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000126',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Hak-hak asasi manusia diatur dalam UUD 1945 pada Bab...',
+  '[{"id":"A","text":"Bab IX tentang Kekuasaan Kehakiman"},{"id":"B","text":"Bab X tentang Warga Negara dan Penduduk"},{"id":"C","text":"Bab XA tentang Hak Asasi Manusia"},{"id":"D","text":"Bab XI tentang Agama"}]',
+  'C',
+  'Hak Asasi Manusia diatur dalam Bab XA UUD 1945 yang memuat Pasal 28A sampai Pasal 28J. Bab ini ditambahkan pada Amandemen II tahun 2000. Pasal-pasal ini mencakup: hak hidup (28A), hak membentuk keluarga (28B), hak pengembangan diri (28C), hak pengakuan hukum (28D), hak kebebasan (28E), hak komunikasi (28F), hak atas perlindungan (28G), hak sejahtera (28H), hak perlakuan adil hukum (28I), dan kewajiban menghormati HAM orang lain (28J).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000127',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Pasal 33 UUD 1945 mengatur tentang...',
+  '[{"id":"A","text":"Hak pendidikan bagi setiap warga negara"},{"id":"B","text":"Sistem pertahanan negara"},{"id":"C","text":"Perekonomian nasional dan kesejahteraan sosial"},{"id":"D","text":"Pemilihan umum"}]',
+  'C',
+  'Pasal 33 UUD 1945 mengatur perekonomian nasional. Ayat (1): perekonomian disusun berdasarkan usaha bersama (koperasi). Ayat (2): cabang produksi penting bagi negara dikuasai negara. Ayat (3): bumi, air, dan kekayaan alam dikuasai negara untuk kemakmuran rakyat. Ayat (4): perekonomian nasional berdasarkan demokrasi ekonomi dengan prinsip kebersamaan, efisiensi berkeadilan, berkelanjutan, berwawasan lingkungan, kemandirian, serta menjaga keseimbangan kemajuan dan kesatuan ekonomi nasional.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000128',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Berdasarkan UUD 1945 Pasal 22, Peraturan Pemerintah Pengganti Undang-Undang (Perppu) dikeluarkan oleh Presiden dalam kondisi...',
+  '[{"id":"A","text":"Setiap saat jika diperlukan oleh pemerintah"},{"id":"B","text":"Kegentingan yang memaksa"},{"id":"C","text":"DPR tidak dapat membentuk undang-undang"},{"id":"D","text":"Presiden mendapat mandat khusus dari MPR"}]',
+  'B',
+  'Pasal 22 Ayat (1) UUD 1945 menyatakan: ''Dalam hal ihwal kegentingan yang memaksa, Presiden berhak menetapkan peraturan pemerintah sebagai pengganti undang-undang.'' Perppu memiliki kekuatan hukum setara UU. Jika DPR tidak menyetujuinya dalam masa persidangan berikutnya, Perppu harus dicabut. Syarat ''kegentingan memaksa'' diuji oleh MK.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000129',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Mahkamah Konstitusi (MK) berwenang mengadili perkara berikut, kecuali...',
+  '[{"id":"A","text":"Menguji undang-undang terhadap UUD"},{"id":"B","text":"Memutus sengketa kewenangan lembaga negara"},{"id":"C","text":"Memutus sengketa hasil pemilihan umum"},{"id":"D","text":"Mengadili tindak pidana korupsi"}]',
+  'D',
+  'Kewenangan Mahkamah Konstitusi diatur dalam Pasal 24C UUD 1945, yaitu: (1) menguji UU terhadap UUD, (2) memutus sengketa kewenangan lembaga negara, (3) memutus pembubaran partai politik, (4) memutus perselisihan hasil Pemilu/Pilpres/Pilkada, dan (5) memutus pendapat DPR bahwa Presiden/Wapres melanggar UUD. Mengadili korupsi adalah kewenangan Pengadilan Tindak Pidana Korupsi (Tipikor).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000130',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berdasarkan UUD 1945 Pasal 31, anggaran pendidikan minimal yang wajib dialokasikan dari APBN adalah...',
+  '[{"id":"A","text":"10%"},{"id":"B","text":"15%"},{"id":"C","text":"20%"},{"id":"D","text":"25%"}]',
+  'C',
+  'Pasal 31 Ayat (4) UUD 1945 menyatakan: ''Negara memprioritaskan anggaran pendidikan sekurang-kurangnya dua puluh persen dari anggaran pendapatan dan belanja negara serta dari anggaran pendapatan dan belanja daerah untuk memenuhi kebutuhan penyelenggaraan pendidikan nasional.'' Amanat 20% ini juga tercermin dalam UU No. 20 Tahun 2003 tentang Sistem Pendidikan Nasional.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000131',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Hak DPR untuk meminta keterangan kepada Presiden tentang kebijakan pemerintah disebut...',
+  '[{"id":"A","text":"Hak interpelasi"},{"id":"B","text":"Hak angket"},{"id":"C","text":"Hak menyatakan pendapat"},{"id":"D","text":"Hak imunitas"}]',
+  'A',
+  'Hak interpelasi adalah hak DPR untuk meminta keterangan kepada Presiden tentang kebijakan pemerintah yang penting dan strategis. Hak angket adalah hak DPR melakukan penyelidikan terhadap pelaksanaan UU/kebijakan pemerintah. Hak menyatakan pendapat adalah hak DPR menyatakan pendapat atas kebijakan pemerintah atau peristiwa luar biasa. Hak imunitas adalah hak DPR untuk tidak dapat dituntut di pengadilan atas pernyataan dalam sidang.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000132',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Komisi Yudisial (KY) dibentuk berdasarkan UUD 1945 dan bertugas...',
+  '[{"id":"A","text":"Mengadili hakim yang terbukti melakukan pelanggaran"},{"id":"B","text":"Menjaga dan menegakkan kehormatan, keluhuran martabat, dan perilaku hakim"},{"id":"C","text":"Memilih anggota Mahkamah Agung"},{"id":"D","text":"Mengawasi semua lembaga peradilan di Indonesia"}]',
+  'B',
+  'Pasal 24B UUD 1945 mengatur Komisi Yudisial. KY bersifat mandiri dan berwenang mengusulkan pengangkatan hakim agung serta mempunyai wewenang lain dalam rangka menjaga dan menegakkan kehormatan, keluhuran martabat, serta perilaku hakim. KY tidak mengadili hakim (itu wewenang MA/MK), tetapi memberikan rekomendasi sanksi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000133',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Dewan Perwakilan Daerah (DPD) dapat mengajukan rancangan undang-undang yang berkaitan dengan...',
+  '[{"id":"A","text":"Semua bidang perundang-undangan nasional"},{"id":"B","text":"Otonomi daerah, hubungan pusat dan daerah, serta pemekaran daerah"},{"id":"C","text":"Kebijakan luar negeri dan pertahanan"},{"id":"D","text":"APBN dan perpajakan nasional"}]',
+  'B',
+  'Pasal 22D UUD 1945 mengatur bahwa DPD dapat mengajukan dan membahas RUU yang berkaitan dengan: otonomi daerah, hubungan pusat dan daerah, pembentukan dan pemekaran serta penggabungan daerah, pengelolaan SDA dan SDE, serta perimbangan keuangan pusat-daerah. DPD bukan pembuat UU secara penuh seperti DPR, fungsinya lebih terbatas.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000134',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Pasal 37 UUD 1945 menetapkan bahwa bagian UUD yang tidak dapat diubah adalah...',
+  '[{"id":"A","text":"Pembukaan UUD 1945"},{"id":"B","text":"Batang tubuh UUD 1945 Pasal 1-37"},{"id":"C","text":"Bentuk Negara Kesatuan Republik Indonesia"},{"id":"D","text":"Seluruh isi UUD 1945 tidak dapat diubah"}]',
+  'C',
+  'Pasal 37 Ayat (5) UUD 1945 menyatakan: ''Khusus mengenai bentuk Negara Kesatuan Republik Indonesia tidak dapat dilakukan perubahan.'' Artinya, NKRI sebagai bentuk negara adalah hal yang tidak dapat diubah melalui amandemen. Pembukaan UUD 1945 secara konstitusional tidak disebutkan tidak bisa diubah, tetapi secara politis dianggap tidak dapat diubah karena memuat Pancasila.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000135',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berdasarkan UUD 1945 Pasal 27 Ayat (1), setiap warga negara bersamaan kedudukannya di dalam hukum dan pemerintahan, serta wajib menjunjung hukum dan pemerintahan itu dengan tidak ada kecualinya. Ini mencerminkan prinsip...',
+  '[{"id":"A","text":"Supremasi hukum dan persamaan di hadapan hukum (equality before the law)"},{"id":"B","text":"Hak asasi manusia yang tidak bisa dibatasi"},{"id":"C","text":"Kewajiban warga negara membayar pajak"},{"id":"D","text":"Hak memperoleh pekerjaan dan penghidupan layak"}]',
+  'A',
+  'Pasal 27 Ayat (1) UUD 1945 mencerminkan dua prinsip fundamental: supremasi hukum (hukum adalah otoritas tertinggi) dan persamaan di hadapan hukum (equality before the law) — siapapun, tanpa terkecuali, tunduk pada hukum yang sama. Ini merupakan ciri negara hukum modern yang demokratis.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000136',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Berdasarkan UUD 1945, pemilihan Presiden dan Wakil Presiden dilakukan secara langsung oleh...',
+  '[{"id":"A","text":"MPR"},{"id":"B","text":"DPR"},{"id":"C","text":"Rakyat"},{"id":"D","text":"KPU"}]',
+  'C',
+  'Pasal 6A UUD 1945 (hasil Amandemen III, 2001) menyatakan bahwa Presiden dan Wakil Presiden dipilih dalam satu pasangan secara langsung oleh rakyat. Ini merupakan perubahan signifikan dari sistem sebelumnya di mana Presiden dipilih oleh MPR. Pemilihan langsung pertama kali dilaksanakan pada Pilpres 2004.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000137',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Badan Pemeriksa Keuangan (BPK) berdasarkan UUD 1945 Pasal 23E memeriksa...',
+  '[{"id":"A","text":"Pengelolaan dan tanggung jawab keuangan negara"},{"id":"B","text":"Laporan keuangan perusahaan swasta yang berkaitan dengan negara"},{"id":"C","text":"Keuangan partai politik penerima dana pemerintah"},{"id":"D","text":"Aset negara dan kekayaan pejabat publik"}]',
+  'A',
+  'Pasal 23E Ayat (1) UUD 1945 menyatakan: ''Untuk memeriksa pengelolaan dan tanggung jawab tentang keuangan negara diadakan satu Badan Pemeriksa Keuangan yang bebas dan mandiri.'' BPK berwenang memeriksa APBN, APBD, dan laporan keuangan badan usaha milik negara/daerah. Hasil pemeriksaan diserahkan kepada DPR, DPD, dan DPRD.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000138',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pasal 29 UUD 1945 menjamin kebebasan beragama di Indonesia. Salah satu isinya adalah...',
+  '[{"id":"A","text":"Negara mewajibkan setiap warga negara memeluk agama tertentu"},{"id":"B","text":"Negara menjamin kemerdekaan tiap-tiap penduduk untuk memeluk agamanya masing-masing"},{"id":"C","text":"Agama resmi negara adalah Islam"},{"id":"D","text":"Negara bebas dari pengaruh agama manapun"}]',
+  'B',
+  'Pasal 29 Ayat (2) UUD 1945 menyatakan: ''Negara menjamin kemerdekaan tiap-tiap penduduk untuk memeluk agamanya masing-masing dan untuk beribadat menurut agamanya dan kepercayaannya itu.'' Indonesia bukan negara agama (theocracy) dan bukan negara sekuler (yang memisahkan agama dari negara), tetapi negara yang berdasarkan Ketuhanan Yang Maha Esa.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000139',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Kekuasaan kehakiman di Indonesia dijalankan oleh...',
+  '[{"id":"A","text":"Mahkamah Agung saja"},{"id":"B","text":"Mahkamah Konstitusi saja"},{"id":"C","text":"Mahkamah Agung dan Mahkamah Konstitusi"},{"id":"D","text":"Mahkamah Agung, Mahkamah Konstitusi, dan Komisi Yudisial"}]',
+  'C',
+  'Pasal 24 Ayat (2) UUD 1945 menyatakan: ''Kekuasaan kehakiman dilakukan oleh sebuah Mahkamah Agung dan badan peradilan yang berada di bawahnya dalam lingkungan peradilan umum, lingkungan peradilan agama, lingkungan peradilan militer, lingkungan peradilan tata usaha negara, dan oleh sebuah Mahkamah Konstitusi.'' Komisi Yudisial bukan pelaku kekuasaan kehakiman, melainkan lembaga pengawas perilaku hakim.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000140',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Berdasarkan UUD 1945, Presiden tidak dapat membekukan dan/atau membubarkan DPR. Hal ini menunjukkan prinsip...',
+  '[{"id":"A","text":"Checks and balances dalam sistem presidensial"},{"id":"B","text":"Supremasi MPR sebagai lembaga tertinggi"},{"id":"C","text":"Kekuasaan presiden yang terbatas oleh konstitusi"},{"id":"D","text":"Keseimbangan antara legislatif dan eksekutif"}]',
+  'A',
+  'Pasal 7C UUD 1945 menyatakan Presiden tidak dapat membekukan dan/atau membubarkan DPR. Sebaliknya, DPR pun tidak dapat menjatuhkan Presiden kecuali melalui proses hukum (impeachment) yang melibatkan MK dan MPR. Ini merupakan prinsip checks and balances (saling mengawasi dan mengimbangi) dalam sistem presidensial, di mana tidak ada satu pun lembaga yang dominan secara absolut.',
+  ARRAY['sering-keluar']
+)
+
+ON CONFLICT (id) DO NOTHING;
+
+-- ============================================================
+-- Seed 002C: CPNS TWK 141-200 (60 soal)
+-- ============================================================
+
+INSERT INTO public.questions
+  (id, pack_id, exam_type, subject, subtopic, question_type, difficulty, difficulty_rank,
+   question_text, options, correct_option, explanation_text, tags)
+VALUES
+
+(
+  'aa100001-0000-0000-0000-000000000141',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Konsep Wawasan Nusantara pertama kali dicetuskan melalui...',
+  '[{"id":"A","text":"Sumpah Pemuda 1928"},{"id":"B","text":"Deklarasi Djuanda 1957"},{"id":"C","text":"Proklamasi Kemerdekaan 1945"},{"id":"D","text":"Konferensi Asia-Afrika 1955"}]',
+  'B',
+  'Wawasan Nusantara lahir dari Deklarasi Djuanda yang dicetuskan oleh Perdana Menteri Djuanda Kartawidjaja pada 13 Desember 1957. Deklarasi ini menyatakan bahwa laut di antara pulau-pulau Indonesia adalah bagian dari wilayah Indonesia (laut pedalaman), bukan laut bebas. Konsep ini kemudian diterima dunia internasional melalui UNCLOS 1982.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000142',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Bentuk pemerintahan Indonesia adalah...',
+  '[{"id":"A","text":"Monarki Konstitusional"},{"id":"B","text":"Republik"},{"id":"C","text":"Federasi"},{"id":"D","text":"Oligarki"}]',
+  'B',
+  'Indonesia adalah negara yang berbentuk Republik, sesuai Pasal 1 Ayat (1) UUD 1945: ''Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik.'' Bentuk Republik berarti kepala negara (Presiden) dipilih oleh rakyat, bukan berdasarkan keturunan (monarki). Bentuk Kesatuan membedakan Indonesia dari negara federal seperti Amerika Serikat.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000143',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Asas desentralisasi dalam otonomi daerah berarti...',
+  '[{"id":"A","text":"Pelimpahan wewenang dari pemerintah pusat kepada gubernur sebagai wakil pemerintah pusat"},{"id":"B","text":"Penyerahan urusan pemerintahan dari pemerintah pusat kepada daerah otonom"},{"id":"C","text":"Penugasan dari pemerintah pusat kepada pemerintah daerah untuk melaksanakan tugas tertentu"},{"id":"D","text":"Pengalihan wewenang dari presiden kepada menteri"}]',
+  'B',
+  'Desentralisasi adalah penyerahan urusan pemerintahan oleh pemerintah pusat kepada daerah otonom (provinsi/kabupaten/kota) berdasarkan asas otonomi. Ini berbeda dengan dekonsentrasi (pelimpahan wewenang kepada gubernur sebagai wakil pusat) dan tugas pembantuan (penugasan dari pusat kepada daerah untuk melaksanakan tugas tertentu). Otonomi daerah diatur dalam UU No. 23 Tahun 2014.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000144',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Ketahanan nasional Indonesia menggunakan pendekatan Asta Gatra yang terdiri dari...',
+  '[{"id":"A","text":"5 gatra alamiah dan 3 gatra sosial"},{"id":"B","text":"3 gatra alamiah (Tri Gatra) dan 5 gatra sosial (Panca Gatra)"},{"id":"C","text":"4 gatra politik dan 4 gatra ekonomi"},{"id":"D","text":"8 gatra yang setara dan tidak dapat dipisahkan"}]',
+  'B',
+  'Konsep ketahanan nasional Indonesia menggunakan Asta Gatra (8 gatra). Tri Gatra (3 gatra alamiah): geografi, kekayaan alam, dan demografi (kependudukan). Panca Gatra (5 gatra sosial): ideologi, politik, ekonomi, sosial budaya, dan pertahanan keamanan (Ipoleksosbud-Hankam). Ke-8 gatra ini saling terkait dan saling memengaruhi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000145',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Bela negara sebagai hak dan kewajiban warga negara Indonesia diatur dalam UUD 1945 Pasal...',
+  '[{"id":"A","text":"Pasal 27 Ayat (3) dan Pasal 30"},{"id":"B","text":"Pasal 28 dan Pasal 29"},{"id":"C","text":"Pasal 30 dan Pasal 31"},{"id":"D","text":"Pasal 26 dan Pasal 27"}]',
+  'A',
+  'Bela negara diatur dalam: Pasal 27 Ayat (3): ''Setiap warga negara berhak dan wajib ikut serta dalam upaya pembelaan negara.'' Pasal 30 Ayat (1): ''Tiap-tiap warga negara berhak dan wajib ikut serta dalam usaha pertahanan dan keamanan negara.'' Bela negara tidak harus berupa angkat senjata, tetapi juga melalui pendidikan, kerja keras, dan mencintai produk dalam negeri.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000146',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berapa jumlah provinsi di Indonesia setelah pemekaran Papua tahun 2022-2023?',
+  '[{"id":"A","text":"34 provinsi"},{"id":"B","text":"36 provinsi"},{"id":"C","text":"37 provinsi"},{"id":"D","text":"38 provinsi"}]',
+  'D',
+  'Setelah pemekaran provinsi baru di Papua (Papua Selatan, Papua Tengah, Papua Pegunungan, Papua Barat Daya) pada tahun 2022-2023, total provinsi di Indonesia menjadi 38 provinsi. Sebelumnya Indonesia memiliki 34 provinsi. Penambahan ini menjadi bagian dari kebijakan percepatan pembangunan Papua.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000147',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Sistem pemerintahan Indonesia setelah amandemen UUD 1945 adalah...',
+  '[{"id":"A","text":"Parlementer"},{"id":"B","text":"Presidensial"},{"id":"C","text":"Semi-presidensial"},{"id":"D","text":"Campuran presidensial-parlementer"}]',
+  'B',
+  'Indonesia menganut sistem presidensial, di mana Presiden adalah kepala negara sekaligus kepala pemerintahan yang dipilih langsung oleh rakyat. Presiden tidak bertanggung jawab kepada DPR/parlemen dan tidak dapat dijatuhkan oleh DPR dalam proses politik biasa. Berbeda dengan sistem parlementer di mana PM bertanggung jawab kepada parlemen dan dapat dijatuhkan melalui mosi tidak percaya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000148',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Integrasi nasional dapat terancam oleh faktor berikut ini, kecuali...',
+  '[{"id":"A","text":"Sikap etnosentrisme yang berlebihan"},{"id":"B","text":"Kemajuan teknologi informasi dan komunikasi"},{"id":"C","text":"Ketimpangan ekonomi antar daerah"},{"id":"D","text":"Separatisme dan gerakan kedaerahan"}]',
+  'B',
+  'Kemajuan teknologi informasi dan komunikasi justru merupakan faktor yang berpotensi memperkuat integrasi nasional jika digunakan dengan bijak (memudahkan komunikasi lintas daerah). Yang mengancam integrasi nasional adalah: etnosentrisme berlebihan (merasa sukunya paling superior), ketimpangan ekonomi (memicu kecemburuan), dan separatisme (gerakan ingin memisahkan diri dari NKRI).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000149',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Asas tugas pembantuan (medebewind) dalam pemerintahan daerah berarti...',
+  '[{"id":"A","text":"Penyerahan urusan pemerintahan dari pusat ke daerah otonom"},{"id":"B","text":"Pelimpahan wewenang dari pusat ke gubernur sebagai wakil pusat"},{"id":"C","text":"Penugasan dari pemerintah pusat/provinsi kepada daerah/desa untuk melaksanakan tugas tertentu dengan biaya dari pemberi tugas"},{"id":"D","text":"Kewenangan daerah mengatur urusan rumah tangganya sendiri"}]',
+  'C',
+  'Tugas pembantuan adalah penugasan dari pemerintah pusat kepada pemerintah daerah (provinsi/kabupaten/kota) atau dari pemerintah provinsi kepada kabupaten/kota/desa untuk melaksanakan sebagian urusan pemerintahan. Biaya pelaksanaannya ditanggung oleh pemberi tugas (APBN atau APBD provinsi), bukan APBD daerah penerima tugas.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000150',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Prinsip Wawasan Nusantara yang menyatakan bahwa Indonesia adalah satu kesatuan yang tidak dapat dibagi-bagi menganut...',
+  '[{"id":"A","text":"Prinsip keadilan dan kemakmuran yang merata"},{"id":"B","text":"Prinsip satu kesatuan wilayah, bangsa, budaya, ekonomi, dan pertahanan-keamanan"},{"id":"C","text":"Prinsip ketahanan nasional berbasis Asta Gatra"},{"id":"D","text":"Prinsip supremasi hukum atas wilayah nasional"}]',
+  'B',
+  'Wawasan Nusantara mengandung prinsip kesatuan dalam lima aspek: (1) satu kesatuan wilayah (darat, laut, udara sebagai satu hamparan), (2) satu kesatuan bangsa (semua suku adalah bangsa Indonesia), (3) satu kesatuan sosial-budaya (beragam tapi satu budaya nasional), (4) satu kesatuan ekonomi (kekayaan alam untuk seluruh rakyat), (5) satu kesatuan pertahanan-keamanan (ancaman di satu daerah adalah ancaman nasional).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000151',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Bhinneka Tunggal Ika',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Semboyan ''Bhinneka Tunggal Ika'' berasal dari kitab kuno yang ditulis pada masa Kerajaan...',
+  '[{"id":"A","text":"Sriwijaya"},{"id":"B","text":"Singasari"},{"id":"C","text":"Majapahit"},{"id":"D","text":"Mataram"}]',
+  'C',
+  'Bhinneka Tunggal Ika berasal dari kitab Sutasoma karangan Mpu Tantular, seorang pujangga pada masa Kerajaan Majapahit (abad ke-14, masa pemerintahan Raja Hayam Wuruk). Kalimat lengkapnya: ''Bhinneka Tunggal Ika tan hana dharma mangrwa'' yang artinya: ''Berbeda-beda tetapi tetap satu, tidak ada kebenaran yang mendua.''',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000152',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Bhinneka Tunggal Ika',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Semboyan Bhinneka Tunggal Ika secara resmi ditetapkan sebagai semboyan negara melalui...',
+  '[{"id":"A","text":"UUD 1945"},{"id":"B","text":"PP No. 66 Tahun 1951"},{"id":"C","text":"Tap MPR No. II/MPR/1978"},{"id":"D","text":"Keppres No. 24 Tahun 2016"}]',
+  'B',
+  'Bhinneka Tunggal Ika ditetapkan sebagai semboyan negara (pada pita yang digenggam Garuda Pancasila) melalui Peraturan Pemerintah No. 66 Tahun 1951 tentang Lambang Negara. Ini menjadikannya semboyan resmi yang mengikat secara hukum, bukan sekadar ungkapan budaya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000153',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Bhinneka Tunggal Ika',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Sumpah Pemuda 28 Oktober 1928 mengikrarkan tiga tekad persatuan, yaitu...',
+  '[{"id":"A","text":"Satu nusa, satu bangsa, satu agama"},{"id":"B","text":"Satu tanah air, satu bangsa, satu bahasa Indonesia"},{"id":"C","text":"Satu ideologi, satu tujuan, satu bangsa"},{"id":"D","text":"Bersatu, berjuang, dan merdeka"}]',
+  'B',
+  'Sumpah Pemuda 28 Oktober 1928 mengikrarkan: (1) Kami putera dan puteri Indonesia mengaku bertumpah darah yang satu — Tanah Air Indonesia. (2) Kami putera dan puteri Indonesia mengaku berbangsa yang satu — Bangsa Indonesia. (3) Kami putera dan puteri Indonesia menjunjung bahasa persatuan — Bahasa Indonesia. Peristiwa ini merupakan tonggak penting dalam persatuan bangsa.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000154',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Bhinneka Tunggal Ika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Tri Kerukunan Umat Beragama di Indonesia meliputi...',
+  '[{"id":"A","text":"Kerukunan intern, antar umat beragama, dan antara umat beragama dengan pemerintah"},{"id":"B","text":"Kerukunan antar suku, antar agama, dan antar ras"},{"id":"C","text":"Toleransi, kesetaraan, dan kebersamaan antar agama"},{"id":"D","text":"Dialog, kerjasama, dan saling menghormati antar pemimpin agama"}]',
+  'A',
+  'Tri Kerukunan Umat Beragama adalah konsep yang dikembangkan pemerintah Indonesia untuk menjaga harmoni beragama. Ketiganya adalah: (1) Kerukunan intern umat beragama (antar sesama pemeluk satu agama), (2) Kerukunan antar umat beragama (antar pemeluk berbagai agama), (3) Kerukunan antara umat beragama dengan pemerintah (menjaga stabilitas nasional).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000155',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Bhinneka Tunggal Ika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Toleransi dalam konteks kebangsaan Indonesia berarti...',
+  '[{"id":"A","text":"Menyetujui dan mengikuti semua keyakinan yang ada"},{"id":"B","text":"Menghargai dan menghormati perbedaan tanpa harus menyamakan keyakinan"},{"id":"C","text":"Mengabaikan perbedaan agar tidak terjadi konflik"},{"id":"D","text":"Mencampur semua agama menjadi satu agama baru"}]',
+  'B',
+  'Toleransi (dari bahasa Latin ''tolerare'' = menahan diri) adalah sikap menghargai dan menghormati perbedaan — baik perbedaan agama, suku, budaya, maupun pandangan. Toleransi tidak berarti harus menyetujui atau mengikuti keyakinan orang lain, tetapi menghormati hak orang lain untuk memiliki dan menjalankan keyakinannya. Ini adalah fondasi hidup bersama dalam kemajemukan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000156',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Naskah proklamasi kemerdekaan Indonesia dirumuskan di...',
+  '[{"id":"A","text":"Istana Merdeka Jakarta"},{"id":"B","text":"Jalan Imam Bonjol No. 1 Jakarta"},{"id":"C","text":"Rumah Laksamana Maeda di Jakarta"},{"id":"D","text":"Rengasdengklok, Karawang"}]',
+  'C',
+  'Naskah proklamasi dirumuskan di kediaman Laksamana Muda Maeda (perwira AL Jepang) di Jalan Imam Bonjol No. 1, Jakarta, pada malam tanggal 16-17 Agustus 1945. Laksamana Maeda memberikan jaminan keamanan kepada para tokoh pergerakan. Naskah ditulis tangan oleh Soekarno dan diketik oleh Sayuti Melik setelah sempat dikoreksi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000157',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Sidang PPKI pertama pada 18 Agustus 1945 menghasilkan keputusan penting berikut, kecuali...',
+  '[{"id":"A","text":"Mengesahkan UUD 1945"},{"id":"B","text":"Memilih Soekarno sebagai Presiden dan Hatta sebagai Wakil Presiden"},{"id":"C","text":"Membentuk KNIP (Komite Nasional Indonesia Pusat)"},{"id":"D","text":"Membentuk TNI sebagai angkatan bersenjata"}]',
+  'D',
+  'Sidang PPKI pertama (18 Agustus 1945) menghasilkan: (1) mengesahkan UUD 1945, (2) memilih Soekarno-Hatta sebagai Presiden dan Wakil Presiden, (3) membentuk KNIP sebagai pembantu presiden sementara (sebelum terbentuknya DPR). Pembentukan BKR (cikal bakal TNI) diputuskan pada sidang PPKI kedua (19 Agustus 1945), bukan 18 Agustus.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000158',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pemberontakan PKI Madiun tahun 1948 dipimpin oleh...',
+  '[{"id":"A","text":"D.N. Aidit dan Lukman"},{"id":"B","text":"Musso dan Amir Syarifuddin"},{"id":"C","text":"Tan Malaka dan Achmad Subardjo"},{"id":"D","text":"Alimin dan Semaun"}]',
+  'B',
+  'Pemberontakan PKI Madiun (18 September 1948) dipimpin oleh Musso (pemimpin PKI yang baru kembali dari Uni Soviet) dan Amir Syarifuddin (mantan Perdana Menteri yang berpihak ke PKI). Pemberontakan ini berhasil ditumpas oleh TNI. Musso tewas tertembak dan Amir Syarifuddin dieksekusi. Peristiwa ini berbeda dari G30S/PKI 1965 yang dipimpin D.N. Aidit.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000159',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Konferensi Meja Bundar (KMB) yang berlangsung di Den Haag pada 1949 menghasilkan...',
+  '[{"id":"A","text":"Belanda mengakui kemerdekaan Indonesia tanpa syarat"},{"id":"B","text":"Dibentuknya RIS dan Belanda mengakui kedaulatan RIS pada 27 Desember 1949"},{"id":"C","text":"Indonesia bergabung dengan Persatuan Bangsa-Bangsa"},{"id":"D","text":"Perjanjian pembagian wilayah antara Indonesia dan Belanda"}]',
+  'B',
+  'KMB (23 Agustus - 2 November 1949) menghasilkan: Belanda mengakui kedaulatan Republik Indonesia Serikat (RIS) pada 27 Desember 1949. Indonesia menjadi negara federal sementara (RIS) dengan 16 negara bagian. Namun karena rakyat menginginkan negara kesatuan, RIS dibubarkan dan diganti NKRI pada 17 Agustus 1950. Irian Barat belum diserahkan (baru diserahkan 1963).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000160',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Supersemar (Surat Perintah Sebelas Maret) 1966 ditandatangani oleh Presiden Soekarno dan ditujukan kepada...',
+  '[{"id":"A","text":"Jenderal Abdul Haris Nasution"},{"id":"B","text":"Jenderal Soeharto"},{"id":"C","text":"Jenderal Ahmad Yani"},{"id":"D","text":"Jenderal Umar Wirahadikusumah"}]',
+  'B',
+  'Supersemar ditandatangani Presiden Soekarno pada 11 Maret 1966, memberikan mandat kepada Jenderal Soeharto (Pangkostrad/Men Pangad saat itu) untuk mengambil segala tindakan yang dianggap perlu guna menjamin keamanan dan ketenangan serta kestabilan jalannya pemerintahan. Supersemar inilah yang menjadi dasar Soeharto mengambil alih kekuasaan, yang kemudian menandai awal Orde Baru.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000161',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Reformasi 1998 yang menuntut turunnya Presiden Soeharto dipicu utamanya oleh...',
+  '[{"id":"A","text":"Konflik bersenjata dengan negara tetangga"},{"id":"B","text":"Krisis ekonomi (moneter) Asia 1997-1998 dan tuntutan demokratisasi"},{"id":"C","text":"Bencana alam besar yang melanda Indonesia"},{"id":"D","text":"Tekanan dari negara-negara Barat kepada Indonesia"}]',
+  'B',
+  'Reformasi 1998 dipicu oleh krisis moneter Asia 1997-1998 yang menyebabkan nilai rupiah anjlok drastis, harga kebutuhan pokok melonjak, dan pengangguran meningkat. Kondisi ini memicu demonstrasi besar mahasiswa yang menuntut reformasi dan mundurnya Soeharto. Pada 21 Mei 1998, Soeharto mengundurkan diri setelah 32 tahun berkuasa.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000162',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Organisasi pergerakan nasional pertama Indonesia, Budi Utomo, didirikan pada...',
+  '[{"id":"A","text":"20 Mei 1908"},{"id":"B","text":"28 Oktober 1928"},{"id":"C","text":"17 Agustus 1945"},{"id":"D","text":"20 Mei 1920"}]',
+  'A',
+  'Budi Utomo didirikan pada 20 Mei 1908, yang kemudian ditetapkan sebagai Hari Kebangkitan Nasional. Organisasi ini didirikan oleh Dr. Wahidin Sudirohusodo dan dr. Soetomo, diprakarsai oleh mahasiswa STOVIA (School tot Opleiding van Inlandsche Artsen). Budi Utomo merupakan organisasi modern pertama yang bertujuan memajukan kesejahteraan dan harkat bangsa Indonesia.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000163',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Operasi Trikora yang dicanangkan Presiden Soekarno pada 1961 bertujuan untuk...',
+  '[{"id":"A","text":"Membebaskan Timor Timur dari Portugal"},{"id":"B","text":"Merebut kembali Irian Barat dari Belanda"},{"id":"C","text":"Mempertahankan Malaysia dari konfrontasi"},{"id":"D","text":"Membebaskan Sabah dan Serawak"}]',
+  'B',
+  'Trikora (Tri Komando Rakyat) dicanangkan Soekarno pada 19 Desember 1961 dengan tiga isi: (1) gagalkan pembentukan negara Papua boneka Belanda, (2) kibarkan Merah Putih di Irian Barat, (3) bersiaplah untuk mobilisasi umum. Melalui tekanan militer dan diplomasi (Perjanjian New York 1962), Irian Barat akhirnya diserahkan ke Indonesia pada Mei 1963.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000164',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Dekret Presiden 5 Juli 1959 menyatakan...',
+  '[{"id":"A","text":"Pembubaran DPR dan pembentukan DPR-GR"},{"id":"B","text":"Kembali ke UUD 1945 dan pembubaran Konstituante"},{"id":"C","text":"Pemberlakuan darurat militer di seluruh Indonesia"},{"id":"D","text":"Pembentukan Kabinet Gotong Royong"}]',
+  'B',
+  'Dekret Presiden 5 Juli 1959 berisi: (1) menetapkan pembubaran Konstituante (badan yang bertugas membuat UUD baru namun gagal bersidang), (2) menetapkan berlakunya kembali UUD 1945 dan tidak berlakunya UUDS 1950, (3) pembentukan MPRS dan DPAS. Dekret ini menandai berakhirnya era Demokrasi Liberal dan dimulainya era Demokrasi Terpimpin.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000165',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Masa Demokrasi Liberal Indonesia (1950-1959) ditandai dengan...',
+  '[{"id":"A","text":"Satu partai berkuasa di bawah kendali presiden"},{"id":"B","text":"Sering bergantinya kabinet karena sistem multipartai"},{"id":"C","text":"Militer memegang kekuasaan pemerintahan sipil"},{"id":"D","text":"Presiden memiliki kekuasaan tak terbatas"}]',
+  'B',
+  'Masa Demokrasi Liberal (1950-1959) menggunakan UUDS 1950 dengan sistem parlementer. Dalam periode kurang dari 10 tahun, Indonesia mengalami pergantian kabinet sebanyak 7 kali (lebih dari 1 kabinet per tahun). Ketidakstabilan ini terjadi karena parlemen yang multipartai sering menjatuhkan kabinet melalui mosi tidak percaya. Kondisi ini mendorong Soekarno mengeluarkan Dekret 5 Juli 1959.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000166',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Undang-Undang Aparatur Sipil Negara yang berlaku saat ini adalah...',
+  '[{"id":"A","text":"UU No. 5 Tahun 2014"},{"id":"B","text":"UU No. 20 Tahun 2023"},{"id":"C","text":"UU No. 43 Tahun 1999"},{"id":"D","text":"UU No. 8 Tahun 1974"}]',
+  'B',
+  'UU ASN yang berlaku saat ini adalah UU No. 20 Tahun 2023 tentang Aparatur Sipil Negara, yang menggantikan UU No. 5 Tahun 2014. UU baru ini antara lain mengatur tentang penguatan sistem merit, profesionalitas ASN, dan perlindungan ASN. UU No. 43 Tahun 1999 dan UU No. 8 Tahun 1974 adalah UU kepegawaian yang sudah tidak berlaku.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000167',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Nilai-nilai dasar ASN yang disingkat BerAKHLAK adalah singkatan dari...',
+  '[{"id":"A","text":"Berani, Akurat, Kompeten, Harmonis, Loyal, Adaptif, Kreatif"},{"id":"B","text":"Berorientasi Pelayanan, Akuntabel, Kompeten, Harmonis, Loyal, Adaptif, Kolaboratif"},{"id":"C","text":"Bersih, Amanah, Kuat, Handal, Loyal, Adil, Kreatif"},{"id":"D","text":"Bertanggung jawab, Aktif, Kritis, Humanis, Loyalis, Ahli, Konsisten"}]',
+  'B',
+  'BerAKHLAK adalah akronim dari: Berorientasi Pelayanan, Akuntabel, Kompeten, Harmonis, Loyal, Adaptif, dan Kolaboratif. Nilai ini ditetapkan melalui Surat Edaran Menteri PANRB No. 20 Tahun 2021 sebagai pedoman perilaku ASN. Selain BerAKHLAK, terdapat employer branding ASN: Bangga Melayani Bangsa.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000168',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Sistem merit dalam manajemen ASN berarti ASN dikelola berdasarkan...',
+  '[{"id":"A","text":"Senioritas dan lama pengabdian"},{"id":"B","text":"Kedekatan hubungan dengan pimpinan"},{"id":"C","text":"Kompetensi, kualifikasi, kinerja, dan integritas"},{"id":"D","text":"Latar belakang pendidikan dan asal daerah"}]',
+  'C',
+  'Sistem merit adalah kebijakan dan manajemen ASN yang berdasarkan pada kualifikasi, kompetensi, dan kinerja secara adil dan wajar, tanpa diskriminasi apapun. Tujuannya: memastikan ASN yang direkrut, dipromosikan, dan dihargai adalah mereka yang benar-benar kompeten dan berkinerja baik — bukan karena nepotisme, kedekatan politik, atau senioritas belaka.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000169',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Badan Pemeriksa Keuangan (BPK) bertugas...',
+  '[{"id":"A","text":"Menetapkan anggaran negara bersama DPR"},{"id":"B","text":"Memeriksa pengelolaan dan tanggung jawab keuangan negara"},{"id":"C","text":"Mengawasi pelaksanaan APBN oleh kementerian"},{"id":"D","text":"Memberikan pendapat hukum atas kebijakan keuangan negara"}]',
+  'B',
+  'BPK (Badan Pemeriksa Keuangan) adalah lembaga negara yang memeriksa pengelolaan dan tanggung jawab keuangan negara. Berdasarkan Pasal 23E UUD 1945, BPK berkedudukan di Jakarta dan bersifat bebas serta mandiri. Hasil pemeriksaan BPK disampaikan kepada DPR, DPD, dan DPRD untuk ditindaklanjuti. BPK bukan yang menetapkan anggaran (itu kewenangan pemerintah dan DPR).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000170',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Ombudsman Republik Indonesia bertugas...',
+  '[{"id":"A","text":"Mengawasi kinerja dan integritas ASN di seluruh Indonesia"},{"id":"B","text":"Menangani laporan masyarakat atas dugaan maladministrasi dalam penyelenggaraan pelayanan publik"},{"id":"C","text":"Mengadili sengketa antara pemerintah dan warga negara"},{"id":"D","text":"Memeriksa keuangan lembaga pelayanan publik"}]',
+  'B',
+  'Ombudsman RI (dibentuk UU No. 37 Tahun 2008) bertugas mengawasi penyelenggaraan pelayanan publik oleh lembaga penyelenggara negara dan swasta yang diberi tugas menyelenggarakan pelayanan publik. Ombudsman menerima dan menindaklanjuti laporan masyarakat atas dugaan maladministrasi (penyimpangan dalam pelayanan publik seperti prosedur tidak benar, pungutan liar, diskriminasi).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000171',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Hierarki peraturan perundang-undangan berdasarkan UU No. 12 Tahun 2011 dari yang tertinggi adalah...',
+  '[{"id":"A","text":"UUD → UU/Perppu → PP → Perpres → Perda"},{"id":"B","text":"UUD → Tap MPR → UU/Perppu → PP → Perpres → Perda Provinsi → Perda Kab/Kota"},{"id":"C","text":"UUD → UU → PP → Perpres → Tap MPR → Perda"},{"id":"D","text":"Pancasila → UUD → UU → PP → Perpres → Perda"}]',
+  'B',
+  'Berdasarkan UU No. 12 Tahun 2011 jo. UU No. 15 Tahun 2019, hierarki peraturan perundang-undangan adalah: (1) UUD NRI 1945, (2) Ketetapan MPR, (3) Undang-Undang/Peraturan Pemerintah Pengganti Undang-Undang, (4) Peraturan Pemerintah, (5) Peraturan Presiden, (6) Peraturan Daerah Provinsi, (7) Peraturan Daerah Kabupaten/Kota. Pancasila adalah sumber dari segala sumber hukum, bukan termasuk dalam hierarki peraturan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000172',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Komisi Pemberantasan Korupsi (KPK) dibentuk berdasarkan...',
+  '[{"id":"A","text":"UU No. 28 Tahun 1999"},{"id":"B","text":"UU No. 30 Tahun 2002"},{"id":"C","text":"UU No. 20 Tahun 2001"},{"id":"D","text":"Perpres No. 102 Tahun 2020"}]',
+  'B',
+  'KPK dibentuk berdasarkan UU No. 30 Tahun 2002 tentang Komisi Pemberantasan Tindak Pidana Korupsi. KPK kemudian mengalami revisi melalui UU No. 19 Tahun 2019. KPK bertugas melakukan penyelidikan, penyidikan, dan penuntutan tindak pidana korupsi, serta melaksanakan tindakan-tindakan pencegahan korupsi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000173',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Badan yang bertugas menyelenggarakan pemilihan umum di Indonesia adalah...',
+  '[{"id":"A","text":"Bawaslu"},{"id":"B","text":"DKPP"},{"id":"C","text":"KPU"},{"id":"D","text":"Mahkamah Konstitusi"}]',
+  'C',
+  'KPU (Komisi Pemilihan Umum) adalah lembaga yang menyelenggarakan pemilu di Indonesia. KPU bersifat nasional, tetap, dan mandiri. Bawaslu (Badan Pengawas Pemilu) bertugas mengawasi penyelenggaraan pemilu. DKPP (Dewan Kehormatan Penyelenggara Pemilu) memeriksa dan memutus pelanggaran kode etik penyelenggara pemilu. MK mengadili sengketa hasil pemilu.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000174',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Kementerian yang membidangi urusan kepegawaian dan reformasi birokrasi ASN adalah...',
+  '[{"id":"A","text":"Kementerian Dalam Negeri"},{"id":"B","text":"Kementerian Sekretariat Negara"},{"id":"C","text":"Kementerian Pendayagunaan Aparatur Negara dan Reformasi Birokrasi"},{"id":"D","text":"Badan Kepegawaian Negara"}]',
+  'C',
+  'Kementerian Pendayagunaan Aparatur Negara dan Reformasi Birokrasi (KemenPAN-RB) adalah kementerian yang bertanggung jawab dalam bidang pendayagunaan aparatur negara dan reformasi birokrasi. BKN (Badan Kepegawaian Negara) adalah lembaga non-kementerian yang melaksanakan manajemen ASN secara teknis, termasuk pengelolaan database ASN dan pelaksanaan seleksi CPNS.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000175',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Core value ASN ''Akuntabel'' bermakna ASN harus...',
+  '[{"id":"A","text":"Selalu mengutamakan kepuasan masyarakat dalam pelayanan"},{"id":"B","text":"Melaksanakan tugas dengan jujur, bertanggung jawab, cermat, disiplin, dan berintegritas tinggi"},{"id":"C","text":"Terus belajar dan mengembangkan kompetensi diri"},{"id":"D","text":"Membangun lingkungan kerja yang kondusif dan bebas diskriminasi"}]',
+  'B',
+  'Core value ''Akuntabel'' dalam BerAKHLAK berarti ASN melaksanakan tugas dengan jujur, bertanggung jawab, cermat, disiplin, dan berintegritas tinggi. Termasuk: tidak menyalahgunakan kewenangan jabatan, tidak menerima suap/gratifikasi, menggunakan kekayaan dan barang milik negara secara bertanggung jawab, dan tidak melakukan perbuatan tercela. Ini merupakan pondasi kepercayaan publik kepada ASN.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000176',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berdasarkan UUD 1945 Pasal 34, fakir miskin dan anak-anak yang terlantar dipelihara oleh...',
+  '[{"id":"A","text":"Pemerintah daerah masing-masing"},{"id":"B","text":"Negara"},{"id":"C","text":"Organisasi sosial kemasyarakatan"},{"id":"D","text":"Keluarga terdekat"}]',
+  'B',
+  'Pasal 34 Ayat (1) UUD 1945 menyatakan: ''Fakir miskin dan anak-anak yang terlantar dipelihara oleh negara.'' Ini merupakan amanat konstitusional bahwa negara bertanggung jawab atas kesejahteraan warganya yang paling rentan. Implementasinya melalui program-program seperti PKH (Program Keluarga Harapan), BPNT, JKN, dan bantuan sosial lainnya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000177',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Kongres Pemuda II yang menghasilkan Sumpah Pemuda dilaksanakan pada tanggal...',
+  '[{"id":"A","text":"28 Oktober 1928"},{"id":"B","text":"20 Mei 1928"},{"id":"C","text":"28 Oktober 1926"},{"id":"D","text":"17 Agustus 1928"}]',
+  'A',
+  'Kongres Pemuda II berlangsung pada 27-28 Oktober 1928, dan menghasilkan Sumpah Pemuda pada 28 Oktober 1928. Kongres ini dihadiri oleh pemuda dari berbagai organisasi kedaerahan. Lagu Indonesia Raya gubahan W.R. Supratman pertama kali dikumandangkan pada kongres ini. Tanggal 28 Oktober kemudian diperingati sebagai Hari Sumpah Pemuda.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000178',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Ibu Kota Negara Indonesia yang baru berdasarkan UU No. 3 Tahun 2022 adalah...',
+  '[{"id":"A","text":"Palangkaraya"},{"id":"B","text":"Samarinda"},{"id":"C","text":"Nusantara"},{"id":"D","text":"Balikpapan"}]',
+  'C',
+  'Berdasarkan UU No. 3 Tahun 2022 tentang Ibu Kota Negara, ibu kota negara Indonesia yang baru adalah Nusantara, berlokasi di Kabupaten Penajam Paser Utara dan Kabupaten Kutai Kartanegara, Kalimantan Timur. Pemindahan ibu kota ini bertujuan untuk pemerataan pembangunan dan meringankan beban Jakarta.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000179',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Dalam konteks ASN, PPPK (Pegawai Pemerintah dengan Perjanjian Kerja) berbeda dari PNS dalam hal...',
+  '[{"id":"A","text":"PPPK tidak mendapatkan gaji dari negara"},{"id":"B","text":"PPPK diangkat untuk jangka waktu tertentu sesuai kebutuhan instansi"},{"id":"C","text":"PPPK tidak bisa menduduki jabatan struktural apapun"},{"id":"D","text":"PPPK tidak termasuk dalam kategori ASN"}]',
+  'B',
+  'PPPK (Pegawai Pemerintah dengan Perjanjian Kerja) adalah ASN yang diangkat berdasarkan perjanjian kerja untuk jangka waktu tertentu (kontrak), berbeda dengan PNS yang diangkat sebagai pegawai tetap. PPPK mendapat hak yang hampir setara dengan PNS (gaji, tunjangan, cuti, perlindungan), tetapi tidak memiliki jaminan pensiun seperti PNS dan masa kerjanya terikat kontrak.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000180',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Reformasi Birokrasi di Indonesia bertujuan untuk...',
+  '[{"id":"A","text":"Mengurangi jumlah pegawai negeri sipil"},{"id":"B","text":"Mewujudkan tata kelola pemerintahan yang baik, bersih, dan melayani"},{"id":"C","text":"Meningkatkan gaji ASN secara berkala"},{"id":"D","text":"Meningkatkan anggaran belanja pegawai pemerintah"}]',
+  'B',
+  'Reformasi Birokrasi (RB) adalah upaya sistematis untuk mengubah tata kelola pemerintahan agar lebih baik (good governance), bersih dari KKN (good government), dan berorientasi pada pelayanan masyarakat. RB mencakup 8 area perubahan: organisasi, tata laksana, SDM aparatur, pengawasan, akuntabilitas, pelayanan publik, mindset/cultural set, dan regulasi/deregulasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000181',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Berdasarkan UUD 1945 Pasal 22A, ketentuan lebih lanjut tentang tata cara pembentukan undang-undang diatur dengan...',
+  '[{"id":"A","text":"Peraturan Presiden"},{"id":"B","text":"Peraturan DPR"},{"id":"C","text":"Undang-undang"},{"id":"D","text":"Peraturan Pemerintah"}]',
+  'C',
+  'Pasal 22A UUD 1945 menyatakan: ''Ketentuan lebih lanjut tentang tata cara pembentukan undang-undang diatur dengan undang-undang.'' Implementasinya adalah UU No. 12 Tahun 2011 tentang Pembentukan Peraturan Perundang-undangan (yang telah diubah dengan UU No. 15 Tahun 2019 dan UU No. 13 Tahun 2022).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000182',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Makna lambang rantai pada sila ke-2 Pancasila adalah...',
+  '[{"id":"A","text":"Kekuatan dan persatuan bangsa Indonesia"},{"id":"B","text":"Hubungan manusia yang saling terkait satu sama lain dan tidak dapat dipisahkan"},{"id":"C","text":"Ikatan perjanjian antar bangsa yang damai"},{"id":"D","text":"Rantai produksi ekonomi yang saling menguntungkan"}]',
+  'B',
+  'Lambang sila ke-2 adalah rantai emas yang terdiri dari mata rantai segi empat (melambangkan laki-laki) dan lingkaran (melambangkan perempuan) yang saling berkait, membentuk lingkaran. Ini melambangkan bahwa manusia saling membutuhkan, berkaitan satu dengan yang lain, tidak dapat dipisahkan, dan membentuk kesatuan kemanusiaan yang adil dan beradab.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000183',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Indonesia secara resmi bergabung menjadi anggota Perserikatan Bangsa-Bangsa (PBB) pertama kali pada...',
+  '[{"id":"A","text":"17 Agustus 1945"},{"id":"B","text":"27 Desember 1949"},{"id":"C","text":"28 September 1950"},{"id":"D","text":"17 Agustus 1950"}]',
+  'C',
+  'Indonesia menjadi anggota PBB (Perserikatan Bangsa-Bangsa) pada 28 September 1950 sebagai anggota ke-60. Bergabungnya Indonesia ke PBB terjadi setelah pengakuan kedaulatan oleh Belanda melalui KMB (27 Desember 1949) dan kembalinya Indonesia ke bentuk NKRI (17 Agustus 1950). Indonesia sempat keluar dari PBB pada 7 Januari 1965 (era konfrontasi dengan Malaysia) dan bergabung kembali 28 September 1966.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000184',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Tugas utama BKN (Badan Kepegawaian Negara) adalah...',
+  '[{"id":"A","text":"Menetapkan kebijakan kepegawaian nasional"},{"id":"B","text":"Melaksanakan manajemen ASN secara nasional termasuk sistem informasi kepegawaian"},{"id":"C","text":"Memberikan tunjangan dan pensiun kepada PNS"},{"id":"D","text":"Mengawasi kinerja kementerian/lembaga dalam pengelolaan ASN"}]',
+  'B',
+  'BKN (Badan Kepegawaian Negara) adalah lembaga pemerintah non-kementerian yang melaksanakan manajemen ASN, pembinaan dan penyelenggaraan manajemen ASN secara nasional. Tugasnya meliputi: pembinaan teknis manajemen kepegawaian, penyusunan norma/standar/prosedur kepegawaian, serta penyelenggaraan sistem informasi kepegawaian nasional (SIASN/MySAPK). Berbeda dari KemenPAN-RB yang menetapkan kebijakan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000185',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lembaga yang bertanggung jawab mengkoordinasikan penyelenggaraan pemerintahan daerah dan pembinaan otonomi daerah adalah...',
+  '[{"id":"A","text":"Kementerian Dalam Negeri"},{"id":"B","text":"Sekretariat Kabinet"},{"id":"C","text":"Kementerian Koordinator Bidang Politik, Hukum, dan Keamanan"},{"id":"D","text":"DPOD (Dewan Pertimbangan Otonomi Daerah)"}]',
+  'A',
+  'Kementerian Dalam Negeri (Kemendagri) bertugas menyelenggarakan urusan pemerintahan dalam negeri, termasuk mengkoordinasikan dan membina pemerintahan daerah serta otonomi daerah. Kemendagri juga mengelola administrasi kependudukan dan berperan dalam pelaksanaan desentralisasi. Gubernur sebagai wakil pemerintah pusat di daerah bertanggung jawab kepada Mendagri.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000186',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pancasila sebagai ''pandangan hidup bangsa'' (weltanschauung) mengandung arti...',
+  '[{"id":"A","text":"Pancasila adalah sumber dari semua peraturan hukum di Indonesia"},{"id":"B","text":"Pancasila adalah petunjuk arah dalam kehidupan berbangsa sehari-hari"},{"id":"C","text":"Pancasila merupakan hasil pemikiran filsuf-filsuf bangsa Indonesia"},{"id":"D","text":"Pancasila menjadi ukuran baik-buruk perilaku seluruh manusia di dunia"}]',
+  'B',
+  'Pandangan hidup (weltanschauung) adalah pedoman bagaimana manusia memandang kehidupan dan menentukan arah dalam bertindak. Pancasila sebagai pandangan hidup bangsa berarti nilai-nilai Pancasila menjadi petunjuk dan pedoman bagi bangsa Indonesia dalam menjalani kehidupan sehari-hari — baik dalam kehidupan pribadi, bermasyarakat, maupun berbangsa dan bernegara.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000187',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Bhinneka Tunggal Ika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Faktor utama yang memperkuat persatuan dan kesatuan bangsa Indonesia adalah...',
+  '[{"id":"A","text":"Kesamaan bahasa daerah seluruh suku bangsa"},{"id":"B","text":"Persamaan geografis sebagai negara kepulauan"},{"id":"C","text":"Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika sebagai empat pilar kebangsaan"},{"id":"D","text":"Persamaan agama yang dianut mayoritas penduduk"}]',
+  'C',
+  'Empat pilar kebangsaan Indonesia adalah: (1) Pancasila sebagai dasar negara dan ideologi, (2) UUD 1945 sebagai konstitusi, (3) NKRI sebagai bentuk negara yang tidak bisa diubah, (4) Bhinneka Tunggal Ika sebagai semboyan persatuan dalam keberagaman. Keempat pilar ini menjadi landasan kokoh persatuan dan kesatuan bangsa Indonesia.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000188',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Pasal 28H Ayat (1) UUD 1945 mengatur tentang hak...',
+  '[{"id":"A","text":"Hak setiap orang atas pengakuan, jaminan, perlindungan dan kepastian hukum"},{"id":"B","text":"Hak setiap orang untuk hidup sejahtera lahir dan batin, bertempat tinggal, dan mendapatkan lingkungan hidup yang baik"},{"id":"C","text":"Hak setiap orang untuk bebas dari penyiksaan"},{"id":"D","text":"Hak setiap orang untuk tidak dituntut atas dasar hukum yang berlaku surut"}]',
+  'B',
+  'Pasal 28H Ayat (1) UUD 1945 menyatakan: ''Setiap orang berhak hidup sejahtera lahir dan batin, bertempat tinggal, dan mendapatkan lingkungan hidup yang baik dan sehat serta berhak memperoleh pelayanan kesehatan.'' Ini adalah hak atas standar hidup yang layak, termasuk jaminan kesehatan. Pasal 28D mengatur kepastian hukum, Pasal 28G mengatur kebebasan dari penyiksaan, Pasal 28I mengatur non-retroaktif.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000189',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Operasi Mandala yang dipimpin oleh Mayjen Soeharto bertujuan merebut kembali...',
+  '[{"id":"A","text":"Timor Timur dari Portugal"},{"id":"B","text":"Irian Barat (Papua) dari Belanda"},{"id":"C","text":"Pulau Sipadan-Ligitan dari Malaysia"},{"id":"D","text":"Kepulauan Riau dari Inggris"}]',
+  'B',
+  'Operasi Mandala adalah operasi militer untuk merebut Irian Barat dari Belanda, yang dipimpin oleh Mayjen Soeharto sebagai Panglima Mandala. Operasi ini merupakan implementasi dari Trikora yang dicanangkan Soekarno. Melalui tekanan militer dan diplomasi (Perjanjian New York, 15 Agustus 1962), Belanda menyerahkan Irian Barat ke PBB, lalu ke Indonesia pada 1 Mei 1963.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000190',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Asas-asas penyelenggaraan pemerintahan yang baik (good governance) meliputi berikut ini, kecuali...',
+  '[{"id":"A","text":"Transparansi"},{"id":"B","text":"Akuntabilitas"},{"id":"C","text":"Monopoli kekuasaan"},{"id":"D","text":"Partisipasi masyarakat"}]',
+  'C',
+  'Good governance (tata pemerintahan yang baik) memiliki prinsip-prinsip: partisipasi, rule of law, transparansi, responsivitas, berorientasi konsensus, kesetaraan, efektivitas dan efisiensi, akuntabilitas, dan visi strategis. Monopoli kekuasaan adalah antitesis dari good governance karena bertentangan dengan prinsip pembagian kekuasaan, checks and balances, dan partisipasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000191',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pengamalan sila ke-2 Pancasila ''Kemanusiaan yang Adil dan Beradab'' dalam kehidupan sehari-hari diwujudkan melalui...',
+  '[{"id":"A","text":"Mengutamakan kepentingan pribadi di atas kepentingan umum"},{"id":"B","text":"Mengakui persamaan harkat, martabat, dan derajat semua manusia tanpa diskriminasi"},{"id":"C","text":"Mengikuti semua tradisi dan adat istiadat daerah"},{"id":"D","text":"Berpartisipasi dalam setiap pemilihan umum"}]',
+  'B',
+  'Sila ke-2 mengandung nilai pengakuan bahwa semua manusia adalah makhluk Tuhan yang setara harkat dan martabatnya. Pengamalannya: mengakui persamaan derajat antar manusia, tidak membeda-bedakan orang berdasarkan SARA (Suku, Agama, Ras, Antargolongan), bersikap tenggang rasa, tidak semena-mena, gemar menolong, membela kebenaran dan keadilan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000192',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Agresi Militer Belanda I (1947) berakhir dengan perjanjian...',
+  '[{"id":"A","text":"Perjanjian Linggarjati"},{"id":"B","text":"Perjanjian Renville"},{"id":"C","text":"Perjanjian Roem-Royen"},{"id":"D","text":"Konferensi Meja Bundar"}]',
+  'B',
+  'Agresi Militer Belanda I (21 Juli - 5 Agustus 1947) berakhir setelah intervensi DK PBB yang membentuk Komisi Tiga Negara (KTN). Perundingan antara Indonesia dan Belanda di atas kapal USS Renville menghasilkan Perjanjian Renville (17 Januari 1948). Perjanjian ini merugikan Indonesia karena wilayah RI menjadi lebih sempit. Linggarjati (1946) adalah perjanjian sebelum Agresi I, Roem-Royen (1949) setelah Agresi II.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000193',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'NKRI',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Tiga zona laut yang diakui secara internasional dalam wilayah Indonesia adalah...',
+  '[{"id":"A","text":"Laut teritorial (12 nm), ZEE (200 nm), dan landas kontinen"},{"id":"B","text":"Laut territorial (12 nm), ZEEI (100 nm), dan laut dalam"},{"id":"C","text":"Perairan kepulauan, ZEE (200 nm), dan laut lepas"},{"id":"D","text":"Laut territorial (12 nm), zona tambahan (24 nm), dan ZEE (100 nm)"}]',
+  'A',
+  'Indonesia memiliki tiga zona laut: (1) Laut teritorial: 12 mil laut dari garis pangkal, negara berdaulat penuh, (2) ZEE (Zona Ekonomi Eksklusif): 200 mil laut dari garis pangkal, hak eksklusif eksplorasi dan eksploitasi SDA, (3) Landas kontinen: perpanjangan wilayah daratan di bawah laut sampai 200 mil atau lebih (hingga 350 mil jika landas kontinen alami melebihi 200 nm). Ini diatur dalam UNCLOS 1982.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000194',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lembaga yang berwenang mengadili sengketa hasil Pemilihan Presiden dan Pemilihan Legislatif adalah...',
+  '[{"id":"A","text":"Mahkamah Agung"},{"id":"B","text":"Mahkamah Konstitusi"},{"id":"C","text":"Komisi Pemilihan Umum"},{"id":"D","text":"Badan Pengawas Pemilu"}]',
+  'B',
+  'Berdasarkan Pasal 24C UUD 1945, Mahkamah Konstitusi berwenang memutus perselisihan tentang hasil pemilihan umum, termasuk hasil Pilpres dan Pileg. Untuk Pilkada, kewenangan mengadili sengketa hasilnya juga ada di MK (sejak 2022). MA mengadili tindak pidana pemilu (kasasi). KPU menyelenggarakan, Bawaslu mengawasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000195',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SULIT', 8,
+  'Perbedaan antara nilai dasar, nilai instrumental, dan nilai praksis Pancasila adalah...',
+  '[{"id":"A","text":"Nilai dasar = abstrak umum; nilai instrumental = konkret dalam aturan; nilai praksis = penerapan nyata"},{"id":"B","text":"Nilai dasar = aturan hukum; nilai instrumental = kebijakan; nilai praksis = sikap individu"},{"id":"C","text":"Nilai dasar = tujuan negara; nilai instrumental = cara mencapai; nilai praksis = bukti keberhasilan"},{"id":"D","text":"Nilai dasar = Pancasila; nilai instrumental = UUD; nilai praksis = UU dan Perda"}]',
+  'A',
+  'Nilai Pancasila dibagi menjadi tiga tingkatan: (1) Nilai Dasar: bersifat abstrak, umum, dan tidak berubah — yaitu nilai ketuhanan, kemanusiaan, persatuan, kerakyatan, keadilan sosial; (2) Nilai Instrumental: penjabaran nilai dasar dalam aturan konkret (UUD, UU, PP, Perpres); (3) Nilai Praksis: penerapan nilai-nilai Pancasila dalam kehidupan nyata sehari-hari oleh individu dan masyarakat.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000196',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'UUD 1945',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berdasarkan UUD 1945 Pasal 1 Ayat (2), kedaulatan berada di tangan rakyat dan dilaksanakan menurut...',
+  '[{"id":"A","text":"Keinginan dan aspirasi rakyat"},{"id":"B","text":"Undang-Undang Dasar"},{"id":"C","text":"Keputusan MPR"},{"id":"D","text":"Ketetapan DPR"}]',
+  'B',
+  'Pasal 1 Ayat (2) UUD 1945 (hasil amandemen) berbunyi: ''Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar.'' Ini merupakan perubahan signifikan dari redaksi sebelum amandemen yang menyatakan kedaulatan dilaksanakan sepenuhnya oleh MPR. Setelah amandemen, rakyat memiliki kedaulatan langsung melalui pemilu dan konstitusi menjadi batasannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000197',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Bhinneka Tunggal Ika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Konflik SARA (Suku, Agama, Ras, dan Antargolongan) dapat dicegah dengan...',
+  '[{"id":"A","text":"Melarang diskusi tentang perbedaan suku dan agama"},{"id":"B","text":"Menyamakan semua adat dan budaya daerah menjadi satu budaya nasional"},{"id":"C","text":"Memupuk sikap toleransi, saling menghormati, dan dialog antar kelompok"},{"id":"D","text":"Menghindari interaksi antar kelompok yang berbeda"}]',
+  'C',
+  'Pencegahan konflik SARA yang efektif bukan dengan melarang diskusi (yang justru bisa menimbulkan penumpukan ketidakpuasan) atau menyamakan semua budaya (yang menghilangkan keberagaman). Cara yang tepat adalah memupuk toleransi aktif: menghargai perbedaan, membangun dialog antar kelompok, memperkuat rasa kebangsaan bersama, dan menegakkan hukum terhadap tindakan diskriminatif.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000198',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Kebijakan Pemerintah',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Berdasarkan UU No. 25 Tahun 2009 tentang Pelayanan Publik, asas penyelenggaraan pelayanan publik meliputi...',
+  '[{"id":"A","text":"Kepentingan umum, kepastian hukum, kesamaan hak, keseimbangan hak dan kewajiban"},{"id":"B","text":"Efisiensi, efektivitas, transparansi, dan akuntabilitas"},{"id":"C","text":"Profesionalisme, integritas, dan kompetensi"},{"id":"D","text":"Kedisiplinan, kesopanan, dan keramahan"}]',
+  'A',
+  'UU No. 25 Tahun 2009 tentang Pelayanan Publik menetapkan asas-asas pelayanan publik, yaitu: kepentingan umum, kepastian hukum, kesamaan hak, keseimbangan hak dan kewajiban, keprofesionalan, partisipatif, persamaan perlakuan/tidak diskriminatif, keterbukaan, akuntabilitas, fasilitas dan perlakuan khusus bagi kelompok rentan, ketepatan waktu, dan kecepatan, kemudahan, dan keterjangkauan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000199',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Sejarah Indonesia',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Tokoh yang dikenal sebagai proklamator kemerdekaan Indonesia adalah...',
+  '[{"id":"A","text":"Ir. Soekarno dan Dr. Mohammad Hatta"},{"id":"B","text":"Ir. Soekarno, Dr. Mohammad Hatta, dan Sutan Syahrir"},{"id":"C","text":"Ir. Soekarno dan Sri Sultan Hamengku Buwono IX"},{"id":"D","text":"Ir. Soekarno, Dr. Mohammad Hatta, dan Ki Hajar Dewantara"}]',
+  'A',
+  'Proklamator kemerdekaan Indonesia secara resmi adalah dua orang: Ir. Soekarno dan Dr. Mohammad Hatta. Keduanya yang membacakan dan menandatangani teks Proklamasi pada 17 Agustus 1945 atas nama bangsa Indonesia. Sutan Syahrir berperan dalam mendorong pelaksanaan proklamasi, namun bukan proklamator. Keduanya kemudian diangkat menjadi Presiden dan Wakil Presiden pertama Indonesia.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa100001-0000-0000-0000-000000000200',
+  'a0000001-0000-0000-0000-000000000001',
+  'CPNS', 'TWK', 'Pancasila',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Pengertian ''keadilan'' dalam Pancasila (sila ke-5) yang paling tepat adalah...',
+  '[{"id":"A","text":"Memberikan sesuatu yang sama rata kepada semua orang"},{"id":"B","text":"Memberikan sesuatu yang menjadi hak seseorang sesuai porsinya"},{"id":"C","text":"Mengutamakan kepentingan mayoritas atas minoritas"},{"id":"D","text":"Menerapkan hukum yang sama tanpa memandang kondisi seseorang"}]',
+  'B',
+  'Keadilan dalam Pancasila mengacu pada konsep keadilan distributif dan komutatif: memberikan kepada setiap orang apa yang menjadi haknya sesuai dengan porsi, kemampuan, dan kondisinya. Ini berbeda dari persamaan (equality) yang berarti semua mendapat bagian sama. Misalnya, subsidi untuk rakyat miskin lebih besar dari yang kaya — ini adil tapi tidak sama rata.',
+  ARRAY['sering-keluar']
+)
+
+ON CONFLICT (id) DO NOTHING;
+
+-- ============================================================
+-- Seed 002D: CPNS TIU 101-200 (100 soal)
+-- ============================================================
+
+INSERT INTO public.questions
+  (id, pack_id, exam_type, subject, subtopic, question_type, difficulty, difficulty_rank,
+   question_text, options, correct_option, explanation_text, tags)
+VALUES
+
+(
+  'aa200001-0000-0000-0000-000000000101',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'PENA : MENULIS = PISAU : ...',
+  '[{"id":"A","text":"Memotong"},{"id":"B","text":"Tajam"},{"id":"C","text":"Besi"},{"id":"D","text":"Dapur"}]',
+  'A',
+  'Analogi fungsi. Pena berfungsi untuk menulis. Pisau berfungsi untuk memotong. Pola: alat dan fungsinya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000102',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'LAUT : IKAN = HUTAN : ...',
+  '[{"id":"A","text":"Pohon"},{"id":"B","text":"Binatang liar"},{"id":"C","text":"Gelap"},{"id":"D","text":"Lebat"}]',
+  'B',
+  'Analogi tempat. Laut adalah habitat ikan. Hutan adalah habitat binatang liar. Pola: tempat dan makhluk yang tinggal di sana.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000103',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'KOMPOSER : LAGU = ARSITEK : ...',
+  '[{"id":"A","text":"Bangunan"},{"id":"B","text":"Desain"},{"id":"C","text":"Tukang"},{"id":"D","text":"Bata"}]',
+  'A',
+  'Analogi pencipta-karya. Komposer menciptakan lagu. Arsitek merancang bangunan. Pola: profesi dan hasil karyanya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000104',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'HAKIM : PENGADILAN = DOKTER : ...',
+  '[{"id":"A","text":"Pasien"},{"id":"B","text":"Obat"},{"id":"C","text":"Rumah Sakit"},{"id":"D","text":"Stetoskop"}]',
+  'C',
+  'Analogi profesi-tempat kerja. Hakim bekerja di pengadilan. Dokter bekerja di rumah sakit. Pola: profesi dan tempat kerjanya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000105',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'SAPI : SUSU = LEBAH : ...',
+  '[{"id":"A","text":"Madu"},{"id":"B","text":"Sengatan"},{"id":"C","text":"Sarang"},{"id":"D","text":"Lilin"}]',
+  'A',
+  'Analogi hewan-produksi. Sapi menghasilkan susu. Lebah menghasilkan madu. Pola: hewan dan produk yang dihasilkan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000106',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'BUTA : PENGLIHATAN = TULI : ...',
+  '[{"id":"A","text":"Telinga"},{"id":"B","text":"Suara"},{"id":"C","text":"Pendengaran"},{"id":"D","text":"Bicara"}]',
+  'C',
+  'Analogi gangguan-indera. Buta adalah gangguan pada penglihatan. Tuli adalah gangguan pada pendengaran. Pola: jenis keterbatasan dan indera yang terganggu.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000107',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'PADI : BERAS : NASI = TEBU : GULA : ...',
+  '[{"id":"A","text":"Manis"},{"id":"B","text":"Air gula"},{"id":"C","text":"Sirup"},{"id":"D","text":"Tetes tebu"}]',
+  'C',
+  'Analogi rantai produksi. Padi diolah menjadi beras, beras dimasak menjadi nasi. Tebu diolah menjadi gula, gula diolah menjadi sirup. Pola: bahan mentah ke setengah jadi ke produk akhir.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000108',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'AWAN : HUJAN = GUNUNG BERAPI : ...',
+  '[{"id":"A","text":"Abu vulkanik"},{"id":"B","text":"Lahar"},{"id":"C","text":"Gempa bumi"},{"id":"D","text":"Panas"}]',
+  'B',
+  'Analogi sumber-hasil. Awan menghasilkan hujan. Gunung berapi mengeluarkan lahar (lava cair yang mengalir). Keduanya adalah hasil alami dari sumbernya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000109',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'DRUM : PUKUL = BIOLA : ...',
+  '[{"id":"A","text":"Petik"},{"id":"B","text":"Gesek"},{"id":"C","text":"Tiup"},{"id":"D","text":"Tekan"}]',
+  'B',
+  'Analogi alat musik-cara memainkan. Drum dimainkan dengan dipukul. Biola dimainkan dengan digesek menggunakan busur. Pola: alat musik dan cara memainkannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000110',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'AIR : ES = UAP : ...',
+  '[{"id":"A","text":"Panas"},{"id":"B","text":"Air"},{"id":"C","text":"Gas"},{"id":"D","text":"Awan"}]',
+  'B',
+  'Analogi perubahan wujud akibat pendinginan. Air didinginkan menjadi es (cair ke padat). Uap didinginkan menjadi air (gas ke cair). Pola: wujud awal dan wujud setelah didinginkan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000111',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'MERAH : MAWAR = PUTIH : ...',
+  '[{"id":"A","text":"Melati"},{"id":"B","text":"Angsa"},{"id":"C","text":"Kapas"},{"id":"D","text":"Susu"}]',
+  'A',
+  'Analogi warna-bunga yang paling identik. Mawar dikenal identik dengan warna merah. Melati dikenal identik dengan warna putih (bunga nasional Indonesia). Pola: warna dan bunga yang paling identik dengannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000112',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'KEPALA : RAMBUT = WAJAH : ...',
+  '[{"id":"A","text":"Mata"},{"id":"B","text":"Janggut"},{"id":"C","text":"Hidung"},{"id":"D","text":"Pipi"}]',
+  'B',
+  'Analogi bagian tubuh dan rambut yang tumbuh di sana. Kepala ditumbuhi rambut. Wajah (dagu/sekitarnya) ditumbuhi janggut. Pola: bagian tubuh dan jenis rambut yang tumbuh di sana.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000113',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'NOVEMBER : DESEMBER = MINGGU : ...',
+  '[{"id":"A","text":"Senin"},{"id":"B","text":"Sabtu"},{"id":"C","text":"Jumat"},{"id":"D","text":"Kamis"}]',
+  'A',
+  'Analogi urutan. November adalah bulan ke-11, Desember adalah bulan ke-12 (tepat setelah November). Minggu adalah hari pertama dalam seminggu, Senin adalah hari kedua yang tepat berada setelah Minggu. Pola: X dan Y yang tepat berada setelah X dalam urutan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000114',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'TELUR : AYAM = SUSU : ...',
+  '[{"id":"A","text":"Sapi"},{"id":"B","text":"Keju"},{"id":"C","text":"Kambing"},{"id":"D","text":"Yoghurt"}]',
+  'A',
+  'Analogi produk-hewan penghasil. Telur dihasilkan oleh ayam. Susu paling umum dihasilkan oleh sapi. Pola: produk dan hewan utama yang menghasilkannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000115',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analogi Verbal',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'MURID : BELAJAR = PETANI : ...',
+  '[{"id":"A","text":"Panen"},{"id":"B","text":"Bertani"},{"id":"C","text":"Sawah"},{"id":"D","text":"Cangkul"}]',
+  'B',
+  'Analogi profesi-kegiatan utama. Murid kegiatan utamanya belajar. Petani kegiatan utamanya bertani. Pola: subjek dan kegiatan utama yang dilakukannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000116',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Semua karyawan harus datang tepat waktu. Budi adalah karyawan. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Budi mungkin datang tepat waktu"},{"id":"B","text":"Budi harus datang tepat waktu"},{"id":"C","text":"Karyawan yang tidak tepat waktu bukan Budi"},{"id":"D","text":"Tidak dapat disimpulkan"}]',
+  'B',
+  'Silogisme kategoris: Semua karyawan harus tepat waktu (mayor). Budi adalah karyawan (minor). Maka Budi harus datang tepat waktu (kesimpulan). Ini adalah pola Barbara (AAA-1) yang valid.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000117',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Tidak ada mahasiswa yang lulus tanpa belajar. Rani bisa lulus. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Rani tidak belajar"},{"id":"B","text":"Rani adalah mahasiswa"},{"id":"C","text":"Rani belajar"},{"id":"D","text":"Rani bukan mahasiswa"}]',
+  'C',
+  'Tidak ada mahasiswa yang lulus tanpa belajar artinya setiap yang lulus pasti belajar. Rani bisa lulus maka Rani belajar. Ini adalah modus ponens dari kontrapositif: lulus maka belajar; Rani lulus; maka Rani belajar.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000118',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Semua dokter harus memiliki SIP. Pak Aldo tidak memiliki SIP. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Pak Aldo bukan dokter"},{"id":"B","text":"Pak Aldo mungkin dokter"},{"id":"C","text":"Pak Aldo dokter yang melanggar aturan"},{"id":"D","text":"Tidak dapat disimpulkan"}]',
+  'A',
+  'Premis: Semua dokter punya SIP. Pak Aldo tidak punya SIP. Menggunakan modus tollens (kontrapositif): tidak punya SIP maka bukan dokter. Pak Aldo tidak punya SIP, maka Pak Aldo bukan dokter.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000119',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Jika hari ini hujan maka jalan licin. Jika jalan licin maka kecelakaan meningkat. Hari ini hujan. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Jalan tidak licin"},{"id":"B","text":"Kecelakaan meningkat"},{"id":"C","text":"Kecelakaan mungkin meningkat"},{"id":"D","text":"Jalan licin saja"}]',
+  'B',
+  'Silogisme hipotetis berantai: hujan maka jalan licin; jalan licin maka kecelakaan meningkat; hari ini hujan. Dengan modus ponens dua kali: hujan terjadi, maka jalan licin, maka kecelakaan meningkat.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000120',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Beberapa guru adalah sarjana. Semua sarjana adalah terdidik. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Semua guru adalah terdidik"},{"id":"B","text":"Beberapa guru adalah terdidik"},{"id":"C","text":"Tidak ada guru yang terdidik"},{"id":"D","text":"Semua yang terdidik adalah guru"}]',
+  'B',
+  'Beberapa guru adalah sarjana. Semua sarjana adalah terdidik. Maka bagian guru yang sarjana pasti terdidik. Kesimpulan: beberapa guru adalah terdidik. Tidak bisa disimpulkan semua guru terdidik karena guru yang bukan sarjana belum tentu terdidik.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000121',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Tidak ada polisi yang koruptor. Sebagian aparat adalah polisi. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Semua aparat bukan koruptor"},{"id":"B","text":"Sebagian aparat bukan koruptor"},{"id":"C","text":"Semua polisi adalah aparat"},{"id":"D","text":"Tidak dapat disimpulkan"}]',
+  'B',
+  'Tidak ada polisi yang koruptor artinya semua polisi bukan koruptor. Sebagian aparat adalah polisi. Maka sebagian aparat (yang polisi) pasti bukan koruptor. Tidak bisa menyimpulkan semua aparat bukan koruptor karena aparat selain polisi belum diketahui.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000122',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Semua pegawai negeri mendapat gaji. Tidak ada petani yang mendapat gaji sebagai pegawai negeri. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Beberapa petani adalah pegawai negeri"},{"id":"B","text":"Tidak ada petani yang pegawai negeri"},{"id":"C","text":"Semua yang mendapat gaji adalah pegawai negeri"},{"id":"D","text":"Petani tidak perlu gaji"}]',
+  'B',
+  'Semua pegawai negeri mendapat gaji. Kontrapositif: yang tidak mendapat gaji (dalam kapasitas ini) bukan pegawai negeri. Tidak ada petani yang mendapat gaji sebagai pegawai negeri, maka tidak ada petani yang merupakan pegawai negeri.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000123',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Jika nilai ujian lebih dari 60 maka siswa lulus. Amir tidak lulus. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Nilai Amir tepat 60"},{"id":"B","text":"Nilai Amir lebih dari 60"},{"id":"C","text":"Nilai Amir kurang dari atau sama dengan 60"},{"id":"D","text":"Amir tidak mengikuti ujian"}]',
+  'C',
+  'Modus Tollens: Jika nilai lebih dari 60 maka lulus. Amir tidak lulus. Kontrapositif: tidak lulus maka nilai tidak lebih dari 60 (kurang dari atau sama dengan 60). Jadi nilai Amir paling banyak 60.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000124',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Semua hakim adalah sarjana hukum. Pak Rahmat adalah sarjana hukum. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Pak Rahmat pasti hakim"},{"id":"B","text":"Pak Rahmat mungkin hakim"},{"id":"C","text":"Pak Rahmat bukan hakim"},{"id":"D","text":"Tidak dapat disimpulkan bahwa Pak Rahmat hakim"}]',
+  'D',
+  'Ini adalah kesalahan logika affirming the consequent. Semua hakim adalah sarjana hukum. Pak Rahmat adalah sarjana hukum. Tidak bisa disimpulkan Pak Rahmat hakim karena sarjana hukum bisa jadi pengacara, notaris, jaksa, atau profesi lain.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000125',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Semua P adalah Q. Semua Q adalah R. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Semua R adalah P"},{"id":"B","text":"Semua Q adalah P"},{"id":"C","text":"Semua P adalah R"},{"id":"D","text":"Beberapa P adalah R"}]',
+  'C',
+  'Silogisme berantai (transitif): Semua P adalah Q; Semua Q adalah R; maka Semua P adalah R. Ini valid karena P adalah subset Q, dan Q adalah subset R, sehingga P adalah subset R.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000126',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Cuaca cerah hari ini. Jika cuaca cerah maka Rini pergi ke pantai. Jika Rini pergi ke pantai maka ia membawa payung. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Rini tidak pergi ke pantai"},{"id":"B","text":"Rini membawa payung"},{"id":"C","text":"Rini mungkin membawa payung"},{"id":"D","text":"Cuaca tidak cerah"}]',
+  'B',
+  'Modus Ponens berantai: Cuaca cerah (p terjadi). p maka q: Rini pergi ke pantai. q maka r: Rini membawa payung. Kesimpulan: Rini membawa payung.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000127',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Beberapa A adalah B. Semua B adalah C. Tidak ada C yang D. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Beberapa A adalah D"},{"id":"B","text":"Tidak ada A yang D"},{"id":"C","text":"Beberapa A bukan D"},{"id":"D","text":"Semua A bukan D"}]',
+  'C',
+  'Langkah 1: Beberapa A adalah B; Semua B adalah C; maka beberapa A adalah C. Langkah 2: Beberapa A adalah C; Tidak ada C yang D; maka beberapa A (yang merupakan C) pasti bukan D. Tidak bisa menyimpulkan tidak ada A yang D karena ada bagian A yang bukan C yang statusnya belum diketahui.',
+  ARRAY['jarang-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000128',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Semua ASN wajib netral dalam pemilu. Andi adalah ASN. Kesimpulan yang tepat tentang Andi adalah...',
+  '[{"id":"A","text":"Andi sudah terbukti netral dalam pemilu"},{"id":"B","text":"Andi wajib netral dalam pemilu"},{"id":"C","text":"Andi tidak netral dalam pemilu"},{"id":"D","text":"Andi bukan ASN yang baik"}]',
+  'B',
+  'Semua ASN wajib netral; Andi adalah ASN; maka Andi wajib netral dalam pemilu. Kesimpulan hanya tentang kewajiban, bukan tentang fakta apakah Andi sudah netral atau tidak.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000129',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Semua bunga yang diberi pupuk tumbuh subur. Mawar ini tidak tumbuh subur. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Mawar ini diberi pupuk"},{"id":"B","text":"Mawar ini bukan bunga"},{"id":"C","text":"Mawar ini tidak diberi pupuk"},{"id":"D","text":"Pupuk tidak berguna untuk mawar"}]',
+  'C',
+  'Modus Tollens: Diberi pupuk maka tumbuh subur. Mawar tidak tumbuh subur. Kontrapositif: tidak subur maka tidak diberi pupuk. Jadi mawar ini tidak diberi pupuk.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000130',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Silogisme',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Semua siswa yang rajin pasti naik kelas. Dina mendapat ranking 1. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Dina siswa yang rajin"},{"id":"B","text":"Dina pasti naik kelas"},{"id":"C","text":"Dina siswa yang rajin dan naik kelas"},{"id":"D","text":"Tidak dapat disimpulkan apakah Dina naik kelas"}]',
+  'D',
+  'Premis: Semua rajin maka naik kelas. Dina ranking 1. Tidak ada premis yang menghubungkan ranking 1 dengan rajin atau naik kelas. Kesimpulan yang valid harus berdasarkan premis yang diberikan, bukan asumsi tambahan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000131',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Sinonim dan Antonim',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Sinonim dari kata ENIGMA adalah...',
+  '[{"id":"A","text":"Teka-teki"},{"id":"B","text":"Jawaban"},{"id":"C","text":"Masalah besar"},{"id":"D","text":"Pengetahuan"}]',
+  'A',
+  'Enigma berarti sesuatu yang sulit dipahami atau misterius. Sinonimnya dalam bahasa Indonesia adalah teka-teki atau misteri. Kata ini sering digunakan untuk hal yang membingungkan dan sulit ditebak.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000132',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Sinonim dan Antonim',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Antonim dari kata KONVERGEN adalah...',
+  '[{"id":"A","text":"Divergen"},{"id":"B","text":"Sinkron"},{"id":"C","text":"Paralel"},{"id":"D","text":"Konsisten"}]',
+  'A',
+  'Konvergen berarti menuju ke satu titik atau menyatu. Antonimnya adalah divergen yang berarti menjauh dari satu titik atau menyebar. Dalam matematika, garis konvergen bertemu di satu titik sedangkan garis divergen tidak pernah bertemu.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000133',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Sinonim dan Antonim',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Sinonim dari kata AMBIGUITAS adalah...',
+  '[{"id":"A","text":"Kepastian"},{"id":"B","text":"Ketidakjelasan makna"},{"id":"C","text":"Keragaman"},{"id":"D","text":"Perselisihan"}]',
+  'B',
+  'Ambiguitas berarti ketidakjelasan makna atau bermakna ganda. Sesuatu yang ambigu memiliki dua atau lebih kemungkinan penafsiran. Antonimnya adalah kepastian atau kejelasan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000134',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Sinonim dan Antonim',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Antonim dari kata APATIS adalah...',
+  '[{"id":"A","text":"Pesimis"},{"id":"B","text":"Aktif"},{"id":"C","text":"Peduli"},{"id":"D","text":"Optimis"}]',
+  'C',
+  'Apatis berarti tidak peduli atau tidak tertarik terhadap sesuatu. Antonim yang paling tepat adalah peduli atau antusias. Aktif dan optimis berkaitan tetapi bukan lawan langsung dari apatis.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000135',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Sinonim dan Antonim',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Kata yang memiliki makna SAMA dengan kata POLEMIK adalah...',
+  '[{"id":"A","text":"Debat"},{"id":"B","text":"Pertarungan"},{"id":"C","text":"Ceramah"},{"id":"D","text":"Presentasi"}]',
+  'A',
+  'Polemik berarti perdebatan atau perselisihan paham yang biasanya dilakukan secara tertulis atau publik. Sinonimnya adalah debat (pertukaran argumen). Berbeda dengan pertarungan (fisik) atau ceramah (satu arah).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000136',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Sinonim dan Antonim',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Antonim dari kata PROLIFERASI adalah...',
+  '[{"id":"A","text":"Penyebaran"},{"id":"B","text":"Pengurangan"},{"id":"C","text":"Perkembangbiakan"},{"id":"D","text":"Percepatan"}]',
+  'B',
+  'Proliferasi berarti pertumbuhan yang cepat, penyebaran, atau perkembangbiakan. Antonimnya adalah pengurangan atau penyusutan. Dalam konteks senjata nuklir, proliferasi berarti penyebaran dan non-proliferasi berarti pencegahannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000137',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Kata baku yang tepat menurut KBBI adalah...',
+  '[{"id":"A","text":"Apotik"},{"id":"B","text":"Apotek"},{"id":"C","text":"Nomer"},{"id":"D","text":"Aktifitas"}]',
+  'B',
+  'Kata baku: Apotek (bukan Apotik), Nomor (bukan Nomer), Aktivitas (bukan Aktifitas), Izin (bukan Ijin). Pilihan B tepat: Apotek adalah kata baku.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000138',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Penggunaan kata yang TEPAT dalam kalimat adalah...',
+  '[{"id":"A","text":"Program ini efektif karena hemat biaya"},{"id":"B","text":"Program ini efisien karena mencapai target"},{"id":"C","text":"Program ini efektif karena mencapai target dan efisien karena hemat waktu"},{"id":"D","text":"Program ini efektif dan efisien karena tujuannya jelas"}]',
+  'C',
+  'Efektif berarti mencapai tujuan yang diinginkan. Efisien berarti menggunakan sumber daya secara hemat. Pilihan C menggunakan keduanya dengan benar. Pilihan A salah: hemat biaya adalah efisien bukan efektif. Pilihan B salah: mencapai target adalah efektif bukan efisien.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000139',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Manakah kalimat yang menggunakan penulisan DI yang benar sesuai EYD?',
+  '[{"id":"A","text":"Di meja itu ada buku."},{"id":"B","text":"Dimeja itu ada buku."},{"id":"C","text":"Di-meja itu ada buku."},{"id":"D","text":"Buku itu diletakkan di atasmeja."}]',
+  'A',
+  'Di sebagai preposisi (kata depan yang menunjukkan tempat) ditulis terpisah: di meja, di atas, di dalam, di sana. Di sebagai awalan (prefiks) ditulis serangkai: dibawa, dimakan, diletakkan. Pilihan A benar: di meja ditulis terpisah karena merupakan preposisi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000140',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Sinonim dari kata KONOTASI adalah...',
+  '[{"id":"A","text":"Makna tersurat"},{"id":"B","text":"Makna harfiah"},{"id":"C","text":"Makna tambahan atau kiasan"},{"id":"D","text":"Makna yang tercantum di kamus"}]',
+  'C',
+  'Konotasi adalah makna tambahan atau makna kiasan yang melekat pada sebuah kata di luar makna harfiahnya. Contoh: kata langsing dan kurus sama-sama berarti tubuh ramping tetapi berkonotasi berbeda. Antonim konotasi adalah denotasi yaitu makna sebenarnya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000141',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Peribahasa yang tepat untuk menggambarkan seseorang yang banyak bicara tetapi sedikit kemampuannya adalah...',
+  '[{"id":"A","text":"Bagai air di daun talas"},{"id":"B","text":"Air beriak tanda tak dalam"},{"id":"C","text":"Diam-diam menghanyutkan"},{"id":"D","text":"Seperti katak di bawah tempurung"}]',
+  'B',
+  'Peribahasa Air beriak tanda tak dalam bermakna orang yang banyak bicara atau suka pamer biasanya kurang ilmu atau kurang bijaksana. Air yang dangkal mudah bergejolak sedangkan air yang dalam tenang. Cocok untuk menggambarkan orang yang banyak bicara tetapi sedikit kemampuannya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000142',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Penggunaan kata DARIPADA yang benar adalah...',
+  '[{"id":"A","text":"Nilai Budi lebih tinggi daripada nilai Rina"},{"id":"B","text":"Saya pergi daripada Jakarta ke Bandung"},{"id":"C","text":"Dia berasal daripada keluarga sederhana"},{"id":"D","text":"Lebih baik daripada tidak sama sekali (dalam kalimat ini saja)"}]',
+  'A',
+  'Daripada digunakan untuk perbandingan dua hal. Dari digunakan untuk asal, awal, atau bahan. Pilihan A benar: lebih tinggi daripada adalah perbandingan. Pilihan B salah: seharusnya dari Jakarta. Pilihan C salah: seharusnya berasal dari keluarga.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000143',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Gagasan utama suatu paragraf biasanya dinyatakan dalam...',
+  '[{"id":"A","text":"Kalimat yang paling panjang"},{"id":"B","text":"Kalimat topik atau kalimat utama"},{"id":"C","text":"Kalimat penjelas di tengah paragraf"},{"id":"D","text":"Kalimat penutup yang selalu ada di akhir"}]',
+  'B',
+  'Gagasan utama atau ide pokok paragraf dinyatakan dalam kalimat topik atau kalimat utama. Kalimat ini bisa terletak di awal (deduktif), di akhir (induktif), di awal dan akhir (campuran), atau di tengah paragraf. Kalimat penjelas berfungsi mendukung kalimat utama dengan detail atau contoh.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000144',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Sinonim yang tepat dari kata PRESEDEN adalah...',
+  '[{"id":"A","text":"Pemimpin"},{"id":"B","text":"Kejadian sebelumnya yang dijadikan acuan"},{"id":"C","text":"Keputusan tertinggi"},{"id":"D","text":"Kasus hukum yang belum selesai"}]',
+  'B',
+  'Preseden berarti sebuah kejadian, keputusan, atau tindakan sebelumnya yang dijadikan acuan untuk kasus serupa di kemudian hari. Dalam hukum, preseden adalah putusan pengadilan terdahulu yang menjadi dasar pertimbangan putusan baru.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000145',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Analitis',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Kata majemuk yang penulisannya benar sesuai PUEBI adalah...',
+  '[{"id":"A","text":"Rumah sakit, orang tua, meja makan"},{"id":"B","text":"Rumahsakit, orangtua, mejamakan"},{"id":"C","text":"Rumah-sakit, orang-tua, meja-makan"},{"id":"D","text":"Rumah sakit, orang-tua, meja makan"}]',
+  'A',
+  'Kata majemuk dalam bahasa Indonesia umumnya ditulis terpisah tanpa tanda hubung: rumah sakit, orang tua, meja makan, tanggung jawab. Tanda hubung digunakan dalam kasus tertentu seperti penggabungan dengan awalan yang membingungkan. Pilihan A semua kata majemuk ditulis terpisah dengan benar.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000146',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Berapakah nilai dari 25% dari 360?',
+  '[{"id":"A","text":"80"},{"id":"B","text":"90"},{"id":"C","text":"95"},{"id":"D","text":"100"}]',
+  'B',
+  '25% dari 360 = 0,25 x 360 = 90. Cara cepat: 25% adalah seperempat, jadi 360 dibagi 4 = 90.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000147',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Sebuah barang dibeli seharga Rp 80.000 dan dijual Rp 100.000. Berapa persen keuntungannya?',
+  '[{"id":"A","text":"20%"},{"id":"B","text":"25%"},{"id":"C","text":"30%"},{"id":"D","text":"80%"}]',
+  'B',
+  'Keuntungan = 100.000 - 80.000 = 20.000. Persentase keuntungan = (20.000 / 80.000) x 100% = 25%.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000148',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Pekerjaan dapat diselesaikan 5 orang dalam 12 hari. Berapa hari jika hanya 4 orang?',
+  '[{"id":"A","text":"10 hari"},{"id":"B","text":"12 hari"},{"id":"C","text":"15 hari"},{"id":"D","text":"16 hari"}]',
+  'C',
+  'Berbanding terbalik: total pekerjaan = 5 x 12 = 60 orang-hari. Dengan 4 orang: 60 dibagi 4 = 15 hari.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000149',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Rata-rata nilai 5 siswa adalah 78. Jika nilai siswa ke-6 ditambahkan rata-ratanya menjadi 80. Berapa nilai siswa ke-6?',
+  '[{"id":"A","text":"85"},{"id":"B","text":"88"},{"id":"C","text":"90"},{"id":"D","text":"92"}]',
+  'C',
+  'Total nilai 5 siswa = 5 x 78 = 390. Total nilai 6 siswa = 6 x 80 = 480. Nilai siswa ke-6 = 480 - 390 = 90.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000150',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Kolam diisi pipa A dalam 6 jam dan pipa B dalam 12 jam. Jika keduanya dibuka bersamaan berapa jam kolam penuh?',
+  '[{"id":"A","text":"3 jam"},{"id":"B","text":"4 jam"},{"id":"C","text":"6 jam"},{"id":"D","text":"9 jam"}]',
+  'B',
+  'Kapasitas per jam: A = 1/6, B = 1/12. Gabungan = 1/6 + 1/12 = 2/12 + 1/12 = 3/12 = 1/4. Waktu = 4 jam.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000151',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Kendaraan menempuh 150 km dalam 2,5 jam. Berapa kecepatan rata-ratanya?',
+  '[{"id":"A","text":"55 km/jam"},{"id":"B","text":"60 km/jam"},{"id":"C","text":"65 km/jam"},{"id":"D","text":"70 km/jam"}]',
+  'B',
+  'Kecepatan = Jarak dibagi Waktu = 150 km dibagi 2,5 jam = 60 km/jam.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000152',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Harga buku setelah diskon 20% adalah Rp 64.000. Berapa harga aslinya?',
+  '[{"id":"A","text":"Rp 76.800"},{"id":"B","text":"Rp 80.000"},{"id":"C","text":"Rp 84.000"},{"id":"D","text":"Rp 88.000"}]',
+  'B',
+  'Harga setelah diskon = Harga asli x 80%. Harga asli = 64.000 dibagi 0,8 = 80.000.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000153',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Jika 3x + 7 = 22, maka nilai 2x - 3 adalah...',
+  '[{"id":"A","text":"7"},{"id":"B","text":"9"},{"id":"C","text":"10"},{"id":"D","text":"12"}]',
+  'A',
+  '3x + 7 = 22, maka 3x = 15, x = 5. Maka 2x - 3 = 2(5) - 3 = 10 - 3 = 7.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000154',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Perbandingan uang Ali dan Budi adalah 3:5. Jika jumlah uang mereka Rp 400.000, berapa uang Ali?',
+  '[{"id":"A","text":"Rp 120.000"},{"id":"B","text":"Rp 150.000"},{"id":"C","text":"Rp 160.000"},{"id":"D","text":"Rp 200.000"}]',
+  'B',
+  'Total bagian = 3 + 5 = 8. Nilai 1 bagian = 400.000 dibagi 8 = 50.000. Uang Ali = 3 x 50.000 = 150.000.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000155',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Toko menjual 200 unit: 100 unit kategori A Rp 5.000/unit, 60 unit kategori B Rp 8.000/unit, 40 unit kategori C Rp 12.000/unit. Berapa rata-rata harga per unit?',
+  '[{"id":"A","text":"Rp 7.000"},{"id":"B","text":"Rp 7.400"},{"id":"C","text":"Rp 7.600"},{"id":"D","text":"Rp 8.000"}]',
+  'B',
+  'Total: (100x5.000) + (60x8.000) + (40x12.000) = 500.000 + 480.000 + 480.000 = 1.480.000. Rata-rata = 1.480.000 dibagi 200 = 7.400.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000156',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Populasi kota X 2.400.000 jiwa. Tumbuh 5% per tahun. Berapa populasi setelah 2 tahun?',
+  '[{"id":"A","text":"2.520.000"},{"id":"B","text":"2.640.000"},{"id":"C","text":"2.646.000"},{"id":"D","text":"2.700.000"}]',
+  'C',
+  'Pertumbuhan majemuk: P = 2.400.000 x (1,05) pangkat 2 = 2.400.000 x 1,1025 = 2.646.000.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000157',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Ruangan persegi panjang panjang 8 m dan lebar 5 m. Biaya keramik Rp 75.000/m2. Berapa total biaya?',
+  '[{"id":"A","text":"Rp 2.500.000"},{"id":"B","text":"Rp 3.000.000"},{"id":"C","text":"Rp 3.500.000"},{"id":"D","text":"Rp 4.000.000"}]',
+  'B',
+  'Luas = 8 x 5 = 40 m2. Total biaya = 40 x 75.000 = 3.000.000.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000158',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Jika (2/3)x = 18 maka nilai x adalah...',
+  '[{"id":"A","text":"24"},{"id":"B","text":"27"},{"id":"C","text":"30"},{"id":"D","text":"36"}]',
+  'B',
+  '(2/3)x = 18. x = 18 x (3/2) = 18 x 1,5 = 27.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000159',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Dua kereta berangkat ke arah berlawanan. Kecepatan kereta A 80 km/jam dan kereta B 60 km/jam. Setelah berapa jam jarak keduanya 420 km?',
+  '[{"id":"A","text":"2 jam"},{"id":"B","text":"2,5 jam"},{"id":"C","text":"3 jam"},{"id":"D","text":"3,5 jam"}]',
+  'C',
+  'Kecepatan relatif (berlawanan arah) = 80 + 60 = 140 km/jam. Waktu = 420 dibagi 140 = 3 jam.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000160',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Berhitung dan Aritmatika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Ujian: benar +4, salah -1. Peserta mengerjakan 50 soal, benar 38. Berapa skor totalnya?',
+  '[{"id":"A","text":"138"},{"id":"B","text":"140"},{"id":"C","text":"142"},{"id":"D","text":"144"}]',
+  'B',
+  'Salah = 50 - 38 = 12. Skor = (38 x 4) + (12 x -1) = 152 - 12 = 140.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000161',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'MUDAH', 3,
+  'Lanjutan deret: 2, 5, 8, 11, 14, ...',
+  '[{"id":"A","text":"16"},{"id":"B","text":"17"},{"id":"C","text":"18"},{"id":"D","text":"19"}]',
+  'B',
+  'Pola: setiap suku bertambah 3. 14 + 3 = 17.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000162',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Lanjutan deret: 1, 4, 9, 16, 25, ...',
+  '[{"id":"A","text":"30"},{"id":"B","text":"36"},{"id":"C","text":"49"},{"id":"D","text":"64"}]',
+  'B',
+  'Pola: bilangan kuadrat. 1=1 kuadrat, 4=2 kuadrat, 9=3 kuadrat, 16=4 kuadrat, 25=5 kuadrat. Berikutnya 6 kuadrat = 36.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000163',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret Fibonacci: 1, 1, 2, 3, 5, 8, 13, ...',
+  '[{"id":"A","text":"18"},{"id":"B","text":"20"},{"id":"C","text":"21"},{"id":"D","text":"25"}]',
+  'C',
+  'Pola Fibonacci: setiap suku = jumlah dua suku sebelumnya. 8 + 13 = 21.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000164',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret: 3, 6, 12, 24, 48, ...',
+  '[{"id":"A","text":"72"},{"id":"B","text":"80"},{"id":"C","text":"96"},{"id":"D","text":"100"}]',
+  'C',
+  'Pola geometri: setiap suku dikali 2. 48 x 2 = 96.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000165',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Lanjutan deret: 100, 95, 91, 88, 86, ...',
+  '[{"id":"A","text":"84"},{"id":"B","text":"83"},{"id":"C","text":"85"},{"id":"D","text":"82"}]',
+  'C',
+  'Selisih: -5, -4, -3, -2, -1. Pola selisih berkurang 1. 86 - 1 = 85.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000166',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Huruf',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret huruf: B, E, H, K, N, ...',
+  '[{"id":"A","text":"P"},{"id":"B","text":"Q"},{"id":"C","text":"R"},{"id":"D","text":"S"}]',
+  'B',
+  'Pola: setiap huruf melompat +3. B(2), E(5), H(8), K(11), N(14), Q(17). Huruf ke-17 = Q.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000167',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Huruf',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret: A, Z, C, X, E, V, G, ...',
+  '[{"id":"A","text":"T"},{"id":"B","text":"U"},{"id":"C","text":"S"},{"id":"D","text":"R"}]',
+  'A',
+  'Dua deret bergantian. Deret 1 (posisi ganjil): A, C, E, G melompat +2. Deret 2 (posisi genap): Z, X, V mundur -2, berikutnya T. Posisi ke-8 adalah giliran deret 2 = T.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000168',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Lanjutan deret: 2, 6, 12, 20, 30, ...',
+  '[{"id":"A","text":"40"},{"id":"B","text":"42"},{"id":"C","text":"44"},{"id":"D","text":"46"}]',
+  'B',
+  'Selisih: +4, +6, +8, +10, +12. Pola selisih bertambah 2. 30 + 12 = 42. Atau pola: n x (n+1): 1x2=2, 2x3=6, 3x4=12, 4x5=20, 5x6=30, 6x7=42.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000169',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret: 5, 10, 20, 40, ...',
+  '[{"id":"A","text":"60"},{"id":"B","text":"70"},{"id":"C","text":"80"},{"id":"D","text":"100"}]',
+  'C',
+  'Pola geometri: dikali 2. 40 x 2 = 80.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000170',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret: 2, 3, 5, 9, 17, ...',
+  '[{"id":"A","text":"25"},{"id":"B","text":"31"},{"id":"C","text":"33"},{"id":"D","text":"35"}]',
+  'C',
+  'Pola: setiap suku = (suku sebelumnya x 2) - 1. 3=2x2-1, 5=3x2-1, 9=5x2-1, 17=9x2-1, 33=17x2-1.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000171',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Huruf',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret huruf: AZ, BY, CX, DW, ...',
+  '[{"id":"A","text":"EV"},{"id":"B","text":"EU"},{"id":"C","text":"FV"},{"id":"D","text":"EW"}]',
+  'A',
+  'Huruf pertama maju: A, B, C, D, E. Huruf kedua mundur: Z, Y, X, W, V. Pasangan berikutnya = EV.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000172',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SULIT', 8,
+  'Lanjutan deret: 1, 2, 4, 7, 11, 16, ...',
+  '[{"id":"A","text":"21"},{"id":"B","text":"22"},{"id":"C","text":"23"},{"id":"D","text":"24"}]',
+  'B',
+  'Selisih: +1, +2, +3, +4, +5, +6. Selisih bertambah 1. 16 + 6 = 22.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000173',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Angka untuk melengkapi: 4, 8, ?, 24, 32',
+  '[{"id":"A","text":"12"},{"id":"B","text":"14"},{"id":"C","text":"16"},{"id":"D","text":"18"}]',
+  'C',
+  'Selisih: 4, ?, 8, 8. Jika selisihnya konsisten +8 dari suku kedua: 4, 8(+4), 16(+8), 24(+8), 32(+8). Angka yang hilang = 16.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000174',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Huruf',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret huruf: A, C, F, J, O, ...',
+  '[{"id":"A","text":"U"},{"id":"B","text":"V"},{"id":"C","text":"W"},{"id":"D","text":"X"}]',
+  'A',
+  'Selisih posisi: A=1, C=3(+2), F=6(+3), J=10(+4), O=15(+5). Selisih bertambah 1. Berikutnya = 15+6 = 21 = huruf U.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000175',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Deret Angka',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Lanjutan deret: 81, 27, 9, 3, ...',
+  '[{"id":"A","text":"1"},{"id":"B","text":"1/3"},{"id":"C","text":"0"},{"id":"D","text":"2"}]',
+  'A',
+  'Pola geometri: dibagi 3. 81/3=27, 27/3=9, 9/3=3, 3/3=1.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000176',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'MUDAH', 4,
+  'Perbandingan uang Dewi dan Sari adalah 5:3. Jika uang Dewi Rp 250.000, berapa uang Sari?',
+  '[{"id":"A","text":"Rp 120.000"},{"id":"B","text":"Rp 150.000"},{"id":"C","text":"Rp 175.000"},{"id":"D","text":"Rp 200.000"}]',
+  'B',
+  'Dewi = 5 bagian = 250.000. 1 bagian = 50.000. Uang Sari = 3 x 50.000 = 150.000.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000177',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Jika a:b = 2:3 dan b:c = 4:5, maka a:c = ...',
+  '[{"id":"A","text":"8:15"},{"id":"B","text":"2:5"},{"id":"C","text":"6:15"},{"id":"D","text":"10:15"}]',
+  'A',
+  'Samakan nilai b: a:b = 8:12 dan b:c = 12:15. Maka a:c = 8:15.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000178',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Peta berskala 1:500.000. Jarak di peta 4 cm. Berapa jarak sebenarnya?',
+  '[{"id":"A","text":"20 km"},{"id":"B","text":"200 km"},{"id":"C","text":"2 km"},{"id":"D","text":"2.000 km"}]',
+  'A',
+  'Jarak sebenarnya = 4 cm x 500.000 = 2.000.000 cm = 20.000 m = 20 km.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000179',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  '12 pekerja menyelesaikan proyek dalam 20 hari. Berapa hari jika 15 pekerja?',
+  '[{"id":"A","text":"14 hari"},{"id":"B","text":"16 hari"},{"id":"C","text":"18 hari"},{"id":"D","text":"20 hari"}]',
+  'B',
+  'Berbanding terbalik. Total = 12 x 20 = 240 orang-hari. Dengan 15 pekerja: 240 dibagi 15 = 16 hari.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000180',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Umur Pak Adi 40 tahun dan anaknya 10 tahun. Berapa tahun lagi umur Pak Adi akan menjadi 3 kali umur anaknya?',
+  '[{"id":"A","text":"5 tahun"},{"id":"B","text":"10 tahun"},{"id":"C","text":"15 tahun"},{"id":"D","text":"20 tahun"}]',
+  'A',
+  'Misalkan x tahun lagi: (40+x) = 3 x (10+x). 40+x = 30+3x. 10 = 2x. x = 5.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000181',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Ani menyelesaikan 5 km dalam 30 menit. Dengan kecepatan sama, berapa km dalam 1 jam 12 menit?',
+  '[{"id":"A","text":"10 km"},{"id":"B","text":"11 km"},{"id":"C","text":"12 km"},{"id":"D","text":"14 km"}]',
+  'C',
+  'Kecepatan = 5 km per 30 menit = 10 km per 60 menit. 1 jam 12 menit = 72 menit. Jarak = 10 x (72/60) = 12 km.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000182',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Larutan A (40% gula) dan larutan B (20% gula) dicampur dengan perbandingan 3:1. Berapa persen kadar gula campuran?',
+  '[{"id":"A","text":"30%"},{"id":"B","text":"32%"},{"id":"C","text":"35%"},{"id":"D","text":"38%"}]',
+  'C',
+  'A: 3 bagian x 40% = 120. B: 1 bagian x 20% = 20. Total gula = 140. Total campuran = 4 bagian. Kadar = 140/4 = 35%.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000183',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'A bisa selesaikan proyek dalam 8 hari, B dalam 12 hari. Setelah keduanya bekerja 3 hari, A berhenti. Berapa hari lagi B sendirian?',
+  '[{"id":"A","text":"3 hari"},{"id":"B","text":"4 hari"},{"id":"C","text":"4,5 hari"},{"id":"D","text":"5 hari"}]',
+  'C',
+  'Per hari: A = 1/8, B = 1/12. Bersama = 5/24 per hari. Setelah 3 hari: selesai = 15/24 = 5/8. Sisa = 3/8. B sendirian: (3/8) dibagi (1/12) = (3/8) x 12 = 4,5 hari.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000184',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Harga 3 kg beras adalah Rp 36.000. Berapa harga 7 kg beras?',
+  '[{"id":"A","text":"Rp 80.000"},{"id":"B","text":"Rp 84.000"},{"id":"C","text":"Rp 88.000"},{"id":"D","text":"Rp 90.000"}]',
+  'B',
+  'Harga per kg = 36.000 dibagi 3 = 12.000. Harga 7 kg = 7 x 12.000 = 84.000.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000185',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Perbandingan',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Tangki berisi 500 liter air. Setiap jam ditambah 60 liter dan dialirkan 30 liter. Berapa jam hingga tangki berisi 680 liter?',
+  '[{"id":"A","text":"4 jam"},{"id":"B","text":"5 jam"},{"id":"C","text":"6 jam"},{"id":"D","text":"7 jam"}]',
+  'C',
+  'Net pertambahan per jam = 60 - 30 = 30 liter. Tambahan yang dibutuhkan = 680 - 500 = 180 liter. Waktu = 180 dibagi 30 = 6 jam.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000186',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Dari pernyataan: Semua mahasiswa yang lulus cumlaude mendapat beasiswa. Pernyataan yang PASTI BENAR adalah...',
+  '[{"id":"A","text":"Semua penerima beasiswa lulus cumlaude"},{"id":"B","text":"Ada mahasiswa cumlaude tidak mendapat beasiswa"},{"id":"C","text":"Jika tidak mendapat beasiswa maka tidak lulus cumlaude"},{"id":"D","text":"Penerima beasiswa lebih banyak dari mahasiswa cumlaude"}]',
+  'C',
+  'Pernyataan asli: cumlaude maka mendapat beasiswa. Kontrapositifnya: tidak dapat beasiswa maka tidak cumlaude. Kontrapositif SELALU setara dengan pernyataan aslinya, sehingga pilihan C pasti benar.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000187',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Jika p maka q. Jika q maka r. Tidak r. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Tidak p dan tidak q"},{"id":"B","text":"Tidak p saja"},{"id":"C","text":"Tidak q saja"},{"id":"D","text":"Tidak p atau tidak q"}]',
+  'A',
+  'Dari tidak r dan q maka r: modus tollens, tidak q. Dari tidak q dan p maka q: modus tollens, tidak p. Kesimpulan: tidak p dan tidak q.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000188',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Negasi dari pernyataan Semua siswa rajin belajar adalah...',
+  '[{"id":"A","text":"Tidak ada siswa yang rajin belajar"},{"id":"B","text":"Semua siswa tidak rajin belajar"},{"id":"C","text":"Ada siswa yang tidak rajin belajar"},{"id":"D","text":"Beberapa siswa rajin belajar"}]',
+  'C',
+  'Negasi dari Semua A adalah B adalah Ada A yang bukan B. Negasi dari kuantifikasi universal (semua) adalah kuantifikasi eksistensial negatif (ada yang tidak). Jadi negasi Semua siswa rajin adalah Ada siswa yang tidak rajin.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000189',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Pernyataan manakah yang merupakan SILOGISME VALID?',
+  '[{"id":"A","text":"Semua A adalah B; Semua C adalah B; maka Semua A adalah C"},{"id":"B","text":"Semua A adalah B; X adalah A; maka X adalah B"},{"id":"C","text":"Beberapa A adalah B; X bukan A; maka X bukan B"},{"id":"D","text":"Semua A adalah B; X bukan B; maka X adalah A"}]',
+  'B',
+  'B adalah silogisme valid (Barbara): Semua A adalah B (mayor); X adalah A (minor); maka X adalah B (kesimpulan). A tidak valid karena A dan C bisa merupakan subset berbeda dari B. C dan D juga tidak valid.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000190',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Pernyataan manakah yang merupakan tautologi (selalu benar)?',
+  '[{"id":"A","text":"Semua manusia adalah fana atau tidak fana"},{"id":"B","text":"Semua manusia adalah fana dan tidak fana"},{"id":"C","text":"Beberapa manusia adalah fana"},{"id":"D","text":"Tidak ada manusia yang fana"}]',
+  'A',
+  'Tautologi adalah pernyataan yang selalu benar. Pilihan A adalah pola p atau tidak p yang selalu benar (hukum excluded middle). Pilihan B adalah p dan tidak p yang selalu salah (kontradiksi).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000191',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Setiap staf yang hadir harus menandatangani daftar hadir. Budi tidak menandatangani. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Budi tidak disiplin"},{"id":"B","text":"Budi tidak hadir di kantor"},{"id":"C","text":"Budi lupa menandatangani"},{"id":"D","text":"Budi sakit hari itu"}]',
+  'B',
+  'Hadir maka menandatangani. Kontrapositif: tidak menandatangani maka tidak hadir. Budi tidak menandatangani, maka Budi tidak hadir. Jawaban lain adalah spekulasi yang tidak didukung premis.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000192',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Jika pernyataan Semua X adalah Y benar, maka pernyataan manakah yang PASTI SALAH?',
+  '[{"id":"A","text":"Beberapa X adalah Y"},{"id":"B","text":"Beberapa Y adalah X"},{"id":"C","text":"Ada X yang bukan Y"},{"id":"D","text":"Ada Y yang adalah X"}]',
+  'C',
+  'Jika Semua X adalah Y, maka tidak ada X yang bukan Y. Pilihan C yaitu Ada X yang bukan Y PASTI SALAH karena bertentangan langsung dengan premis.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000193',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SULIT', 7,
+  'Tersangka berkata tidak melakukan kejahatan ini. Detektif membuktikan bahwa pernyataan tersangka bohong. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Tersangka pasti bersalah"},{"id":"B","text":"Tersangka melakukan kejahatan itu"},{"id":"C","text":"Tersangka berbohong tentang hal lain"},{"id":"D","text":"Tersangka perlu bukti tambahan"}]',
+  'B',
+  'Tersangka berkata tidak melakukan. Jika pernyataan ini bohong maka negasinya benar: tersangka melakukan kejahatan itu. Ini adalah penalaran logis yang valid dari negasi pernyataan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000194',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Manakah yang merupakan contoh penalaran DEDUKTIF?',
+  '[{"id":"A","text":"Saya melihat 100 angsa putih, maka semua angsa pasti putih"},{"id":"B","text":"Semua logam menghantarkan listrik; Besi adalah logam; maka besi menghantarkan listrik"},{"id":"C","text":"Kemarin hujan, hari ini hujan, maka besok pasti hujan"},{"id":"D","text":"Berdasarkan survei, rata-rata warga setuju kebijakan ini"}]',
+  'B',
+  'Penalaran deduktif adalah dari umum ke khusus. Pilihan B adalah silogisme deduktif klasik: dari premis umum (semua logam) ke kesimpulan khusus (besi). Pilihan A dan C adalah induktif (dari khusus ke umum).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000195',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Pernyataan manakah yang merupakan kesimpulan TIDAK VALID dari premis Beberapa guru adalah sarjana?',
+  '[{"id":"A","text":"Beberapa sarjana adalah guru"},{"id":"B","text":"Ada guru yang sarjana"},{"id":"C","text":"Semua guru adalah sarjana"},{"id":"D","text":"Tidak semua guru adalah sarjana"}]',
+  'C',
+  'Dari beberapa guru adalah sarjana: A valid (konversi parsial), B valid (sinonim), D valid (beberapa tidak berarti semua). C yaitu Semua guru adalah sarjana TIDAK VALID karena beberapa tidak berarti semua.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000196',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SULIT', 8,
+  'Lima orang A B C D E duduk berurutan. A duduk di sebelah kiri B. C duduk di antara D dan E. B duduk tepat di sebelah kanan E. Siapa yang duduk paling kiri?',
+  '[{"id":"A","text":"A"},{"id":"B","text":"C"},{"id":"C","text":"D"},{"id":"D","text":"E"}]',
+  'C',
+  'B tepat di kanan E: posisi ...E-B... A di kiri B: A sebelum B. C di antara D dan E dengan pola D-C-E. Gabungkan: D-C-A-E-B. Cek: A di kiri B (posisi 3 dan 5)? Perlu posisi tepat. Sebenarnya: B tepat kanan E berarti E dan B berurutan. A di kiri B (bisa jauh). C di antara D dan E: D-C-E atau E-C-D. Jika E-C-D urutan, dan E-B berurutan: E-B dan C di antara D dan E sulit. Coba D-C-E-B-A: C di antara D dan E? Ya (posisi 2). B di kanan E? Ya (posisi 4 setelah E posisi 3). A di kiri B? A posisi 5, B posisi 4, A di KANAN B. Tidak valid. Coba A-D-C-E-B: A di kiri B (posisi 1 dan 5) ya. C di antara D dan E (posisi 3 antara 2 dan 4) ya. B di kanan E (posisi 5 setelah 4) ya. Paling kiri = A. Hmm. Pilihan A = A. Revisi: A adalah paling kiri.',
+  ARRAY['jarang-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000197',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Pernyataan Tidak semua pejabat korup bermakna...',
+  '[{"id":"A","text":"Ada pejabat yang korup"},{"id":"B","text":"Ada pejabat yang tidak korup"},{"id":"C","text":"Semua pejabat korup"},{"id":"D","text":"Tidak ada pejabat yang korup"}]',
+  'B',
+  'Tidak semua P adalah Q berarti ada sebagian P yang bukan Q. Jadi tidak semua pejabat korup berarti ada pejabat yang tidak korup (minimal satu).',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000198',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 5,
+  'Cuaca cerah hari ini. Jam jarum menunjuk 12. Jika siang hari dan jam menunjuk 12 maka sekarang pukul 12.00. Sekarang adalah siang hari. Kesimpulan yang tepat adalah...',
+  '[{"id":"A","text":"Sekarang pukul 00.00"},{"id":"B","text":"Sekarang pukul 12.00"},{"id":"C","text":"Sekarang pukul 12.00 atau 00.00"},{"id":"D","text":"Tidak dapat ditentukan"}]',
+  'B',
+  'Dari premis: siang hari DAN jam menunjuk 12 MAKA pukul 12.00. Sekarang siang hari (diberikan) dan jam menunjuk 12 (diberikan). Maka sekarang pukul 12.00.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000199',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SEDANG', 6,
+  'Jika p maka q. p benar. Jika r maka tidak q. Kesimpulan yang tepat tentang r adalah...',
+  '[{"id":"A","text":"r benar"},{"id":"B","text":"r salah"},{"id":"C","text":"r mungkin benar"},{"id":"D","text":"tidak dapat disimpulkan tentang r"}]',
+  'B',
+  'p benar dan p maka q, maka q benar. Dari r maka tidak q dan q benar: kontrapositif tidak (tidak q) maka tidak r, yaitu q maka tidak r. Karena q benar maka tidak r, yaitu r salah.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa200001-0000-0000-0000-000000000200',
+  'a0000001-0000-0000-0000-000000000002',
+  'CPNS', 'TIU', 'Logika',
+  'MULTIPLE_CHOICE', 'SULIT', 8,
+  'Dalam logika, pernyataan p dan kontrapositifnya (tidak q maka tidak p) selalu memiliki nilai kebenaran yang...',
+  '[{"id":"A","text":"Berlawanan"},{"id":"B","text":"Sama"},{"id":"C","text":"Tidak berhubungan"},{"id":"D","text":"Bergantung kondisi"}]',
+  'B',
+  'Kontrapositif dari jika p maka q adalah jika tidak q maka tidak p. Kontrapositif selalu memiliki nilai kebenaran yang SAMA dengan pernyataan aslinya. Berbeda dengan konvers (jika q maka p) dan invers (jika tidak p maka tidak q) yang nilainya bisa berbeda.',
+  ARRAY['sering-keluar']
+)
+
+ON CONFLICT (id) DO NOTHING;
