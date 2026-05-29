@@ -1115,7 +1115,7 @@ VALUES
   'Keadaan yang sering terjadi dalam pekerjaan kelompok adalah...',
   '[{"id":"A","text":"Semua anggota terlibat aktif dan berkontribusi merata"},{"id":"B","text":"Tidak semua orang mau mengerjakan bagian tugasnya"},{"id":"C","text":"Akhirnya saya yang harus membereskan semua pekerjaan"},{"id":"D","text":"Saling menunggu siapa yang akan memulai"},{"id":"E","text":"Pekerjaan akan selesai jika ada yang mengambil inisiatif memulai"}]',
   'E',
-  '{"A":5,"B":2,"C":3,"D":2,"E":4}',
+  '{"A":4,"B":2,"C":3,"D":2,"E":5}',
   'Opsi A adalah kondisi ideal (semua aktif berkontribusi). Namun karena ini menggambarkan apa yang "sering terjadi," opsi E lebih realistis sekaligus positif: menunjukkan kesadaran bahwa kepemimpinan dan inisiatif adalah kunci kelompok bergerak. Ini mencerminkan nilai Kolaboratif dan kesadaran untuk menjadi inisiator. Akhirnya saya sendiri yang beresin (C) bisa menunjukkan rasa tanggung jawab tinggi. Saling menunggu (D) adalah kondisi yang kontraproduktif.',
   ARRAY['sering-keluar']
 ),
@@ -1277,6 +1277,1229 @@ VALUES
   'E',
   '{"A":1,"B":2,"C":3,"D":2,"E":5}',
   'Opsi E adalah yang paling tepat: menjaga kerahasiaan informasi dan menggunakannya hanya sesuai tujuan yang dimaksud atasan. Ini mencerminkan nilai Akuntabel (bertanggung jawab atas kepercayaan) dan Loyal (menjaga rahasia instansi). Menyimpan untuk diri sendiri (C) sudah baik namun opsi E lebih eksplisit tentang penggunaan yang tepat. Memberitahu siapapun (A, B, D) melanggar kepercayaan dan bisa melanggar aturan kerahasiaan data.',
+  ARRAY['sering-keluar']
+)
+
+ON CONFLICT (id) DO NOTHING;
+-- ============================================================
+-- TKP 101-178 (lanjutan: Pelayanan Publik, Profesionalisme, Anti Radikalisme,
+--               Jejaring Kerja, Sosial Budaya, Teknologi Informasi)
+-- ============================================================
+
+INSERT INTO public.questions
+  (id, pack_id, exam_type, subject, subtopic, question_type, difficulty, difficulty_rank,
+   question_text, options, correct_option, tkp_scores, explanation_text, tags)
+VALUES
+
+(
+  'aa300001-0000-0000-0000-000000000101',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Seorang warga lansia kesulitan mengisi formulir KTP elektronik karena tidak bisa membaca dengan jelas. Anda sedang sibuk melayani antrean. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Memintanya kembali besok membawa anggota keluarga"},{"id":"B","text":"Memberikan formulir kosong dan memintanya menunggu"},{"id":"C","text":"Membantu mengisikan formulir sambil menjelaskan setiap bagian"},{"id":"D","text":"Mengarahkan ke petugas lain yang lebih luang"},{"id":"E","text":"Meminta warga lain di sekitarnya untuk membantu"}]',
+  'C',
+  '{"A":2,"B":1,"C":5,"D":3,"E":2}',
+  'Opsi C terbaik karena mencerminkan nilai Berorientasi Pelayanan — membantu langsung kelompok rentan tanpa diskriminasi. Mengarahkan ke petugas lain (D) cukup baik namun menunda. Meminta kembali besok (A) kurang empati. Membiarkan warga lain membantu (E) melepas tanggung jawab petugas.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000102',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Antrean panjang dan sistem nomor antrean bermasalah. Beberapa warga mulai mengeluh. Sebagai petugas, apa yang Anda lakukan?',
+  '[{"id":"A","text":"Melanjutkan pekerjaan seperti biasa dan meminta warga bersabar"},{"id":"B","text":"Memberitahu atasan dan mengusulkan solusi sementara seperti antrean manual"},{"id":"C","text":"Menutup loket sampai sistem diperbaiki teknisi"},{"id":"D","text":"Meminta semua warga pulang dan kembali esok hari"},{"id":"E","text":"Melayani tanpa sistem antrean secara bebas siapa cepat dia dapat"}]',
+  'B',
+  '{"A":2,"B":5,"C":1,"D":1,"E":3}',
+  'Opsi B terbaik: proaktif melapor ke atasan sekaligus mengusulkan solusi antrean manual — menunjukkan Kompeten dan Berorientasi Pelayanan. Melanjutkan seperti biasa (A) tidak menyelesaikan masalah. Menutup loket (C) dan menyuruh pulang (D) merugikan warga. Tanpa sistem antrean (E) menimbulkan kekacauan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000103',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Warga komplain bahwa pelayanan buruk dan mengancam melapor ke media sosial. Sebagian keluhan memang beralasan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membalas defensif bahwa pelayanan sudah sesuai prosedur"},{"id":"B","text":"Meminta warga tidak menyebarkan ke media sosial"},{"id":"C","text":"Mendengarkan, mengakui kekurangan, dan berjanji memperbaiki"},{"id":"D","text":"Mengabaikan ancaman tersebut"},{"id":"E","text":"Mendengarkan, mencatat poin perbaikan, dan melaporkan ke atasan untuk tindak lanjut sistemik"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: mendengarkan + mencatat + melaporkan ke atasan untuk perbaikan sistemik — Berorientasi Pelayanan + Akuntabel. Opsi C juga baik (skor 4) namun tanpa langkah sistemik. Bersikap defensif (A) atau mencegah pelaporan (B) bertentangan dengan transparansi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000104',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Prosedur di unit Anda memakan 3 hari kerja, padahal di instansi serupa hanya 1 hari. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan prosedur berjalan karena sudah menjadi aturan"},{"id":"B","text":"Membicarakan dengan rekan untuk mencari solusi informal"},{"id":"C","text":"Menganalisis tahapan dan mengusulkan penyederhanaan kepada atasan dengan data perbandingan"},{"id":"D","text":"Langsung mempercepat proses tanpa izin atasan"},{"id":"E","text":"Melaporkan ke Ombudsman bahwa prosedur terlalu lama"}]',
+  'C',
+  '{"A":2,"B":3,"C":5,"D":2,"E":1}',
+  'Opsi C terbaik: analisis sistematis + usul perbaikan melalui jalur formal dengan data — Kompeten + Berorientasi Pelayanan. Diskusi informal (B) bagus sebagai langkah awal. Mengubah prosedur sendiri (D) melanggar hirarki. Melapor ke Ombudsman (E) melewati jalur internal.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000105',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Warga meminta Anda mengecualikan syarat tertentu karena kondisi khusus yang tidak diatur dalam SOP. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Langsung menolak karena tidak sesuai SOP"},{"id":"B","text":"Mengabulkan diam-diam untuk membantu warga"},{"id":"C","text":"Mendengarkan situasi warga dan mengarahkan ke mekanisme pengajuan keberatan jika ada"},{"id":"D","text":"Menyuruh warga melengkapi semua syarat tanpa penjelasan"},{"id":"E","text":"Berkonsultasi dengan atasan atau bagian hukum mengenai kebijaksanaan untuk kondisi khusus ini"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: berkonsultasi untuk mencari solusi sah bagi kondisi khusus — Adaptif + Loyal. Menjelaskan dan mengarahkan ke mekanisme keberatan (C) juga tepat (skor 4). Mengabulkan diam-diam (B) berisiko melanggar aturan. Menolak tanpa solusi (A, D) kurang berorientasi pelayanan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000106',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Saat jam pelayanan hampir habis (14.45, tutup 15.00), seorang warga datang dengan keperluan yang membutuhkan minimal 30 menit. Anda harus hadir rapat pukul 15.30. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak dan meminta warga datang besok pagi"},{"id":"B","text":"Melayani penuh meski terlambat ke rapat"},{"id":"C","text":"Melayani semaksimal mungkin dalam sisa waktu lalu koordinasi dengan rekan untuk melanjutkan"},{"id":"D","text":"Meminta rekan piket mengambil alih pelayanan"},{"id":"E","text":"Meminta warga menunggu sampai rapat selesai baru dilayani"}]',
+  'C',
+  '{"A":1,"B":3,"C":5,"D":4,"E":2}',
+  'Opsi C terbaik: melayani semaksimal mungkin sambil mengatur transisi ke rekan — keseimbangan antara pelayanan dan tanggung jawab internal. Melimpahkan ke rekan (D) juga baik jika rekan bersedia. Menolak (A) tidak berorientasi pelayanan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000107',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Anda diminta mengisi survei kepuasan pelayanan internal. Ada beberapa hal yang perlu diperbaiki namun atasan tidak suka dikritik. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengisi positif semua agar tidak ada masalah"},{"id":"B","text":"Mengisi jujur sesuai pengalaman nyata termasuk hal yang perlu diperbaiki"},{"id":"C","text":"Mengisi sebagian jujur dengan kata-kata yang tidak menyudutkan atasan"},{"id":"D","text":"Tidak mengisi untuk menghindari konflik"},{"id":"E","text":"Mengisi jujur dan menyertakan saran konstruktif untuk setiap kritik"}]',
+  'E',
+  '{"A":1,"B":4,"C":3,"D":1,"E":5}',
+  'Opsi E terbaik: jujur + saran konstruktif — Akuntabel + Harmonis. Jujur saja (B) sudah baik (skor 4) namun tanpa solusi. Mengisi positif semua (A) adalah ketidakjujuran. Tidak mengisi (D) menghindari tanggung jawab.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000108',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Warga dari luar daerah tidak bisa mengurus dokumen di kantor Anda karena aturan domisili. Ia sudah jauh-jauh datang dan sangat kecewa. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menjelaskan aturan dan memintanya mengurus di kantor sesuai domisili tanpa informasi tambahan"},{"id":"B","text":"Mengecualikan aturan karena kasihan"},{"id":"C","text":"Menjelaskan aturan, memberi informasi kontak kantor berwenang, dan menyarankan layanan online jika ada"},{"id":"D","text":"Meminta menghubungi kantor pusat untuk dispensasi"},{"id":"E","text":"Memberi tahu tidak ada yang bisa dilakukan"}]',
+  'C',
+  '{"A":2,"B":1,"C":5,"D":3,"E":1}',
+  'Opsi C terbaik: menjelaskan aturan sekaligus memberikan informasi praktis alternatif — Berorientasi Pelayanan yang proaktif. Mengarahkan ke kantor pusat (D) bisa membantu tapi kurang spesifik. Mengecualikan aturan (B) melanggar ketentuan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000109',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Anda mendengar percakapan warga yang menyebut ada oknum petugas meminta uang tambahan agar berkas cepat diproses. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Pura-pura tidak mendengar karena bukan urusan Anda"},{"id":"B","text":"Menegur oknum tersebut secara langsung di tempat"},{"id":"C","text":"Melaporkan ke atasan atau unit pengawas internal"},{"id":"D","text":"Memberitahu warga bahwa hal itu tidak seharusnya terjadi dan anjurkan mereka melapor"},{"id":"E","text":"Melaporkan ke atasan dan menginformasikan warga tentang mekanisme pengaduan resmi"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: dua langkah — melapor ke pengawas internal AND menginformasikan warga tentang mekanisme pengaduan. Hanya melapor ke atasan (C) sudah baik (skor 4) namun tidak memberdayakan warga. Pura-pura tidak tahu (A) adalah pembiaran korupsi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000110',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Rekan kerja mengajak mengobrol hal tidak berkaitan pekerjaan saat Anda sedang melayani warga. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Ikut mengobrol agar tidak dianggap tidak solidar"},{"id":"B","text":"Meminta rekan diajak bicara setelah selesai melayani warga"},{"id":"C","text":"Mengabaikan rekan dan fokus melayani warga"},{"id":"D","text":"Melayani warga sambil sesekali menjawab ajakan rekan"},{"id":"E","text":"Dengan sopan menjelaskan sedang melayani warga dan akan merespons setelah selesai"}]',
+  'E',
+  '{"A":1,"B":3,"C":3,"D":2,"E":5}',
+  'Opsi E terbaik: menolak dengan sopan tanpa memutus hubungan dengan rekan — Profesionalisme + Harmonis. Fokus pada warga saja (C) efektif tapi kurang harmonis. Ikut mengobrol (A) mengorbankan kualitas pelayanan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000111',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Warga meminta Anda melayani di luar jam kantor karena alasan pekerjaan. Hal ini tidak dilarang namun juga tidak ada aturan yang membolehkan secara eksplisit. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Langsung menyetujui permintaan warga"},{"id":"B","text":"Menolak karena tidak ada aturan yang membolehkan"},{"id":"C","text":"Berkonsultasi dengan atasan untuk mendapat kejelasan sebelum memutuskan"},{"id":"D","text":"Meminta warga mengajukan surat permohonan resmi"},{"id":"E","text":"Menyarankan warga untuk memanfaatkan layanan online yang tersedia 24 jam"}]',
+  'C',
+  '{"A":3,"B":2,"C":5,"D":3,"E":4}',
+  'Opsi C terbaik: berkonsultasi dengan atasan sebelum memutuskan hal yang tidak diatur jelas — mencerminkan Akuntabel + Loyal. Menyarankan layanan online (E) juga solusi praktis (skor 4). Langsung setuju (A) tanpa izin atasan berisiko. Menolak tanpa alternatif (B) tidak berorientasi pelayanan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000112',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Anda mendapati bahwa informasi di papan pengumuman kantor sudah kadaluarsa dan menyebabkan warga datang dengan persyaratan yang salah. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan karena bukan tanggung jawab Anda"},{"id":"B","text":"Memperbarui informasi sendiri jika memungkinkan"},{"id":"C","text":"Melaporkan ke bagian yang bertanggung jawab dan meminta segera diperbarui"},{"id":"D","text":"Memperbarui informasi yang bisa diakses dan melaporkan sisanya ke bagian terkait"},{"id":"E","text":"Hanya memperbarui bagian yang paling banyak ditanyakan warga"}]',
+  'D',
+  '{"A":1,"B":3,"C":4,"D":5,"E":3}',
+  'Opsi D terbaik: tindakan langsung untuk bagian yang bisa dilakukan PLUS laporan ke bagian terkait untuk bagian lainnya — inisiatif + koordinasi. Melaporkan saja (C) sudah baik (skor 4) namun tidak ada tindakan langsung. Membiarkan (A) merugikan warga.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000113',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Seorang warga penyandang disabilitas datang ke kantor Anda namun fasilitas aksesibilitas tidak memadai. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Meminta warga datang dengan pendamping kali lain"},{"id":"B","text":"Meminta maaf dan mengatakan tidak bisa membantu"},{"id":"C","text":"Keluar dari loket untuk membantu warga secara langsung"},{"id":"D","text":"Membantu warga masuk ke kantor dan melayani keperluannya"},{"id":"E","text":"Membantu warga, melayani keperluannya, dan melaporkan ke atasan tentang perlunya perbaikan fasilitas aksesibilitas"}]',
+  'E',
+  '{"A":2,"B":1,"C":3,"D":4,"E":5}',
+  'Opsi E terbaik: melayani langsung + melaporkan untuk perbaikan sistemik fasilitas — Berorientasi Pelayanan + Kompeten. Membantu tanpa pelaporan (D) sudah baik (skor 4) namun melewatkan perbaikan jangka panjang. Meminta datang dengan pendamping (A) tidak responsif terhadap kebutuhan saat ini.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000114',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Warga mengajukan permintaan yang sebenarnya bisa dipenuhi dengan dokumen yang berbeda dari yang diminta, tetapi warga tidak tahu. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Memberitahu warga bahwa dokumennya salah dan memintanya kembali"},{"id":"B","text":"Menerima dokumen warga dan memproses seadanya"},{"id":"C","text":"Memberitahu warga dokumen alternatif yang lebih sesuai dan membantu prosesnya"},{"id":"D","text":"Melimpahkan ke bagian lain yang lebih tahu"},{"id":"E","text":"Menginformasikan kepada semua warga yang mengantre tentang alternatif dokumen ini"}]',
+  'C',
+  '{"A":2,"B":2,"C":5,"D":3,"E":3}',
+  'Opsi C terbaik: memberitahu alternatif yang lebih tepat dan membantu prosesnya — Berorientasi Pelayanan proaktif. Melimpahkan ke bagian lain (D) kurang inisiatif. Memberitahu semua warga dalam antrean (E) bisa membantu tapi harus dipastikan relevan bagi mereka.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000115',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Jam kantor baru mulai namun tiba-tiba mati listrik. Banyak warga sudah mengantre dan sistem digital tidak bisa digunakan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menunggu listrik pulih sambil meminta warga bersabar"},{"id":"B","text":"Menyuruh semua warga pulang dan kembali besok"},{"id":"C","text":"Berkoordinasi dengan rekan dan atasan untuk melayani secara manual selama listrik padam"},{"id":"D","text":"Segera melaporkan ke PLN dan menunggu kepastian"},{"id":"E","text":"Mengumumkan kepada warga situasi dan estimasi solusi sambil mulai layanan manual"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: komunikasi transparan kepada warga PLUS memulai layanan manual — menunjukkan Adaptif + Berorientasi Pelayanan. Berkoordinasi internal saja (C) juga baik (skor 4) namun warga tidak mendapat informasi. Menyuruh pulang (B) pilihan terburuk.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000116',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Warga meminta percepatan proses dokumen karena alasan kemanusiaan yang mendesak (misalnya untuk keperluan medis darurat). Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Memproses sesuai antrean karena semua warga sama pentingnya"},{"id":"B","text":"Langsung memproses tanpa izin agar warga cepat dibantu"},{"id":"C","text":"Mendengarkan situasi warga, memverifikasi urgensinya, dan melaporkan ke atasan untuk kemungkinan percepatan prosedural"},{"id":"D","text":"Meminta warga mengajukan surat permohonan formal percepatan"},{"id":"E","text":"Menolak karena tidak ada prosedur untuk hal tersebut"}]',
+  'C',
+  '{"A":2,"B":2,"C":5,"D":3,"E":1}',
+  'Opsi C terbaik: verifikasi urgensi + laporkan ke atasan untuk kemungkinan prosedural — menunjukkan empati sekaligus kepatuhan prosedur. Langsung proses tanpa izin (B) melanggar prosedur. Menolak tanpa solusi (E) tidak berorientasi pelayanan di kondisi darurat.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000117',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Setelah Anda melayani warga, ia memberikan ucapan terima kasih yang tulus beserta sebuah amplop. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menerima amplop karena dianggap sebagai tanda terima kasih yang wajar"},{"id":"B","text":"Menerima amplop dan melaporkannya kepada atasan"},{"id":"C","text":"Menolak amplop dengan sopan dan menjelaskan bahwa pelayanan adalah tugas Anda"},{"id":"D","text":"Menolak amplop dan meminta warga tidak perlu berterima kasih"},{"id":"E","text":"Menerima amplop namun menyumbangkannya ke kotak amal kantor"}]',
+  'C',
+  '{"A":1,"B":2,"C":5,"D":4,"E":2}',
+  'Opsi C terbaik: menolak dengan sopan sambil menjelaskan — menunjukkan integritas sekaligus menjaga hubungan baik dengan warga. Menolak tanpa penjelasan (D) juga tepat (skor 4) namun bisa terkesan kaku. Menerima dalam bentuk apapun (A, B, E) berpotensi melanggar aturan gratifikasi ASN.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000118',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda mendapat tugas baru yang belum pernah Anda kerjakan dan memiliki tenggat waktu ketat. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak tugas karena merasa tidak kompeten"},{"id":"B","text":"Menerima dan langsung mengerjakan sesuai intuisi"},{"id":"C","text":"Menerima, mempelajari materi intensif, dan berkonsultasi dengan rekan berpengalaman"},{"id":"D","text":"Menerima namun meminta tenggat diperpanjang"},{"id":"E","text":"Menerima, membuat rencana belajar, mengerjakan sambil berkonsultasi, dan melaporkan perkembangan ke atasan"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: menerima tantangan + rencana belajar + konsultasi + pelaporan ke atasan — Kompeten + Akuntabel + Adaptif secara komprehensif. Belajar dan konsultasi (C) juga baik (skor 4) namun tanpa pelaporan berkala. Menolak (A) menunjukkan kurangnya jiwa berkembang.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000119',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda menyadari laporan yang sudah diserahkan ke atasan mengandung kesalahan data signifikan. Atasan belum membacanya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan saja karena belum tentu atasan menyadarinya"},{"id":"B","text":"Segera menghubungi atasan, mengakui kesalahan, dan menyerahkan laporan yang diperbaiki"},{"id":"C","text":"Menunggu atasan memberikan feedback baru memperbaiki"},{"id":"D","text":"Memperbaiki dan mengganti versi lama diam-diam"},{"id":"E","text":"Meminta rekan memeriksa laporan sebelum memberitahu atasan"}]',
+  'B',
+  '{"A":1,"B":5,"C":2,"D":2,"E":3}',
+  'Opsi B terbaik: segera mengakui secara proaktif dan menyerahkan perbaikan — Akuntabel penuh. Mengganti diam-diam (D) tidak transparan. Membiarkan (A) adalah pembiaran atas kesalahan. Meminta rekan periksa dulu (E) menunda pengakuan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000120',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Rekan sering datang terlambat dan tugasnya sering tidak selesai tepat waktu sehingga memengaruhi kinerja tim. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Melaporkan langsung ke atasan agar rekan mendapat sanksi"},{"id":"B","text":"Mengerjakan tugasnya juga agar tim tidak terdampak"},{"id":"C","text":"Menegur rekan secara langsung dan menawarkan bantuan jika ada masalah"},{"id":"D","text":"Membicarakan dengan rekan lain di tim"},{"id":"E","text":"Berbicara empat mata dengan rekan untuk memahami situasinya; jika berlanjut, libatkan atasan"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":1,"E":5}',
+  'Opsi E terbaik: pendekatan bertahap — dialog personal untuk memahami akar masalah baru libatkan atasan. Harmonis + Kolaboratif + Akuntabel. Langsung melapor ke atasan (A) tanpa dialog merusak hubungan. Mengerjakan tugasnya (B) pembiaran yang tidak menyelesaikan masalah.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000121',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Atasan memberikan instruksi yang menurut Anda kurang tepat secara teknis dan berpotensi menghasilkan output tidak optimal. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengikuti instruksi atasan tanpa komentar karena atasan lebih berpengalaman"},{"id":"B","text":"Mengabaikan instruksi dan mengerjakan dengan cara yang Anda anggap benar"},{"id":"C","text":"Menyampaikan pandangan teknis kepada atasan dengan sopan disertai data pendukung"},{"id":"D","text":"Meminta rekan lain berbicara ke atasan atas nama Anda"},{"id":"E","text":"Mengerjakan sesuai instruksi sambil mendokumentasikan kekhawatiran teknis secara tertulis"}]',
+  'C',
+  '{"A":3,"B":1,"C":5,"D":2,"E":4}',
+  'Opsi C terbaik: menyampaikan pendapat teknis dengan sopan dan berdasarkan data — Kompeten + Harmonis. Mendokumentasikan kekhawatiran (E) juga baik (skor 4) namun kurang proaktif. Mengabaikan instruksi (B) melanggar hierarki.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000122',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda memiliki beberapa tugas penting yang harus diselesaikan bersamaan. Salah satu kurang menarik bagi Anda. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengerjakan tugas yang paling Anda sukai terlebih dahulu"},{"id":"B","text":"Mendelegasikan tugas yang tidak Anda sukai ke rekan"},{"id":"C","text":"Menentukan prioritas berdasarkan urgensi dan dampak lalu mengerjakan semua secara sistematis"},{"id":"D","text":"Mengerjakan tugas paling mudah terlebih dahulu agar cepat selesai"},{"id":"E","text":"Meminta atasan menentukan prioritas untuk Anda"}]',
+  'C',
+  '{"A":2,"B":1,"C":5,"D":3,"E":3}',
+  'Opsi C terbaik: prioritas berdasarkan urgensi dan dampak — manajemen waktu profesional yang mencerminkan Kompeten + Akuntabel. Meminta atasan menentukan (E) bisa tepat namun seharusnya diusahakan mandiri dulu. Mengerjakan yang disukai (A) atau mudah (D) tidak profesional.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000123',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Dalam rapat tim, atasan meminta pendapat tentang rencana program. Anda melihat potensi kelemahan namun berbeda dengan mayoritas. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Diam dan menyetujui mayoritas untuk menghindari konflik"},{"id":"B","text":"Menyampaikan pandangan dengan fakta dan argumen terstruktur"},{"id":"C","text":"Berbisik ke rekan di sebelah tentang kekhawatiran"},{"id":"D","text":"Menyampaikan pendapat setelah rapat hanya kepada atasan"},{"id":"E","text":"Menyampaikan kekhawatiran secara terbuka disertai solusi alternatif yang konkret"}]',
+  'E',
+  '{"A":1,"B":4,"C":1,"D":3,"E":5}',
+  'Opsi E terbaik: menyampaikan kekhawatiran terbuka sekaligus solusi alternatif — keberanian + kontribusi positif. Menyampaikan dengan argumen (B) juga bagus (skor 4) namun tanpa solusi alternatif. Berbisik (C) tidak profesional. Diam (A) merugikan kualitas keputusan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000124',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Rekan secara rutin menggunakan fasilitas kantor (printer, internet) untuk keperluan pribadi dalam jumlah signifikan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Melakukan hal yang sama karena rekan Anda melakukannya"},{"id":"B","text":"Membiarkan karena bukan urusan Anda"},{"id":"C","text":"Menegur langsung di depan rekan lain"},{"id":"D","text":"Mengingatkan rekan secara pribadi bahwa penggunaan fasilitas harus sesuai aturan"},{"id":"E","text":"Mengingatkan secara pribadi dahulu; jika berlanjut, melaporkan ke pengawas"}]',
+  'E',
+  '{"A":1,"B":1,"C":2,"D":4,"E":5}',
+  'Opsi E terbaik: ingatkan pribadi dulu baru lapor jika berlanjut — menghormati rekan sambil menegakkan integritas. Mengingatkan pribadi (D) sudah baik (skor 4) namun tanpa langkah lanjutan. Menegur di depan umum (C) merendahkan martabat. Ikut-ikutan (A) melanggar nilai Akuntabel.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000125',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda sedang sakit namun ada presentasi penting yang hanya bisa Anda bawakan dan tidak ada rekan yang bisa menggantikan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Tidak masuk kerja dan meminta presentasi dijadwalkan ulang"},{"id":"B","text":"Masuk kerja dan memberikan presentasi sebaik mungkin"},{"id":"C","text":"Mengirim materi melalui email dan meminta atasan yang menyampaikan"},{"id":"D","text":"Memaksakan diri hadir, presentasi selesai, lalu segera istirahat"},{"id":"E","text":"Menginformasikan kondisi kepada atasan, menawarkan opsi hadir atau presentasi virtual, dan memutuskan bersama"}]',
+  'E',
+  '{"A":2,"B":3,"C":3,"D":4,"E":5}',
+  'Opsi E terbaik: komunikasi proaktif dengan atasan dan memberikan beberapa opsi solusi — Akuntabel + Kolaboratif. Memaksakan hadir (D) menunjukkan dedikasi (skor 4) namun tanpa koordinasi atasan. Tidak masuk tanpa alternatif (A) meninggalkan tim tanpa solusi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000126',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda ditawari pelatihan relevan namun dilaksanakan di luar jam kantor tanpa uang lembur. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak karena tidak ada kompensasi untuk waktu di luar jam kerja"},{"id":"B","text":"Mengikuti pelatihan karena penting untuk pengembangan kompetensi"},{"id":"C","text":"Mengikuti sambil mengajukan klaim lembur"},{"id":"D","text":"Menanyakan kepada atasan apakah diwajibkan"},{"id":"E","text":"Mengikuti dengan antusias karena investasi kompetensi berdampak jangka panjang"}]',
+  'E',
+  '{"A":1,"B":4,"C":2,"D":3,"E":5}',
+  'Opsi E terbaik: mengikuti dengan antusias karena memahami nilai jangka panjang pengembangan — Kompeten + orientasi berkembang. Mengikuti tanpa pertimbangan khusus (B) sudah baik (skor 4). Menolak karena tidak ada lembur (A) orientasi jangka pendek semata.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000127',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Target kinerja Anda bulan ini belum tercapai karena ada hambatan eksternal yang tidak terduga. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Melaporkan kepada atasan bahwa target tidak tercapai dan meminta penyesuaian"},{"id":"B","text":"Bekerja lebih keras bulan depan untuk mengompensasi"},{"id":"C","text":"Menganalisis hambatan, membuat rencana perbaikan, dan melaporkan kepada atasan secara transparan"},{"id":"D","text":"Menyalahkan kondisi eksternal dalam laporan kinerja"},{"id":"E","text":"Meminta rekan membantu sehingga tampak target tercapai"}]',
+  'C',
+  '{"A":3,"B":3,"C":5,"D":1,"E":1}',
+  'Opsi C terbaik: analisis hambatan + rencana perbaikan + pelaporan transparan — Akuntabel + Kompeten. Sekadar melaporkan tanpa rencana (A) atau bekerja lebih keras tanpa evaluasi (B) kurang sistematis. Menyalahkan kondisi eksternal (D) tidak akuntabel.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000128',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda menemukan cara kerja baru yang lebih efisien dari prosedur yang berlaku saat ini. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Langsung menerapkan cara baru tanpa pemberitahuan"},{"id":"B","text":"Menyimpan temuan untuk diri sendiri"},{"id":"C","text":"Mendokumentasikan temuan dan mengusulkan kepada atasan dengan data perbandingan efisiensinya"},{"id":"D","text":"Membicarakan dengan rekan kerja dan mendorong mereka menerapkan secara informal"},{"id":"E","text":"Mengusulkan ke atasan dan menawarkan untuk memimpin uji coba pilot"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: mengusulkan secara formal + menawarkan untuk memimpin uji coba — Kompeten + Adaptif + inisiatif. Mendokumentasikan dan mengusulkan (C) sudah baik (skor 4) namun tanpa tawaran tindak lanjut konkret. Menerapkan tanpa pemberitahuan (A) melanggar prosedur.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000129',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Dalam sebuah proyek tim, salah satu anggota tidak berkontribusi optimal namun tidak mau mengakui masalahnya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengerjakan bagian anggota tersebut tanpa komentar"},{"id":"B","text":"Mengeluhkan kepada anggota lain"},{"id":"C","text":"Berbicara langsung dengan anggota tersebut secara empati untuk memahami hambatannya"},{"id":"D","text":"Melaporkan langsung ke pemimpin proyek"},{"id":"E","text":"Berbicara empati dengan anggota tersebut; jika tidak ada perubahan, informasikan pemimpin proyek"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: dialog personal dahulu baru eskalasi ke pemimpin jika tidak ada perubahan. Berbicara langsung (C) sudah baik (skor 4) namun tanpa langkah lanjutan. Mengeluhkan ke anggota lain (B) tidak konstruktif dan merusak harmoni tim.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000130',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda diminta menandatangani laporan yang berisi data yang Anda tidak yakin kebenarannya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menandatangani saja karena atasan yang bertanggung jawab"},{"id":"B","text":"Menolak menandatangani sampai data diverifikasi"},{"id":"C","text":"Memverifikasi data terlebih dahulu sebelum menandatangani"},{"id":"D","text":"Meminta rekan lain yang menandatangani"},{"id":"E","text":"Menyatakan kekhawatiran secara tertulis kepada atasan sebelum menandatangani"}]',
+  'C',
+  '{"A":1,"B":3,"C":5,"D":1,"E":4}',
+  'Opsi C terbaik: memverifikasi data sendiri sebelum menandatangani — Akuntabel penuh karena tanda tangan berarti persetujuan atas isi. Menyatakan kekhawatiran secara tertulis (E) juga tepat (skor 4). Menandatangani tanpa verifikasi (A) melepas tanggung jawab secara tidak bertanggung jawab.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000131',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Atasan meminta Anda menyelesaikan pekerjaan rekan yang sedang cuti darurat di samping pekerjaan Anda sendiri, tanpa penyesuaian target atau tenggat waktu. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menerima dan mengerjakan kedua pekerjaan semaksimal mungkin"},{"id":"B","text":"Menolak karena beban kerja sudah cukup berat"},{"id":"C","text":"Menerima, mengerjakan yang paling prioritas, dan mengomunikasikan kepada atasan jika ada yang tidak bisa selesai tepat waktu"},{"id":"D","text":"Mengerjakan seadanya untuk kedua pekerjaan agar selesai semua"},{"id":"E","text":"Meminta atasan memilih pekerjaan mana yang lebih diprioritaskan"}]',
+  'C',
+  '{"A":3,"B":2,"C":5,"D":2,"E":4}',
+  'Opsi C terbaik: menerima dengan proaktif mengomunikasikan risiko dan prioritas — Akuntabel + Kompeten. Meminta atasan memilih prioritas (E) juga baik (skor 4). Menerima tanpa komunikasi (A) berisiko semua pekerjaan tidak optimal. Menolak tanpa diskusi (B) tidak fleksibel.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000132',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda mengetahui bahwa anggaran proyek yang Anda kelola akan habis sebelum proyek selesai karena estimasi awal yang kurang tepat. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Melanjutkan proyek apa adanya sampai anggaran habis"},{"id":"B","text":"Menghentikan proyek secara diam-diam"},{"id":"C","text":"Segera melaporkan kepada atasan dengan analisis situasi dan opsi solusi"},{"id":"D","text":"Mencari dana tambahan dari pos anggaran lain tanpa izin"},{"id":"E","text":"Merevisi scope proyek secara sepihak agar sesuai anggaran yang tersisa"}]',
+  'C',
+  '{"A":2,"B":1,"C":5,"D":1,"E":2}',
+  'Opsi C terbaik: melaporkan segera dengan analisis dan opsi solusi — Akuntabel + transparan dalam pengelolaan anggaran publik. Semua opsi lain yang tidak melibatkan atasan (A, B, D, E) melanggar prinsip tata kelola keuangan pemerintah.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000133',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda menemukan bahwa output kerja Anda sendiri dari minggu lalu mengandung kesalahan yang berdampak pada unit lain. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menunggu sampai ada yang komplain baru memperbaiki"},{"id":"B","text":"Memperbaiki diam-diam tanpa memberitahu siapapun"},{"id":"C","text":"Segera memberitahu unit yang terdampak dan memperbaiki kesalahan"},{"id":"D","text":"Memberitahu unit yang terdampak, memperbaiki kesalahan, menganalisis penyebab, dan membuat tindakan pencegahan"},{"id":"E","text":"Melaporkan kepada atasan saja"}]',
+  'D',
+  '{"A":1,"B":2,"C":4,"D":5,"E":3}',
+  'Opsi D terbaik: memberitahu pihak terdampak + memperbaiki + analisis penyebab + tindakan pencegahan — Akuntabel komprehensif. Memberitahu dan memperbaiki saja (C) sudah baik (skor 4) namun tanpa pembelajaran. Menunggu komplain (A) dan memperbaiki diam-diam (B) tidak akuntabel.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000134',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda diminta presentasi di hadapan pimpinan tinggi tentang topik yang hanya Anda kuasai secara parsial dan waktunya sangat singkat untuk persiapan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak dengan alasan tidak cukup waktu persiapan"},{"id":"B","text":"Menerima dan presentasi dengan data yang ada, seolah-olah yakin"},{"id":"C","text":"Menerima, mempersiapkan semaksimal mungkin, dan menyatakan dengan jujur bagian mana yang masih perlu dikonfirmasi"},{"id":"D","text":"Meminta rekan yang lebih menguasai untuk menggantikan"},{"id":"E","text":"Menerima dan melakukan riset intensif semalam suntuk"}]',
+  'C',
+  '{"A":2,"B":2,"C":5,"D":3,"E":4}',
+  'Opsi C terbaik: menerima tantangan + persiapan maksimal + kejujuran tentang keterbatasan — Kompeten + Akuntabel + integritas intelektual. Riset intensif (E) juga menunjukkan dedikasi (skor 4). Presentasi seolah-olah yakin (B) tanpa kejujuran tentang keterbatasan bisa menyesatkan pimpinan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000135',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Teman dekat membagikan konten media sosial berisi ujaran kebencian terhadap kelompok agama tertentu. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Ikut membagikan karena percaya kepada teman"},{"id":"B","text":"Mengabaikan karena tidak ingin merusak pertemanan"},{"id":"C","text":"Mengirim pesan pribadi kepada teman menjelaskan bahaya konten dan memintanya menghapus"},{"id":"D","text":"Langsung melaporkan akun teman ke platform"},{"id":"E","text":"Mengirim pesan pribadi, menjelaskan dampaknya, memintanya menghapus, dan jika tidak diindahkan melaporkan konten"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: dialog personal dahulu baru ambil langkah pelaporan jika diperlukan — menghormati pertemanan sekaligus menjaga ketertiban. Mengirim pesan pribadi saja (C) sudah baik (skor 4). Ikut menyebarkan (A) pelanggaran serius.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000136',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Anda mengetahui ada rekan ASN yang sering mengikuti kegiatan organisasi yang dicurigai berafiliasi gerakan radikal. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan karena itu urusan pribadi"},{"id":"B","text":"Langsung memposting di media sosial agar masyarakat waspada"},{"id":"C","text":"Mendekati rekan dan mendiskusikan nilai kebangsaan dan risiko keterlibatan"},{"id":"D","text":"Melaporkan secara resmi ke atasan atau unit pembinaan ASN"},{"id":"E","text":"Melakukan pendekatan personal dahulu; jika mengkhawatirkan, melaporkan ke atasan atau badan intelijen berwenang"}]',
+  'E',
+  '{"A":1,"B":1,"C":3,"D":4,"E":5}',
+  'Opsi E terbaik: pendekatan bertahap — dialog personal dahulu, lalu lapor ke otoritas tepat jika diperlukan. Melaporkan ke atasan (D) tepat (skor 4) namun melewati dialog yang bisa mencegah eskalasi. Memposting di media sosial (B) berisiko fitnah.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000137',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Anda menerima undangan ceramah dari tokoh yang kontennya pernah menimbulkan kontroversi dan dianggap memecah persatuan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menghadiri karena setiap warga berhak mendapat informasi dari berbagai sumber"},{"id":"B","text":"Menolak dan memberi tahu pengundang alasannya"},{"id":"C","text":"Mencari informasi lebih lanjut tentang tokoh sebelum memutuskan"},{"id":"D","text":"Menghadiri sambil menyaring informasi dan tidak menyebarkan konten memecah belah"},{"id":"E","text":"Tidak menghadiri dan memilih referensi dari tokoh yang mempromosikan moderasi dan persatuan"}]',
+  'E',
+  '{"A":2,"B":3,"C":3,"D":3,"E":5}',
+  'Opsi E terbaik: proaktif memilih sumber yang mendukung moderasi dan persatuan — Anti Radikalisme + Loyal. Hadir dengan kritis (D) tetap berisiko terpapar konten memecah belah. Hadir tanpa pertimbangan (A) tidak mencerminkan kewaspadaan sebagai ASN.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000138',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Adik Anda mulai menjauhi keluarga dan berpendapat bahwa sistem pemerintahan harus diganti dengan sistem tertentu. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan karena itu hak adik untuk berpikir bebas"},{"id":"B","text":"Melarang keras dan memutuskan hubungan jika tidak menurut"},{"id":"C","text":"Melaporkan adik ke BNPT atau kepolisian"},{"id":"D","text":"Mendekati adik dengan kasih sayang, berdialog tentang nilai Pancasila, dan mencari bantuan profesional jika perlu"},{"id":"E","text":"Berkomunikasi intensif, melibatkan keluarga besar, dan jika perlu menghubungi BNPT atau konselor deradikalisasi"}]',
+  'E',
+  '{"A":1,"B":2,"C":3,"D":4,"E":5}',
+  'Opsi E terbaik: pendekatan keluarga menyeluruh — komunikasi + pelibatan keluarga besar + ahli deradikalisasi. Opsi D juga tepat (skor 4) namun kurang komprehensif. Melaporkan langsung (C) tanpa dialog keluarga bisa memperparah situasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000139',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Di grup WhatsApp keluarga, seseorang menyebarkan informasi menghasut untuk tidak mempercayai pemerintah. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membalas dengan mengklarifikasi informasi salah dan menjelaskan pentingnya sumber terpercaya"},{"id":"B","text":"Keluar dari grup tanpa komentar"},{"id":"C","text":"Melaporkan nomor pengirim ke pihak berwajib"},{"id":"D","text":"Diam agar tidak menimbulkan konflik di keluarga"},{"id":"E","text":"Mengklarifikasi dengan data resmi, mengajak berpikir kritis, dan secara pribadi menghubungi pengirim untuk berdialog"}]',
+  'E',
+  '{"A":4,"B":1,"C":3,"D":1,"E":5}',
+  'Opsi E terbaik: klarifikasi publik di grup PLUS dialog personal dengan pengirim — pendekatan dua lapis yang efektif. Mengklarifikasi di grup saja (A) sudah baik (skor 4). Keluar grup (B) meninggalkan ruang bagi penyebaran lebih lanjut. Diam (D) adalah pembiaran.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000140',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Anda melihat seseorang di kantor membaca literatur yang berisi ideologi ekstrem secara terang-terangan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengabaikan karena membaca adalah hak pribadi"},{"id":"B","text":"Langsung merebut dan melaporkan ke polisi"},{"id":"C","text":"Menegur secara langsung di depan rekan lain"},{"id":"D","text":"Mendekati orang tersebut secara pribadi untuk berdialog tentang konten bacaan tersebut"},{"id":"E","text":"Melaporkan kepada atasan atau unit keamanan kantor disertai fakta yang Anda lihat"}]',
+  'E',
+  '{"A":1,"B":2,"C":2,"D":3,"E":5}',
+  'Opsi E terbaik: melaporkan ke otoritas internal kantor dengan fakta yang jelas — langkah yang tepat dan terukur di lingkungan kerja. Pendekatan personal (D) bisa dicoba namun berisiko jika ideologinya sudah kuat. Mengabaikan (A) adalah pembiaran serius di lingkungan ASN.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000141',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Anda menemukan grup online yang menyebarkan narasi anti-Pancasila dan mengajak anggotanya untuk bergabung dalam aksi massa yang berpotensi rusuh. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Bergabung untuk memantau dari dalam"},{"id":"B","text":"Melaporkan grup tersebut ke platform dan ke Kominfo atau BSSN"},{"id":"C","text":"Membagikan temuan ke teman-teman agar semua waspada"},{"id":"D","text":"Mengabaikan karena sudah banyak grup serupa"},{"id":"E","text":"Keluar dari grup dan melaporkan ke platform saja"}]',
+  'B',
+  '{"A":2,"B":5,"C":2,"D":1,"E":3}',
+  'Opsi B terbaik: melaporkan ke platform DAN ke instansi pemerintah yang berwenang (Kominfo/BSSN) — langkah paling efektif dan tepat secara prosedural. Keluar dan lapor ke platform saja (E) kurang komprehensif. Membagikan ke teman (C) bisa menyebarkan konten berbahaya lebih luas.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000142',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Dalam diskusi informal di kantor, rekan menyatakan bahwa demokrasi adalah sistem yang salah dan harus diganti. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Setuju untuk menghindari perdebatan"},{"id":"B","text":"Langsung melaporkan ke atasan"},{"id":"C","text":"Menyampaikan pandangan yang mendukung nilai-nilai demokrasi Pancasila dengan argumen yang rasional"},{"id":"D","text":"Mengubah topik pembicaraan"},{"id":"E","text":"Berdebat keras dan menunjukkan bahwa rekan salah"}]',
+  'C',
+  '{"A":1,"B":3,"C":5,"D":2,"E":2}',
+  'Opsi C terbaik: menyampaikan counter-narasi yang rasional dan berbasis nilai Pancasila — peran ASN sebagai penjaga ideologi negara. Melaporkan ke atasan (B) mungkin diperlukan jika berlanjut namun terlalu dini untuk satu pernyataan. Setuju (A) bertentangan dengan nilai kebangsaan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000143',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Atasan meminta Anda menandatangani petisi internal yang mengkritik kebijakan pemerintah secara tajam dan berpotensi merusak kepercayaan publik terhadap institusi. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menandatangani karena atasan yang meminta"},{"id":"B","text":"Menolak dengan menjelaskan bahwa sebagai ASN ada etika yang membatasi ekspresi kritik publik"},{"id":"C","text":"Menandatangani namun tidak menyebarkan"},{"id":"D","text":"Menolak dan melaporkan ke unit pengawas internal"},{"id":"E","text":"Menolak dengan sopan, menjelaskan dasar etika ASN, dan menyarankan jalur resmi penyampaian aspirasi"}]',
+  'E',
+  '{"A":1,"B":4,"C":2,"D":3,"E":5}',
+  'Opsi E terbaik: menolak dengan sopan + menjelaskan dasar etika ASN + menyarankan jalur resmi — Loyal + Akuntabel + edukatif. Menolak dengan penjelasan saja (B) sudah baik (skor 4). Menandatangani karena atasan (A) melanggar etika ASN PP 94/2021.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000144',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Anda mendapati poster yang berisi ajakan untuk bergabung dengan gerakan yang menentang Pancasila ditempel di papan pengumuman kantor. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mencatat isi poster lalu melepasnya dan melaporkan ke atasan"},{"id":"B","text":"Melepas poster dan tidak memberitahu siapa pun"},{"id":"C","text":"Membiarkan sampai ada yang melaporkan"},{"id":"D","text":"Langsung mengambil foto dan membagikan ke media sosial sebagai bukti"},{"id":"E","text":"Melepas poster, mendokumentasikan buktinya, dan segera melaporkan ke atasan serta unit keamanan"}]',
+  'E',
+  '{"A":4,"B":2,"C":1,"D":1,"E":5}',
+  'Opsi E terbaik: melepas + dokumentasi + laporan ke atasan DAN unit keamanan — respons lengkap dan terkoordinasi. Melepas dan melaporkan (A) sudah baik (skor 4) namun tidak menyertakan unit keamanan. Membagikan ke media sosial (D) bisa menyebarkan konten berbahaya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000145',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Anti Radikalisme', 'TKP_SCALE', 'SULIT', 8,
+  'Seorang rekan mengundang Anda ke acara pengajian yang kemudian Anda ketahui diisi oleh pembicara yang termasuk daftar pemantauan BNPT. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menghadiri karena sudah berjanji dan tidak ingin mengecewakan rekan"},{"id":"B","text":"Langsung pergi meninggalkan acara"},{"id":"C","text":"Pergi meninggalkan acara dan melaporkan informasi tersebut ke pihak berwenang"},{"id":"D","text":"Tetap hadir untuk memantau namun tidak berinteraksi"},{"id":"E","text":"Meninggalkan acara, memberitahu rekan yang mengundang tentang status pembicara, dan melaporkan ke pihak berwenang"}]',
+  'E',
+  '{"A":1,"B":3,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: meninggalkan acara + memberitahu rekan + melaporkan ke berwenang — komprehensif dan bertanggung jawab. Meninggalkan dan melaporkan (C) sudah baik (skor 4) namun tidak memberitahu rekan yang mungkin tidak tahu. Tetap hadir untuk memantau (D) terlalu berisiko tanpa koordinasi pihak berwenang.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000146',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda baru bergabung di unit baru dan merasa sulit berinteraksi dengan rekan-rekan yang sudah lama bekerja bersama dan memiliki dinamika kelompok yang sudah terbentuk. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menunggu rekan-rekan yang lebih dulu mengajak interaksi"},{"id":"B","text":"Aktif memperkenalkan diri dan menunjukkan ketertarikan pada pekerjaan rekan"},{"id":"C","text":"Fokus pada pekerjaan sendiri dan tidak perlu bersosialisasi berlebihan"},{"id":"D","text":"Meminta atasan memperkenalkan Anda kepada seluruh tim"},{"id":"E","text":"Aktif memperkenalkan diri, menunjukkan minat pada pekerjaan tim, dan menawarkan kontribusi pada proyek yang sedang berjalan"}]',
+  'E',
+  '{"A":2,"B":4,"C":2,"D":3,"E":5}',
+  'Opsi E terbaik: memperkenalkan diri + minat + tawaran kontribusi konkret — Harmonis + Kolaboratif secara aktif. Aktif memperkenalkan diri saja (B) sudah baik (skor 4) namun tanpa kontribusi konkret. Menunggu diajak (A) terlalu pasif untuk lingkungan profesional.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000147',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda diminta berkolaborasi dengan unit lain yang memiliki budaya kerja dan gaya komunikasi yang sangat berbeda dengan unit Anda. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mempertahankan cara kerja unit Anda karena terbukti efektif"},{"id":"B","text":"Sepenuhnya mengadopsi cara kerja unit lain"},{"id":"C","text":"Mendiskusikan perbedaan cara kerja dan mencari titik tengah yang disepakati bersama"},{"id":"D","text":"Melaporkan perbedaan ini ke atasan agar ada arahan"},{"id":"E","text":"Mempelajari cara kerja unit lain, menghargai perbedaan, dan mengusulkan pendekatan hybrid yang mengambil kelebihan dari kedua gaya"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: mempelajari + menghargai + mengusulkan pendekatan hybrid — Harmonis + Adaptif + Kompeten. Mencari titik tengah (C) juga baik (skor 4) namun lebih ke kompromi daripada sintesis yang mengambil kelebihan keduanya. Mempertahankan cara sendiri (A) tidak adaptif.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000148',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda memiliki informasi yang relevan bagi rekan di unit lain namun mereka tidak bertanya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menunggu sampai mereka bertanya"},{"id":"B","text":"Langsung berbagi informasi meski tidak diminta"},{"id":"C","text":"Menghubungi rekan di unit lain dan berbagi informasi yang relevan secara proaktif"},{"id":"D","text":"Menyampaikan informasi kepada atasan Anda untuk diteruskan"},{"id":"E","text":"Berbagi informasi melalui sistem informasi resmi instansi"}]',
+  'C',
+  '{"A":2,"B":3,"C":5,"D":3,"E":4}',
+  'Opsi C terbaik: proaktif menghubungi dan berbagi informasi relevan — Kolaboratif + Berorientasi Pelayanan internal. Berbagi melalui sistem resmi (E) juga tepat (skor 4) namun kurang personal. Menunggu (A) terlalu pasif dan bisa menyebabkan pekerjaan unit lain tidak optimal.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000149',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda mengenal seseorang di luar instansi yang memiliki keahlian yang sangat dibutuhkan untuk proyek Anda. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Tidak memanfaatkan karena berisiko melanggar prosedur pengadaan"},{"id":"B","text":"Langsung mengajak orang tersebut terlibat tanpa prosedur formal"},{"id":"C","text":"Mendiskusikan potensi kolaborasi dengan atasan dan mengusulkan jalur resmi"},{"id":"D","text":"Meminta orang tersebut berbagi pengetahuan secara informal"},{"id":"E","text":"Mendiskusikan dengan atasan, mengusulkan jalur resmi, dan menawarkan diri untuk memfasilitasi prosesnya"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: diskusi dengan atasan + jalur resmi + tawaran fasilitasi — Jejaring Kerja yang profesional dan patuh prosedur. Mendiskusikan dengan atasan saja (C) sudah baik (skor 4) namun tanpa tawaran tindak lanjut konkret. Langsung mengajak tanpa prosedur (B) melanggar tata kelola.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000150',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda memiliki jadwal yang padat namun rekan dari unit lain meminta bantuan untuk menyelesaikan tugasnya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak karena jadwal Anda sudah penuh"},{"id":"B","text":"Membantu sepenuhnya meski pekerjaan Anda sendiri tertunda"},{"id":"C","text":"Menilai urgensi permintaan dan jadwal Anda, lalu memutuskan berapa banyak waktu yang bisa dialokasikan"},{"id":"D","text":"Meminta rekan menunggu sampai pekerjaan Anda sendiri selesai"},{"id":"E","text":"Membantu secara terbatas sesuai kapasitas yang ada, dan jika tidak bisa, merekomendasikan sumber bantuan lain"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: membantu sesuai kapasitas yang ada ATAU merekomendasikan sumber bantuan lain — Kolaboratif + realistis. Menilai urgensi (C) sudah baik (skor 4) namun tanpa tawaran alternatif jika tidak bisa membantu. Membantu sepenuhnya (B) mengorbankan pekerjaan sendiri.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000151',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Rekan di unit lain sering menolak permintaan kerjasama Anda tanpa alasan yang jelas. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan dan mengerjakan sendiri"},{"id":"B","text":"Mengeluhkan ke atasan tentang sikap rekan tersebut"},{"id":"C","text":"Mendekati rekan tersebut secara informal untuk memahami keberatannya"},{"id":"D","text":"Meminta atasan memerintahkan rekan untuk bekerjasama"},{"id":"E","text":"Mencari tahu hambatan kerjasama melalui dialog informal; jika sistemik, mengusulkan mekanisme kerjasama yang lebih jelas kepada atasan"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: dialog informal untuk memahami hambatan + usulan perbaikan sistemik jika perlu. Mendekati secara informal (C) sudah baik (skor 4) namun tanpa langkah sistemik jika masalah berulang. Meminta atasan memerintahkan (D) bisa menyelesaikan jangka pendek namun tidak membangun hubungan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000152',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda terlibat dalam tim lintas unit yang baru terbentuk. Anggota tim memiliki pandangan berbeda tentang siapa yang seharusnya memimpin proyek ini. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menawarkan diri untuk memimpin karena merasa paling kompeten"},{"id":"B","text":"Mendorong diadakannya diskusi untuk menentukan pemimpin berdasarkan kriteria yang disepakati"},{"id":"C","text":"Mengikuti siapa yang paling vokal dalam rapat"},{"id":"D","text":"Menyerahkan keputusan kepada atasan masing-masing"},{"id":"E","text":"Mengusulkan proses pemilihan berdasarkan kompetensi, kapasitas, dan kesediaan anggota"}]',
+  'E',
+  '{"A":2,"B":4,"C":1,"D":3,"E":5}',
+  'Opsi E terbaik: mengusulkan proses pemilihan yang transparan dan berbasis kriteria objektif — Harmonis + Kompeten. Mendorong diskusi (B) juga baik (skor 4) namun lebih terbuka tanpa kriteria spesifik. Menawarkan diri secara sepihak (A) kurang Harmonis.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000153',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Dalam rapat koordinasi dengan mitra instansi lain, ada ketidaksepakatan tentang pembagian peran. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mempertahankan posisi instansi Anda sekuat mungkin"},{"id":"B","text":"Mengalah demi kelancaran hubungan antar-instansi"},{"id":"C","text":"Mendengarkan perspektif mitra, mengidentifikasi kepentingan bersama, dan mencari solusi yang menguntungkan semua pihak"},{"id":"D","text":"Meminta penundaan rapat dan berkonsultasi dengan atasan"},{"id":"E","text":"Mendokumentasikan ketidaksepakatan dan meminta mediasi dari pihak ketiga"}]',
+  'C',
+  '{"A":2,"B":2,"C":5,"D":3,"E":3}',
+  'Opsi C terbaik: negosiasi berbasis kepentingan bersama — Harmonis + Kolaboratif. Konsultasi ke atasan (D) tepat sebelum rapat jika isu besar, tapi dalam rapat harus tetap ada respons awal. Mengalah sepenuhnya (B) atau bersikeras (A) keduanya tidak optimal.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000154',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda mengetahui bahwa rekan kerja yang paling senior di tim tidak menyukai Anda tanpa alasan yang Anda ketahui. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menghindari interaksi dengan rekan tersebut"},{"id":"B","text":"Membalas dengan bersikap dingin kepadanya"},{"id":"C","text":"Tetap bersikap profesional dan ramah dalam setiap interaksi kerja"},{"id":"D","text":"Mencari tahu alasan ketidaksukaannya dan mencoba berdialog"},{"id":"E","text":"Bersikap profesional dalam kerja dan mencari kesempatan untuk membangun hubungan secara tulus"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: profesionalisme + upaya aktif membangun hubungan secara tulus — Harmonis yang berkelanjutan. Bersikap profesional saja (C) dan mencari tahu alasan (D) keduanya baik (skor 4). Menghindari (A) atau membalas dingin (B) memperburuk situasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000155',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda menyadari bahwa tim Anda dan tim lain mengerjakan pekerjaan yang tumpang tindih secara tidak sengaja. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Melanjutkan pekerjaan karena sudah terlanjur dimulai"},{"id":"B","text":"Menghentikan pekerjaan tim Anda dan menyerahkan ke tim lain"},{"id":"C","text":"Berkoordinasi dengan tim lain untuk membagi tugas agar tidak ada duplikasi"},{"id":"D","text":"Melaporkan kepada atasan tentang tumpang tindih dan meminta arahan"},{"id":"E","text":"Menginisiasi pertemuan dengan tim lain untuk mendefinisikan ulang pembagian tugas dan melaporkan hasilnya kepada atasan"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: inisiasi pertemuan + pembagian ulang + laporan ke atasan — Kolaboratif + Akuntabel. Berkoordinasi dengan tim lain (C) sudah baik (skor 4) namun tanpa pelaporan ke atasan. Melanjutkan tumpang tindih (A) membuang sumber daya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000156',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Seorang kolega dari instansi lain meminta pendapat Anda tentang kebijakan internal instansi Anda yang bersifat rahasia. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Berbagi informasi karena kolega dari instansi pemerintah juga"},{"id":"B","text":"Menolak tegas dan mengakhiri percakapan"},{"id":"C","text":"Menjelaskan bahwa informasi tersebut bersifat rahasia dan tidak bisa dibagikan"},{"id":"D","text":"Menjelaskan keterbatasan Anda, menyarankan jalur resmi permintaan informasi antar-instansi"},{"id":"E","text":"Berpura-pura tidak tahu agar tidak terkesan tidak kooperatif"}]',
+  'D',
+  '{"A":1,"B":3,"C":4,"D":5,"E":2}',
+  'Opsi D terbaik: menjelaskan keterbatasan + menyarankan jalur resmi — Loyal + Harmonis. Menjelaskan bahwa rahasia dan tidak bisa dibagikan (C) sudah tepat (skor 4) namun tanpa solusi alternatif bagi kolega. Berbagi informasi rahasia (A) melanggar kerahasiaan instansi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000157',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda diundang dalam acara networking profesional di luar kantor. Anda tidak mengenal siapapun di sana. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Duduk di sudut ruangan dan menunggu orang mendekati Anda"},{"id":"B","text":"Pulang lebih awal karena merasa tidak nyaman"},{"id":"C","text":"Aktif memperkenalkan diri kepada peserta lain dan menanyakan pekerjaan mereka"},{"id":"D","text":"Hanya berbicara dengan orang yang terlihat paling mudah didekati"},{"id":"E","text":"Aktif memperkenalkan diri, mendengarkan cerita orang lain, dan berbagi pengalaman yang relevan"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: proaktif + mendengarkan aktif + berbagi relevan — jejaring kerja yang berkualitas. Aktif memperkenalkan diri (C) sudah baik (skor 4) namun kurang aspek mendengarkan dan berbagi yang relevan. Pulang lebih awal (B) melewatkan tujuan networking.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000158',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda ditugaskan ke daerah terpencil yang memiliki budaya dan kebiasaan yang sangat berbeda dengan daerah asal Anda. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Meminta agar ditugaskan ke tempat lain yang lebih familiar"},{"id":"B","text":"Menjalankan tugas namun tetap mempertahankan kebiasaan dari daerah asal"},{"id":"C","text":"Mempelajari budaya setempat sebelum dan selama bertugas agar bisa beradaptasi"},{"id":"D","text":"Mengikuti semua kebiasaan setempat meski bertentangan dengan nilai pribadi"},{"id":"E","text":"Mempelajari budaya setempat, menghormati perbedaan, dan beradaptasi sambil tetap menjaga nilai dan profesionalisme"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: belajar + menghormati + adaptasi dengan tetap menjaga nilai — Harmonis + Adaptif yang seimbang. Mempelajari budaya setempat (C) sudah baik (skor 4) namun tidak ada aspek menjaga nilai pribadi dan profesionalisme. Mengikuti semua (D) bisa berbenturan dengan nilai dan etika.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000159',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Dalam pertemuan resmi yang melibatkan berbagai suku dan agama, salah satu peserta membuat komentar yang tanpa sengaja menyinggung kelompok tertentu. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Diam agar tidak memperkeruh suasana"},{"id":"B","text":"Langsung menegur keras di depan semua peserta"},{"id":"C","text":"Membahas topik lain untuk mengalihkan perhatian"},{"id":"D","text":"Menyampaikan dengan tenang bahwa komentar tersebut mungkin bisa diinterpretasikan berbeda dan mengajak melanjutkan diskusi secara konstruktif"},{"id":"E","text":"Setelah pertemuan, mendekati peserta tersebut secara pribadi untuk menjelaskan dampak komentar dan memberikan perspektif"}]',
+  'D',
+  '{"A":2,"B":2,"C":2,"D":5,"E":4}',
+  'Opsi D terbaik: menyampaikan dengan tenang dalam konteks yang konstruktif — mengurangi potensi pelanggaran tanpa mempermalukan siapapun. Pendekatan pribadi setelah rapat (E) juga baik (skor 4) namun tidak menghentikan dampak saat itu. Diam (A) membiarkan potensi konflik berkembang.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000160',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Rekan kerja Anda dari suku minoritas sering menerima perlakuan berbeda dari atasan. Anda melihat ketidakadilan ini. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan karena bukan urusan Anda"},{"id":"B","text":"Berbicara dengan rekan yang terdampak untuk memastikan persepsi Anda benar"},{"id":"C","text":"Langsung melaporkan ke HRD atau unit pengawas"},{"id":"D","text":"Berbicara dengan rekan terdampak, dan jika ia mengkonfirmasi, membantu melaporkan ke jalur yang tepat"},{"id":"E","text":"Membicarakan dengan rekan-rekan lain agar semua aware"}]',
+  'D',
+  '{"A":1,"B":3,"C":3,"D":5,"E":2}',
+  'Opsi D terbaik: verifikasi dengan yang bersangkutan dahulu, lalu bantu melaporkan jika dikonfirmasi — menghormati otonomi rekan sekaligus mendukung keadilan. Langsung melaporkan (C) tanpa verifikasi bisa salah persepsi. Membiarkan (A) pembiaran diskriminasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000161',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Hari raya keagamaan rekan Anda berbeda. Ia masuk kerja pada hari raya Anda. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Tidak ada yang perlu dilakukan karena itu urusan masing-masing"},{"id":"B","text":"Mengucapkan selamat hari raya dan menghargai kehadirannya"},{"id":"C","text":"Meminta atasan agar rekan yang berbeda agama juga diberi libur hari rayanya"},{"id":"D","text":"Mengucapkan selamat, menghargai kehadiran, dan menawarkan bantuan menyelesaikan tugasnya di hari raya Anda"},{"id":"E","text":"Tidak mengucapkan selamat karena berbeda keyakinan"}]',
+  'D',
+  '{"A":2,"B":4,"C":3,"D":5,"E":1}',
+  'Opsi D terbaik: apresiasi + tawaran bantuan konkret — Harmonis yang aktif dan tulus. Mengucapkan selamat (B) sudah baik (skor 4). Tidak mengucapkan (E) menunjukkan kurangnya penghargaan terhadap perbedaan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000162',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda terlibat dalam program CSR instansi yang menyentuh komunitas adat di daerah terpencil. Komunitas menolak beberapa aspek program karena berbenturan dengan adat. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Tetap menjalankan program sesuai rencana karena sudah disetujui pimpinan"},{"id":"B","text":"Membatalkan program karena tidak mendapat dukungan komunitas"},{"id":"C","text":"Melaporkan situasi ke atasan dan mengusulkan penyesuaian program dengan mengakomodasi kearifan lokal"},{"id":"D","text":"Mendiskusikan langsung dengan tokoh adat untuk memahami keberatan mereka"},{"id":"E","text":"Mendiskusikan dengan tokoh adat, mencatat keberatan spesifik, dan mengusulkan modifikasi program kepada atasan"}]',
+  'E',
+  '{"A":1,"B":2,"C":3,"D":4,"E":5}',
+  'Opsi E terbaik: dialog dengan tokoh adat + dokumentasi + usulan modifikasi kepada atasan — Harmonis + Adaptif yang sistematik. Diskusi dengan tokoh adat saja (D) sudah baik (skor 4) namun tanpa eskalasi ke atasan untuk keputusan formal. Menjalankan tanpa perubahan (A) melanggar prinsip kearifan lokal.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000163',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Di lingkungan kerja Anda ada kebiasaan patungan untuk perayaan tertentu yang tidak Anda sukai namun semua rekan tampak menikmatinya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak ikut serta secara tegas"},{"id":"B","text":"Ikut serta karena takut dikucilkan"},{"id":"C","text":"Berpartisipasi sesuai kemampuan sambil tetap menghormati kebiasaan tim"},{"id":"D","text":"Berpartisipasi dengan tulus karena memahami fungsinya sebagai pemersatu tim"},{"id":"E","text":"Mengusulkan kegiatan alternatif yang lebih inklusif"}]',
+  'D',
+  '{"A":2,"B":2,"C":4,"D":5,"E":3}',
+  'Opsi D terbaik: berpartisipasi dengan tulus karena memahami fungsi sosialnya — Harmonis + Kolaboratif. Berpartisipasi sesuai kemampuan (C) juga baik (skor 4). Menolak tegas (A) bisa merusak kohesivitas tim tanpa alasan yang kuat.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000164',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda mendapati bahwa cara berpakaian Anda berbeda dari norma yang berlaku di daerah penugasan baru. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mempertahankan cara berpakaian karena itu hak pribadi"},{"id":"B","text":"Langsung mengubah seluruh gaya berpakaian agar sama dengan setempat"},{"id":"C","text":"Mempelajari norma berpakaian setempat dan menyesuaikan dalam batas kenyamanan dan nilai pribadi"},{"id":"D","text":"Menanyakan kepada rekan tentang ekspektasi berpakaian di lingkungan kerja"},{"id":"E","text":"Menanyakan kepada rekan dan atasan, lalu menyesuaikan dengan norma setempat sambil tetap profesional"}]',
+  'E',
+  '{"A":2,"B":3,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: mencari informasi dari rekan dan atasan + menyesuaikan secara profesional — Harmonis + Adaptif dengan langkah yang terkoordinasi. Menyesuaikan dalam batas nilai pribadi (C) juga baik (skor 4). Mempertahankan tanpa pertimbangan (A) menunjukkan kurangnya sensitivitas budaya.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000165',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda mengetahui ada stereotip negatif tentang suku tertentu yang beredar di kalangan rekan kerja melalui guyonan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Ikut tertawa agar tidak terkesan terlalu sensitif"},{"id":"B","text":"Meninggalkan percakapan diam-diam"},{"id":"C","text":"Menyatakan ketidaksetujuan dengan tenang dan menjelaskan bahwa stereotip tersebut tidak tepat"},{"id":"D","text":"Melaporkan ke HRD tentang guyonan tersebut"},{"id":"E","text":"Menyatakan ketidaksetujuan, menjelaskan dampak stereotip, dan mengajak beralih ke percakapan yang lebih positif"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: menyatakan ketidaksetujuan + edukasi singkat + ajakan beralih topik — Harmonis + Keberanian moral. Menyatakan ketidaksetujuan saja (C) sudah baik (skor 4). Ikut tertawa (A) berarti melegitimasi stereotip.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000166',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Program kantor bertabrakan dengan upacara adat penting di daerah Anda. Beberapa rekan asal daerah Anda termasuk Anda menghadapi dilema. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Memilih menghadiri upacara adat dan tidak hadir program kantor"},{"id":"B","text":"Menghadiri program kantor dan melewatkan upacara adat"},{"id":"C","text":"Berkomunikasi kepada atasan tentang situasi dan meminta kebijaksanaan khusus"},{"id":"D","text":"Mendiskusikan dengan atasan jauh sebelum hari tersebut dan mencari solusi yang memungkinkan keduanya"},{"id":"E","text":"Mendiskusikan dengan atasan, mengusulkan solusi kreatif (misal hadir sebagian di program kantor), dan mendokumentasikan keputusan"}]',
+  'E',
+  '{"A":2,"B":2,"C":3,"D":4,"E":5}',
+  'Opsi E terbaik: diskusi proaktif jauh sebelumnya + solusi kreatif + dokumentasi — perencanaan yang matang dan menghormati kedua kewajiban. Mendiskusikan dengan atasan lebih awal (D) sudah baik (skor 4) namun tanpa solusi kreatif yang konkret.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000167',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Atasan meminta Anda membuat laporan menggunakan aplikasi baru yang belum pernah Anda gunakan dan tenggat waktu cukup ketat. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak dan meminta menggunakan aplikasi yang sudah biasa Anda gunakan"},{"id":"B","text":"Mengerjakan dengan aplikasi lama dan menjelaskan situasinya kepada atasan"},{"id":"C","text":"Mempelajari aplikasi baru secara mandiri melalui tutorial dan langsung mencoba"},{"id":"D","text":"Meminta rekan yang sudah paham untuk mengerjakan laporan"},{"id":"E","text":"Mempelajari aplikasi baru, mencoba mengerjakan, dan meminta bantuan rekan untuk bagian yang tidak dipahami agar tetap tepat waktu"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: belajar mandiri + mencoba + meminta bantuan spesifik untuk bagian yang perlu — Kompeten + Kolaboratif. Mempelajari secara mandiri (C) sudah baik (skor 4) namun tanpa backup plan jika ada hambatan. Langsung meminta rekan mengerjakan (D) tidak mengembangkan kompetensi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000168',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda menerima email mencurigakan yang mengklaim dari atasan dan meminta transfer data sensitif segera. Email ini menggunakan akun yang sedikit berbeda dari akun resmi atasan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Langsung memenuhi permintaan karena terlihat mendesak"},{"id":"B","text":"Mengabaikan email tersebut"},{"id":"C","text":"Memverifikasi keaslian permintaan dengan menghubungi atasan melalui saluran komunikasi lain"},{"id":"D","text":"Meneruskan email ke IT security dan tidak merespons pengirim"},{"id":"E","text":"Memverifikasi keaslian kepada atasan melalui saluran lain, dan melaporkan email mencurigakan ke IT security"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: verifikasi + laporan ke IT security — respons phishing yang komprehensif. Verifikasi saja (C) atau lapor ke IT security saja (D) keduanya baik (skor 4) namun opsi E mencakup keduanya. Langsung memenuhi (A) dapat mengakibatkan kebocoran data.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000169',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda menemukan celah keamanan pada sistem informasi kantor yang bisa dieksploitasi. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengeksploitasi celah untuk menguji seberapa serius masalahnya"},{"id":"B","text":"Mengabaikan karena bukan tanggung jawab Anda"},{"id":"C","text":"Melaporkan kepada IT atau admin sistem kantor"},{"id":"D","text":"Mendokumentasikan celah secara rinci dan melaporkan ke IT security dengan cara yang bertanggung jawab"},{"id":"E","text":"Mendokumentasikan celah, melaporkan ke IT security, dan memastikan laporan Anda mendapat tindak lanjut"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: dokumentasi + pelaporan bertanggung jawab + memastikan tindak lanjut — responsible disclosure yang lengkap. Melaporkan dan mendokumentasikan (C, D) keduanya baik (skor 4). Mengeksploitasi (A) melanggar etika dan hukum siber.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000170',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Rekan meminta kata sandi akun sistem kantor Anda untuk keperluan mendesak karena akunnya sedang bermasalah. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Memberikan kata sandi karena rekan adalah orang yang dipercaya"},{"id":"B","text":"Menolak dan memintanya menghubungi IT untuk reset akun"},{"id":"C","text":"Menolak dan menawarkan bantuan dengan login menggunakan akun Anda di bawah pengawasan Anda"},{"id":"D","text":"Meminjamkan akun hanya untuk satu kali dengan mengawasi langsung"},{"id":"E","text":"Menolak, menjelaskan alasan keamanan, dan membantu menghubungi IT untuk solusi yang tepat"}]',
+  'E',
+  '{"A":1,"B":4,"C":3,"D":2,"E":5}',
+  'Opsi E terbaik: menolak + penjelasan keamanan + bantu hubungi IT — menjaga keamanan sistem sekaligus membantu rekan. Menolak dan arahkan ke IT (B) sudah baik (skor 4) namun tanpa penjelasan alasan. Memberikan kata sandi (A) melanggar keamanan informasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000171',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda diminta membuat konten media sosial resmi instansi namun tidak memiliki pelatihan komunikasi digital sebelumnya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membuat konten berdasarkan intuisi dan tren yang Anda lihat"},{"id":"B","text":"Menolak karena tidak memiliki keahlian"},{"id":"C","text":"Mempelajari panduan komunikasi digital instansi dan referensi konten media sosial pemerintah yang baik"},{"id":"D","text":"Meminta bantuan rekan yang lebih berpengalaman"},{"id":"E","text":"Mempelajari panduan resmi, membuat draft, dan meminta review dari rekan atau atasan sebelum publikasi"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: belajar + draft + review sebelum publikasi — Kompeten + Akuntabel untuk konten resmi instansi. Mempelajari panduan (C) sudah baik (skor 4) namun tanpa mekanisme review sebelum publish. Intuisi saja (A) berisiko untuk konten resmi pemerintah.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000172',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Data kerja penting tersimpan hanya di laptop pribadi Anda tanpa backup. Laptop mulai menunjukkan tanda-tanda kerusakan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menunggu sampai benar-benar rusak baru mengambil tindakan"},{"id":"B","text":"Segera membackup data ke storage resmi instansi"},{"id":"C","text":"Membackup ke harddisk eksternal pribadi"},{"id":"D","text":"Meminta IT untuk membantu"},{"id":"E","text":"Segera membackup ke storage resmi instansi, melaporkan kondisi laptop ke IT, dan memastikan sistem backup berjalan secara rutin ke depannya"}]',
+  'E',
+  '{"A":1,"B":4,"C":3,"D":3,"E":5}',
+  'Opsi E terbaik: backup ke tempat resmi + lapor IT + pastikan backup rutin ke depan — penanganan komprehensif risiko data. Backup ke storage resmi (B) sudah baik (skor 4). Menunggu (A) sangat berisiko kehilangan data kerja penting.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000173',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda menerima informasi bahwa ada kebocoran data pengguna di sistem instansi Anda dari sumber tidak resmi. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membagikan informasi tersebut ke media sosial agar publik waspada"},{"id":"B","text":"Mengabaikan karena sumbernya tidak resmi"},{"id":"C","text":"Melaporkan informasi tersebut ke atasan dan IT security untuk diverifikasi"},{"id":"D","text":"Langsung menyatakan kepada warga bahwa tidak ada kebocoran data"},{"id":"E","text":"Melaporkan ke atasan dan IT security, membantu proses verifikasi jika diminta, dan menunggu pernyataan resmi"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":1,"E":5}',
+  'Opsi E terbaik: lapor ke otoritas internal + bantu verifikasi + tunggu pernyataan resmi — penanganan insiden keamanan yang bertanggung jawab. Melaporkan dan memverifikasi (C) sudah baik (skor 4). Membagikan ke media sosial (A) sebelum diverifikasi bisa menimbulkan kepanikan yang tidak perlu.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000174',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Atasan meminta Anda menggunakan aplikasi pihak ketiga yang tidak tersandar oleh IT kantor untuk mempermudah pekerjaan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Langsung menggunakan karena atasan yang memerintahkan"},{"id":"B","text":"Menolak karena tidak sesuai standar IT"},{"id":"C","text":"Memberitahu atasan tentang potensi risiko keamanan dan meminta melalui proses approval IT"},{"id":"D","text":"Menggunakan namun tidak menyimpan data sensitif di sana"},{"id":"E","text":"Menjelaskan risiko kepada atasan dan mengusulkan alternatif yang sudah tersandar IT atau proses persetujuan formal"}]',
+  'E',
+  '{"A":1,"B":3,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: penjelasan risiko + usul alternatif tersandar atau approval formal — Kompeten + Loyal dalam keamanan informasi. Memberitahu risiko dan minta approval (C) sudah baik (skor 4). Langsung menggunakan (A) berisiko kebocoran data meski atas perintah atasan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000175',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda mendapati rekan menggunakan komputer kantor untuk mengakses situs yang diblokir dengan VPN pribadi. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Ikut menggunakan VPN tersebut karena tampaknya aman"},{"id":"B","text":"Mengabaikan karena bukan urusan Anda"},{"id":"C","text":"Mengingatkan rekan bahwa penggunaan VPN di perangkat kantor dapat melanggar kebijakan IT"},{"id":"D","text":"Melaporkan langsung ke IT atau atasan"},{"id":"E","text":"Mengingatkan rekan secara pribadi dahulu; jika berlanjut, melaporkan ke IT security"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: ingatkan pribadi dahulu baru lapor — pendekatan bertahap yang menjaga hubungan sambil menegakkan keamanan. Mengingatkan langsung (C) sudah baik (skor 4) namun tanpa langkah lanjutan. Ikut menggunakan (A) adalah pelanggaran kebijakan IT.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000176',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda diminta membuat presentasi digital untuk acara besar dalam waktu sangat singkat. Anda tahu cara membuatnya namun ingin hasil yang sangat sempurna. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengerjakan sampai benar-benar sempurna meski melewati tenggat"},{"id":"B","text":"Membuat presentasi sederhana namun tepat waktu"},{"id":"C","text":"Membuat presentasi berkualitas baik dalam waktu yang ada, dan jika perlu meminta bantuan untuk aspek tertentu"},{"id":"D","text":"Meminta tenggat diperpanjang"},{"id":"E","text":"Membuat presentasi sebaik mungkin dalam waktu yang ada, memprioritaskan konten inti, dan meminta feedback cepat dari rekan"}]',
+  'E',
+  '{"A":1,"B":3,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: kualitas optimal dalam batas waktu + prioritas konten inti + feedback cepat — manajemen waktu dan kualitas yang seimbang. Berkualitas baik dan tepat waktu (C) sudah baik (skor 4). Mengerjakan sampai sempurna melewati tenggat (A) tidak dapat diterima dalam konteks profesional.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000177',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Sistem informasi kantor sering mengalami gangguan yang menghambat pekerjaan Anda namun tidak ada yang melapor secara formal. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mencari cara mengerjakan tanpa sistem"},{"id":"B","text":"Terus mengeluh kepada rekan namun tidak melaporkan secara formal"},{"id":"C","text":"Melaporkan gangguan secara formal ke IT dengan mencatat waktu dan jenis gangguan"},{"id":"D","text":"Membiarkan karena IT pasti sudah tahu"},{"id":"E","text":"Mendokumentasikan gangguan secara sistematis dan melaporkan ke IT dengan data yang cukup untuk diagnosis dan perbaikan"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: dokumentasi sistematis + laporan dengan data cukup untuk diagnosis — Kompeten + Akuntabel. Melaporkan formal (C) sudah baik (skor 4) namun tanpa dokumentasi yang membantu diagnosis. Menganggap IT sudah tahu (D) melepas tanggung jawab pelaporan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000178',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda diminta membagikan dokumen rahasia melalui email kepada pihak eksternal atas permintaan yang tampak resmi namun tidak ada verifikasi formal. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengirim dokumen karena permintaannya terlihat resmi"},{"id":"B","text":"Menolak mengirim apapun"},{"id":"C","text":"Memverifikasi keaslian permintaan melalui saluran resmi sebelum mengirim"},{"id":"D","text":"Meminta konfirmasi tertulis dari atasan sebelum mengirim"},{"id":"E","text":"Memverifikasi keaslian permintaan, mendapat persetujuan tertulis atasan, dan mengirim melalui jalur yang aman"}]',
+  'E',
+  '{"A":1,"B":3,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: verifikasi + persetujuan tertulis atasan + pengiriman melalui jalur aman — tiga lapis keamanan informasi. Verifikasi (C) dan konfirmasi atasan (D) keduanya baik (skor 4) namun opsi E mencakup ketiganya sekaligus.',
+  ARRAY['sering-keluar']
+)
+
+ON CONFLICT (id) DO NOTHING;
+
+-- ============================================================
+-- TKP 179-200 (final batch: Teknologi Informasi, Profesionalisme,
+--               Pelayanan Publik, Jejaring Kerja, Sosial Budaya)
+-- ============================================================
+
+INSERT INTO public.questions
+  (id, pack_id, exam_type, subject, subtopic, question_type, difficulty, difficulty_rank,
+   question_text, options, correct_option, tkp_scores, explanation_text, tags)
+VALUES
+
+(
+  'aa300001-0000-0000-0000-000000000179',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda diminta mengarsipkan dokumen fisik ke dalam sistem digital, namun volume dokumen sangat banyak dan sistem yang ada lambat. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengarsipkan seadanya agar cepat selesai"},{"id":"B","text":"Menunda pekerjaan sampai sistem diperbaiki"},{"id":"C","text":"Membuat rencana kerja bertahap, memprioritaskan dokumen penting, dan melaporkan kendala sistem ke IT"},{"id":"D","text":"Meminta tambahan personel untuk membantu"},{"id":"E","text":"Membuat rencana bertahap, melaporkan kendala sistem ke IT, dan mengusulkan solusi seperti pemindaian batch"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: rencana bertahap + laporan kendala + usulan solusi teknis konkret — Kompeten + Adaptif. Membuat rencana dan melapor (C) sudah baik (skor 4) namun tanpa usulan solusi. Mengarsipkan seadanya (A) mengorbankan kualitas data.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000180',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda melihat unggahan di akun media sosial pribadi rekan kerja yang membocorkan informasi internal kantor yang belum boleh dipublikasikan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengabaikan karena itu akun pribadi rekan"},{"id":"B","text":"Mengomentari unggahan tersebut secara terbuka"},{"id":"C","text":"Menghubungi rekan secara pribadi dan memintanya menghapus unggahan"},{"id":"D","text":"Langsung melaporkan ke atasan"},{"id":"E","text":"Menghubungi rekan secara pribadi untuk menghapus; jika tidak diindahkan, melaporkan ke atasan"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: ingatkan pribadi dahulu baru eskalasi — menjaga rekan sekaligus melindungi informasi instansi. Menghubungi rekan (C) sudah baik (skor 4). Mengabaikan (A) membiarkan kebocoran informasi berlanjut.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000181',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Anda diberi akses ke database yang berisi data pribadi masyarakat. Seorang teman meminta Anda mencarikan data seseorang untuk keperluan pribadinya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mencarikan data karena hanya teman yang meminta"},{"id":"B","text":"Mencarikan data namun meminta teman merahasiakannya"},{"id":"C","text":"Menolak dengan tegas karena akses data hanya untuk keperluan dinas resmi"},{"id":"D","text":"Menolak dan menjelaskan bahwa penggunaan data di luar kedinasan melanggar hukum perlindungan data pribadi"},{"id":"E","text":"Menolak, menjelaskan aturan, dan menyarankan teman menempuh jalur resmi jika memang berhak"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: menolak + edukasi aturan + menyarankan jalur resmi — integritas + Berorientasi Pelayanan. Menolak dengan tegas (C) dan menolak dengan penjelasan hukum (D) keduanya baik (skor 4). Mencarikan data (A, B) melanggar UU Perlindungan Data Pribadi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000182',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Teknologi Informasi', 'TKP_SCALE', 'SEDANG', 6,
+  'Kantor Anda baru menerapkan sistem digital baru, dan banyak rekan senior kesulitan menggunakannya. Anda termasuk yang cepat memahaminya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Fokus pada pekerjaan sendiri karena bukan tugas Anda mengajari"},{"id":"B","text":"Membantu rekan yang bertanya langsung kepada Anda"},{"id":"C","text":"Menawarkan diri membantu rekan senior memahami sistem baru"},{"id":"D","text":"Mengusulkan kepada atasan untuk mengadakan sesi pelatihan internal singkat dan bersedia menjadi fasilitator"},{"id":"E","text":"Membuat panduan tertulis sederhana lalu membagikannya ke seluruh rekan"}]',
+  'D',
+  '{"A":1,"B":3,"C":4,"D":5,"E":4}',
+  'Opsi D terbaik: solusi sistemik — mengusulkan pelatihan internal dan bersedia jadi fasilitator. Mencerminkan Kolaboratif + Kompeten + inisiatif. Menawarkan bantuan (C) dan membuat panduan (E) keduanya baik (skor 4). Fokus pada diri sendiri (A) melewatkan peluang kontribusi tim.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000183',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda dipromosikan menjadi pemimpin tim yang sebelumnya beranggotakan rekan-rekan sebaya Anda. Beberapa dari mereka tampak kurang nyaman dengan perubahan ini. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Bersikap tegas dan menunjukkan otoritas agar dihormati"},{"id":"B","text":"Tetap bersikap seperti dulu agar tidak ada yang merasa berbeda"},{"id":"C","text":"Berkomunikasi terbuka tentang harapan bersama dan tetap menghargai kontribusi setiap anggota"},{"id":"D","text":"Meminta atasan menjelaskan posisi baru Anda kepada tim"},{"id":"E","text":"Membangun komunikasi terbuka, melibatkan tim dalam pengambilan keputusan, dan menunjukkan kepemimpinan melalui keteladanan"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: komunikasi terbuka + pelibatan tim + kepemimpinan melalui keteladanan — Harmonis + Kolaboratif. Komunikasi terbuka tentang harapan (C) sudah baik (skor 4). Bersikap tegas menunjukkan otoritas (A) bisa memperburuk dinamika tim.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000184',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda mendapat tawaran pekerjaan di tempat lain dengan gaji lebih tinggi, namun Anda sedang mengerjakan proyek penting yang belum selesai di instansi saat ini. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Langsung resign untuk mengambil kesempatan yang lebih baik"},{"id":"B","text":"Menolak tawaran karena loyalitas pada instansi"},{"id":"C","text":"Menyelesaikan tanggung jawab proyek terlebih dahulu sebelum mempertimbangkan keputusan"},{"id":"D","text":"Mempertimbangkan tawaran sambil memastikan transisi yang bertanggung jawab jika memutuskan pindah"},{"id":"E","text":"Mempertimbangkan secara matang, dan apapun keputusannya, memastikan proyek diselesaikan atau ditransfer dengan baik"}]',
+  'E',
+  '{"A":1,"B":3,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: pertimbangan matang + memastikan kontinuitas proyek apapun keputusannya — Akuntabel + profesional. Menyelesaikan proyek dulu (C) dan transisi bertanggung jawab (D) keduanya baik (skor 4). Langsung resign meninggalkan proyek (A) tidak bertanggung jawab.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000185',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda menerima banyak pujian atas keberhasilan sebuah proyek, padahal sebagian besar pekerjaan dilakukan bersama tim. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menerima pujian karena Anda memang berperan penting"},{"id":"B","text":"Menerima pujian dan diam-diam mengakui kontribusi tim dalam hati"},{"id":"C","text":"Mengklarifikasi bahwa keberhasilan adalah hasil kerja tim dan menyebutkan kontribusi rekan-rekan"},{"id":"D","text":"Membagikan pujian hanya kepada rekan terdekat"},{"id":"E","text":"Mengakui keberhasilan sebagai hasil kerja tim, menyebutkan kontribusi spesifik anggota, dan berterima kasih kepada mereka"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: mengakui kerja tim + menyebut kontribusi spesifik + apresiasi — Harmonis + Akuntabel + kerendahan hati. Mengklarifikasi kerja tim (C) sudah baik (skor 4). Menerima pujian sendiri (A) tidak menghargai kontribusi tim.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000186',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda diminta atasan untuk melakukan tugas yang sebenarnya bukan bagian dari deskripsi pekerjaan Anda, tanpa penjelasan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak karena bukan tanggung jawab Anda"},{"id":"B","text":"Mengerjakan dengan terpaksa sambil mengeluh"},{"id":"C","text":"Mengerjakan tugas tersebut sebagai bentuk fleksibilitas dan tim work"},{"id":"D","text":"Menanyakan dengan sopan konteks tugas tersebut, lalu mengerjakannya"},{"id":"E","text":"Menanyakan konteks dan prioritasnya secara sopan, mengerjakan jika memungkinkan, dan mengomunikasikan jika ada beban kerja yang berbenturan"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: klarifikasi konteks + kesediaan + komunikasi beban kerja — Adaptif + Akuntabel + komunikatif. Mengerjakan sebagai fleksibilitas (C) dan menanyakan konteks lalu mengerjakan (D) keduanya baik (skor 4). Menolak langsung (A) tidak fleksibel.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000187',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Anda menyadari bahwa Anda telah membuat janji kepada warga yang ternyata tidak bisa Anda penuhi karena ada kendala prosedural yang baru Anda ketahui. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menghindari warga tersebut agar tidak ditagih janji"},{"id":"B","text":"Menyalahkan prosedur kepada warga"},{"id":"C","text":"Segera menghubungi warga, menjelaskan kendala dengan jujur, dan menawarkan solusi alternatif"},{"id":"D","text":"Menunggu sampai warga menanyakan baru menjelaskan"},{"id":"E","text":"Menghubungi warga, meminta maaf, menjelaskan kendala secara jujur, dan berupaya mencari solusi terbaik yang mungkin"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: proaktif menghubungi + permintaan maaf + kejujuran + upaya solusi — Akuntabel + Berorientasi Pelayanan. Menghubungi dengan solusi alternatif (C) sudah baik (skor 4). Menghindari warga (A) tidak bertanggung jawab.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000188',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Profesionalisme', 'TKP_SCALE', 'SEDANG', 7,
+  'Pekerjaan Anda dievaluasi dan mendapat kritik yang menurut Anda kurang adil dari atasan. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menerima kritik dengan kesal namun diam"},{"id":"B","text":"Membantah kritik tersebut secara emosional"},{"id":"C","text":"Mendengarkan kritik, merefleksikan, dan menyampaikan klarifikasi secara objektif jika diperlukan"},{"id":"D","text":"Mengabaikan kritik karena merasa tidak adil"},{"id":"E","text":"Mendengarkan dengan terbuka, mengambil poin yang membangun, dan mendiskusikan perbedaan persepsi dengan data secara profesional"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":1,"E":5}',
+  'Opsi E terbaik: keterbukaan + mengambil poin membangun + diskusi berbasis data — Akuntabel + dewasa secara profesional. Mendengarkan dan klarifikasi objektif (C) sudah baik (skor 4). Membantah emosional (B) tidak profesional.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000189',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Seorang warga datang dengan keluhan yang sebenarnya bukan kewenangan unit Anda untuk menangani. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengatakan bahwa itu bukan urusan unit Anda dan menyuruhnya pergi"},{"id":"B","text":"Menerima keluhan namun tidak menindaklanjuti"},{"id":"C","text":"Menjelaskan unit yang berwenang dan memberikan informasi cara menghubunginya"},{"id":"D","text":"Mengantar warga ke unit yang berwenang"},{"id":"E","text":"Menjelaskan unit yang berwenang, memberikan informasi kontak, dan jika memungkinkan membantu menghubungkannya"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: informasi unit berwenang + kontak + bantuan menghubungkan — Berorientasi Pelayanan tanpa lempar tanggung jawab. Menjelaskan unit berwenang (C) dan mengantar warga (D) keduanya baik (skor 4). Menyuruh pergi (A) tidak berorientasi pelayanan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000190',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Anda mendapati antrean pelayanan diserobot oleh seseorang yang mengaku kerabat pejabat. Warga lain mulai protes. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Melayani orang tersebut lebih dulu untuk menghindari masalah"},{"id":"B","text":"Mengabaikan protes dan melanjutkan sesuai keinginan orang tersebut"},{"id":"C","text":"Menjelaskan dengan sopan bahwa pelayanan dilakukan berdasarkan urutan antrean untuk semua warga"},{"id":"D","text":"Meminta orang tersebut kembali ke antrean dan melayani sesuai urutan"},{"id":"E","text":"Menjelaskan kebijakan antrean yang adil, meminta semua warga mengikuti urutan, dan melayani sesuai antrean tanpa diskriminasi"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":4,"E":5}',
+  'Opsi E terbaik: penegasan kebijakan antrean yang adil untuk semua tanpa diskriminasi — Akuntabel + integritas + Berorientasi Pelayanan. Menjelaskan kebijakan (C) dan meminta kembali ke antrean (D) keduanya baik (skor 4). Mendahulukan karena kerabat pejabat (A) melanggar keadilan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000191',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Seorang warga tidak puas dengan keputusan yang Anda sampaikan dan mulai berbicara dengan nada tinggi serta mengintimidasi. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membalas dengan nada tinggi agar warga tahu Anda tidak takut"},{"id":"B","text":"Menyerah dan mengubah keputusan agar warga tenang"},{"id":"C","text":"Tetap tenang, mendengarkan, dan menjelaskan dasar keputusan dengan sabar"},{"id":"D","text":"Memanggil petugas keamanan untuk menertibkan warga"},{"id":"E","text":"Tetap tenang, mendengarkan keluhan, menjelaskan dasar keputusan, dan menawarkan jalur keberatan resmi jika warga tidak puas"}]',
+  'E',
+  '{"A":1,"B":1,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: ketenangan + penjelasan + tawaran jalur keberatan resmi — Berorientasi Pelayanan + Akuntabel. Tetap tenang dan menjelaskan (C) sudah baik (skor 4). Mengubah keputusan agar warga tenang (B) melanggar integritas. Membalas dengan nada tinggi (A) memperburuk situasi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000192',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Anda menerima banyak permintaan pelayanan secara bersamaan dan tidak mungkin menyelesaikan semuanya hari ini. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengerjakan sebanyak mungkin tanpa sistem yang jelas"},{"id":"B","text":"Mengerjakan yang paling mudah lebih dulu"},{"id":"C","text":"Memprioritaskan berdasarkan urgensi dan menginformasikan estimasi waktu kepada warga"},{"id":"D","text":"Meminta semua warga menunggu tanpa kepastian"},{"id":"E","text":"Memprioritaskan berdasarkan urgensi dan asas keadilan, menginformasikan estimasi waktu, dan mengelola ekspektasi warga dengan transparan"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":1,"E":5}',
+  'Opsi E terbaik: prioritas berbasis urgensi + keadilan + transparansi estimasi — Berorientasi Pelayanan + Akuntabel. Memprioritaskan dan menginformasikan estimasi (C) sudah baik (skor 4). Tanpa sistem yang jelas (A) atau tanpa kepastian (D) menimbulkan kebingungan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000193',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Anda diberi target jumlah pelayanan harian yang sangat tinggi sehingga sulit memberikan pelayanan yang berkualitas. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengejar target dengan mengorbankan kualitas pelayanan"},{"id":"B","text":"Mengabaikan target dan fokus pada kualitas saja"},{"id":"C","text":"Berusaha menyeimbangkan kuantitas dan kualitas semaksimal mungkin"},{"id":"D","text":"Melaporkan kepada atasan bahwa target tidak realistis disertai data"},{"id":"E","text":"Berusaha optimal menyeimbangkan keduanya, dan menyampaikan kepada atasan analisis tentang target dengan usulan penyesuaian"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: upaya optimal + analisis + usulan penyesuaian target kepada atasan — Kompeten + Akuntabel + Berorientasi Pelayanan. Menyeimbangkan kuantitas-kualitas (C) sudah baik (skor 4). Mengorbankan kualitas (A) bertentangan dengan esensi pelayanan publik.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000194',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Pelayanan Publik', 'TKP_SCALE', 'SEDANG', 4,
+  'Anda menemukan bahwa formulir pelayanan yang digunakan saat ini membingungkan banyak warga sehingga sering terjadi kesalahan pengisian. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan karena formulir adalah standar yang ditetapkan"},{"id":"B","text":"Membantu warga satu per satu setiap kali ada kesalahan"},{"id":"C","text":"Mengusulkan perbaikan desain formulir kepada atasan disertai contoh kesalahan yang sering terjadi"},{"id":"D","text":"Membuat panduan pengisian tidak resmi untuk membantu warga"},{"id":"E","text":"Membuat panduan pengisian sementara dan mengusulkan perbaikan formulir secara formal kepada atasan dengan data"}]',
+  'E',
+  '{"A":1,"B":3,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: solusi cepat (panduan sementara) + perbaikan sistemik (usul formal) — Berorientasi Pelayanan + Kompeten. Mengusulkan perbaikan formulir (C) sudah baik (skor 4) namun tanpa solusi sementara. Membiarkan (A) membiarkan masalah berulang.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000195',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Dalam sebuah proyek kolaboratif, mitra dari instansi lain tidak memenuhi komitmen waktu yang disepakati sehingga menghambat keseluruhan proyek. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengeluh kepada atasan tentang mitra tersebut"},{"id":"B","text":"Mengambil alih pekerjaan mitra agar proyek tetap jalan"},{"id":"C","text":"Berkomunikasi dengan mitra untuk memahami kendala dan mencari solusi bersama"},{"id":"D","text":"Melaporkan keterlambatan secara formal ke pimpinan proyek"},{"id":"E","text":"Berkomunikasi dengan mitra untuk memahami kendala, mencari solusi bersama, dan jika tidak terselesaikan, mengeskalasi melalui jalur formal"}]',
+  'E',
+  '{"A":2,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: komunikasi + solusi bersama + eskalasi formal bila perlu — Kolaboratif + Akuntabel. Berkomunikasi untuk solusi bersama (C) sudah baik (skor 4) namun tanpa langkah eskalasi. Mengambil alih pekerjaan mitra (B) tidak menyelesaikan akar masalah.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000196',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda memiliki ide bagus untuk meningkatkan kerjasama antar-unit, namun Anda bukan orang yang berwenang untuk memutuskannya. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menyimpan ide karena bukan wewenang Anda"},{"id":"B","text":"Menerapkan ide secara informal di lingkungan Anda sendiri"},{"id":"C","text":"Menyampaikan ide kepada atasan atau pihak berwenang dengan penjelasan manfaatnya"},{"id":"D","text":"Mendiskusikan ide dengan rekan-rekan dari unit lain terlebih dahulu"},{"id":"E","text":"Menyampaikan ide secara terstruktur kepada pihak berwenang, disertai analisis manfaat dan rencana implementasi"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: usulan terstruktur + analisis manfaat + rencana implementasi — Kompeten + Kolaboratif + inisiatif. Menyampaikan ide dengan penjelasan manfaat (C) sudah baik (skor 4). Menyimpan ide (A) melewatkan peluang perbaikan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000197',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Jejaring Kerja', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda diminta menjadi penghubung antara unit Anda dengan unit lain yang memiliki hubungan yang kurang harmonis dengan unit Anda. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menolak tugas karena hubungan yang sulit"},{"id":"B","text":"Menjalankan tugas dengan berpihak pada unit Anda"},{"id":"C","text":"Menjalankan tugas secara netral, fokus pada tujuan bersama, dan membangun komunikasi yang konstruktif"},{"id":"D","text":"Hanya menyampaikan pesan tanpa berusaha memperbaiki hubungan"},{"id":"E","text":"Menjalankan tugas dengan netral, membangun kepercayaan kedua unit, dan mencari titik temu untuk tujuan bersama"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: netralitas + membangun kepercayaan + mencari titik temu — Harmonis + Kolaboratif. Menjalankan secara netral dan konstruktif (C) sudah baik (skor 4). Berpihak pada unit sendiri (B) memperburuk ketidakharmonisan.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000198',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda bekerja dalam tim yang anggotanya berasal dari berbagai generasi, dari yang senior hingga yang sangat muda, dengan gaya kerja yang berbeda-beda. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Mengikuti gaya kerja generasi yang paling dominan"},{"id":"B","text":"Mendorong semua orang mengikuti gaya kerja Anda"},{"id":"C","text":"Menghargai perbedaan gaya kerja dan menyesuaikan komunikasi sesuai dengan masing-masing"},{"id":"D","text":"Membiarkan setiap orang bekerja dengan gayanya tanpa koordinasi"},{"id":"E","text":"Menghargai perbedaan, menjembatani gaya kerja antargenerasi, dan memanfaatkan keragaman sebagai kekuatan tim"}]',
+  'E',
+  '{"A":2,"B":1,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: menghargai + menjembatani + memanfaatkan keragaman sebagai kekuatan — Harmonis + Kolaboratif. Menghargai dan menyesuaikan komunikasi (C) sudah baik (skor 4). Mengikuti yang dominan (A) tidak optimal untuk dinamika tim.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000199',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda mendapati bahwa sebuah tradisi di lingkungan kerja Anda secara tidak sengaja mengecualikan kelompok minoritas tertentu. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Membiarkan karena tradisi sudah berlangsung lama"},{"id":"B","text":"Menghapus tradisi tersebut secara sepihak"},{"id":"C","text":"Mengangkat isu ini secara konstruktif dan mengusulkan penyesuaian agar lebih inklusif"},{"id":"D","text":"Hanya membicarakannya dengan kelompok yang terdampak"},{"id":"E","text":"Mengangkat isu secara konstruktif, melibatkan berbagai pihak, dan mengusulkan modifikasi tradisi agar lebih inklusif tanpa menghilangkan nilainya"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":3,"E":5}',
+  'Opsi E terbaik: mengangkat isu + melibatkan berbagai pihak + modifikasi inklusif tanpa menghilangkan nilai — Harmonis + Adaptif yang bijak. Mengusulkan penyesuaian (C) sudah baik (skor 4). Membiarkan (A) melanggengkan eksklusi. Menghapus sepihak (B) bisa menimbulkan resistensi.',
+  ARRAY['sering-keluar']
+),
+
+(
+  'aa300001-0000-0000-0000-000000000200',
+  'a0000001-0000-0000-0000-000000000003',
+  'CPNS', 'TKP', 'Sosial Budaya', 'TKP_SCALE', 'SEDANG', 5,
+  'Anda ditempatkan dalam lingkungan kerja yang mayoritas anggotanya memiliki latar belakang budaya berbeda dengan Anda, dan Anda merasa menjadi minoritas. Apa yang Anda lakukan?',
+  '[{"id":"A","text":"Menarik diri dan membatasi interaksi sosial"},{"id":"B","text":"Berusaha mengubah lingkungan agar sesuai dengan budaya Anda"},{"id":"C","text":"Beradaptasi dengan lingkungan sambil tetap menjaga identitas diri"},{"id":"D","text":"Mengikuti semua kebiasaan mayoritas tanpa terkecuali"},{"id":"E","text":"Beradaptasi secara aktif, menghargai budaya mayoritas, berbagi perspektif budaya Anda secara positif, dan membangun saling pengertian"}]',
+  'E',
+  '{"A":1,"B":2,"C":4,"D":2,"E":5}',
+  'Opsi E terbaik: adaptasi aktif + menghargai + berbagi perspektif + saling pengertian — Harmonis + Adaptif yang sehat. Beradaptasi sambil menjaga identitas (C) sudah baik (skor 4). Menarik diri (A) menghambat integrasi. Mengubah lingkungan agar sesuai budaya sendiri (B) tidak realistis dan tidak Harmonis.',
   ARRAY['sering-keluar']
 )
 
