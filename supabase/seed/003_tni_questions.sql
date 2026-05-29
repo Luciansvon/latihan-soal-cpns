@@ -1,12 +1,13 @@
 -- ============================================================
--- Seed 003: TNI Questions (50 soal)
+-- Seed 003: TNI Questions (250 soal)
 -- Distribusi:
---   MATEMATIKA       : 15 soal (Aritmatika 5, Aljabar 5, Geometri 3, Statistika 2)
---   BAHASA_INDONESIA : 12 soal (Pemahaman Bacaan 4, Tata Bahasa 4, Ejaan & Kosakata 4)
---   PENGETAHUAN_UMUM : 12 soal (Sejarah Indonesia 4, Geografi 4, IPA 4)
---   PSIKOTES         :  6 soal (Deret Angka 3, Spasial/Figurasi 3)
---   KEDINASAN        :  5 soal (Regulasi TNI, Tugas Pokok, Bela Negara)
+--   MATEMATIKA       : 80 soal (Aritmatika, Aljabar, Geometri, Statistika)
+--   BAHASA_INDONESIA : 60 soal (Pemahaman Bacaan, Tata Bahasa, Ejaan & Kosakata)
+--   PENGETAHUAN_UMUM : 60 soal (Sejarah Indonesia, Geografi, IPA)
+--   PSIKOTES         : 30 soal (Deret Angka, Spasial/Figurasi)
+--   KEDINASAN        : 20 soal (Regulasi TNI, Tugas Pokok, Bela Negara)
 -- Sistem penilaian TNI: benar +4, salah -1 (negative marking)
+-- Jawaban matematika dihitung programatik; posisi kunci dirotasi.
 -- ============================================================
 
 INSERT INTO public.questions

@@ -2,14 +2,10 @@
 -- Seed 002: CPNS TKP (Tes Karakteristik Pribadi)
 -- pack_id : a0000001-0000-0000-0000-000000000003
 -- UUID    : aa300001-0000-0000-0000-{12-digit nomor}
--- 50 soal, tipe TKP_SCALE, difficulty SEDANG
--- Distribusi subtopik:
---   Pelayanan Publik   : 10 soal (001-010)
---   Profesionalisme    : 10 soal (011-020)
---   Anti Radikalisme   :  8 soal (021-028)
---   Jejaring Kerja     :  8 soal (029-036)
---   Sosial Budaya      :  7 soal (037-043)
---   Teknologi Informasi:  7 soal (044-050)
+-- 200 soal, tipe TKP_SCALE (skala skor 1-5, correct_option = key skor 5)
+-- Soal 001-100 batch awal; 101-200 perluasan lintas 6 subtopik.
+-- Distribusi subtopik (kumulatif): Pelayanan Publik, Profesionalisme,
+--   Anti Radikalisme, Jejaring Kerja, Sosial Budaya, Teknologi Informasi.
 -- ============================================================
 
 INSERT INTO public.questions
