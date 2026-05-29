@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -10,47 +10,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import { CognitiveCalm, HyperMinimal, Fonts } from '../../constants/colors';
 import { useStore } from '../../store';
 import type { ProgressScreenProps } from '../../navigation/types';
 import { useProgressData } from '../../hooks/useProgressData';
-import { AccuracyChart } from '../../components/charts/AccuracyChart';
+import { SUBJECT_LABELS } from '../../types/exam.types';
 
-interface StatCardProps {
-  label: string;
-  value: string | number;
-  icon: keyof typeof Ionicons.glyphMap;
-  color: string;
-}
-
-function StatCard({ label, value, icon, color }: StatCardProps) {
-  return (
-    <View style={[statStyles.card, { borderTopColor: color }]}>
-      <Ionicons name={icon} size={20} color={color} />
-      <Text style={statStyles.value}>{value}</Text>
-      <Text style={statStyles.label}>{label}</Text>
-    </View>
-  );
-}
-
-const statStyles = StyleSheet.create({
-  card: {
-    flex: 1,
-    backgroundColor: Colors.white,
-    borderRadius: 14,
-    padding: 14,
-    alignItems: 'center',
-    gap: 6,
-    borderTopWidth: 3,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  value: { fontSize: 22, fontWeight: '900', color: Colors.textPrimary },
-  label: { fontSize: 11, color: Colors.textSecondary, textAlign: 'center' },
-});
+const DAY_LABELS = ['S', 'S', 'R', 'K', 'J', 'S', 'M']; // Sen Sel Rab Kam Jum Sab Min
 
 export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'ProgressDashboard'>) {
   const userId = useStore((s) => s.userId);
@@ -61,90 +27,228 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
 
   const progress = useProgressData({ userId });
 
+  const nextLevelTarget = Math.max(level, 1) * 1000;
+  const xpToNext = Math.min(xpTotal, nextLevelTarget);
+  const xpPct = Math.max(0, Math.min(1, xpToNext / nextLevelTarget));
+
+  const totalAcc =
+    progress.totalAnswered > 0
+      ? Math.round((progress.totalCorrect / progress.totalAnswered) * 100)
+      : 0;
+
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Progress Belajar</Text>
-        <Text style={styles.headerSubtitle}>Pantau perkembanganmu dari waktu ke waktu</Text>
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      {/* TopAppBar */}
+      <View style={styles.topbar}>
+        <View style={styles.avatarPlaceholder}>
+          <Ionicons name="person-outline" size={16} color={HyperMinimal.onSurfaceVariant} />
+        </View>
+        <Text style={styles.wordmark}>Wirago Academy</Text>
+        <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
+          <Ionicons name="notifications-outline" size={22} color={CognitiveCalm.error} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={progress.loading} onRefresh={progress.refresh} />
+          <RefreshControl
+            refreshing={progress.loading}
+            onRefresh={progress.refresh}
+            tintColor={CognitiveCalm.primary}
+          />
         }
       >
-        {/* Gamification Stats */}
-        <View style={styles.statsRow}>
-          <StatCard label="Level" value={level} icon="ribbon-outline" color={Colors.levelBadge} />
-          <StatCard label="Total XP" value={xpTotal.toLocaleString('id-ID')} icon="star-outline" color={Colors.xpGold} />
-          <StatCard label="Streak" value={`${streakCurrent}🔥`} icon="flame-outline" color={Colors.streakFire} />
+        {/* Page intro */}
+        <View style={styles.intro}>
+          <Text style={styles.title}>Progress Kamu</Text>
+          <Text style={styles.subtitle}>Pantau perkembangan belajarmu hari ini.</Text>
         </View>
 
-        {/* Streak Detail */}
-        <View style={styles.streakCard}>
-          <View style={styles.streakRow}>
-            <View style={styles.streakItem}>
-              <Text style={styles.streakValue}>{streakCurrent}</Text>
-              <Text style={styles.streakLabel}>Streak Saat Ini</Text>
+        {/* Bento: Hero card */}
+        <View style={[styles.bentoCard, styles.bentoHero]}>
+          <View style={styles.heroTopRow}>
+            <View style={styles.levelPill}>
+              <Text style={styles.levelPillText}>Level {level}</Text>
             </View>
-            <View style={styles.streakDivider} />
-            <View style={styles.streakItem}>
-              <Text style={styles.streakValue}>{streakLongest}</Text>
-              <Text style={styles.streakLabel}>Streak Terpanjang</Text>
+            <View style={styles.streakPill}>
+              <Ionicons name="flame" size={16} color={CognitiveCalm.error} />
+              <Text style={styles.streakPillText}>
+                {streakCurrent} Hari Streak
+              </Text>
             </View>
           </View>
-          <View style={styles.streakWeek}>
-            {['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'].map((day, i) => {
-              const isActive = i < (streakCurrent % 7);
+
+          <Text style={styles.heroLevelTitle}>Pejuang Wirago</Text>
+
+          <View>
+            <Text style={styles.heroXpLabel}>TOTAL XP</Text>
+            <View style={styles.heroXpRow}>
+              <Text style={styles.heroXpValue}>{xpTotal.toLocaleString('id-ID')}</Text>
+              <Text style={styles.heroXpUnit}>XP</Text>
+            </View>
+          </View>
+
+          <View>
+            <View style={styles.heroLevelBarMeta}>
+              <Text style={styles.heroLevelBarLabel}>
+                Menuju Level {level + 1}
+              </Text>
+              <Text style={styles.heroLevelBarLabel}>
+                {xpTotal.toLocaleString('id-ID')} / {nextLevelTarget.toLocaleString('id-ID')} XP
+              </Text>
+            </View>
+            <View style={styles.heroLevelTrack}>
+              <View style={[styles.heroLevelFill, { width: `${xpPct * 100}%` }]} />
+            </View>
+          </View>
+        </View>
+
+        {/* Bento: Weekly activity */}
+        <View style={styles.bentoCard}>
+          <Text style={styles.bentoLabel}>AKTIVITAS MINGGU INI</Text>
+          <View style={styles.weekRow}>
+            {DAY_LABELS.map((day, i) => {
+              const isActive = i < (streakCurrent % 7 || (streakCurrent > 0 ? 7 : 0));
+              // Date.getDay(): 0=Sun..6=Sat. Shift so Mon=0..Sun=6.
+              const today = i === ((new Date().getDay() + 6) % 7);
+              const heightPct = isActive ? (i % 3 === 0 ? 60 : i % 3 === 1 ? 100 : 80) : 60;
               return (
-                <View key={day} style={styles.streakDayItem}>
-                  <View style={[styles.streakDayDot, isActive && styles.streakDayDotActive]} />
-                  <Text style={styles.streakDayLabel}>{day}</Text>
+                <View key={`${day}-${i}`} style={styles.dayItem}>
+                  {today ? <Text style={styles.dayTodayBadge}>Hari Ini</Text> : null}
+                  <View
+                    style={[
+                      styles.dayBarTrack,
+                      today && styles.dayBarTrackToday,
+                    ]}
+                  >
+                    {isActive ? (
+                      <View
+                        style={[styles.dayBarFill, { height: `${heightPct}%` }]}
+                      />
+                    ) : null}
+                  </View>
+                  <Text
+                    style={[
+                      styles.dayLabel,
+                      today && styles.dayLabelToday,
+                      !isActive && !today && styles.dayLabelDim,
+                    ]}
+                  >
+                    {day}
+                  </Text>
                 </View>
               );
             })}
           </View>
         </View>
 
-        {/* Session summary */}
-        <View style={styles.summaryCard}>
-          <Text style={styles.sectionTitle}>Ringkasan Sesi</Text>
+        {/* Bento: Ringkasan Sesi */}
+        <View style={styles.bentoCard}>
+          <View style={styles.bentoHeaderRow}>
+            <Text style={styles.bentoLabel}>RINGKASAN SESI</Text>
+            <Ionicons
+              name="analytics-outline"
+              size={18}
+              color={HyperMinimal.outline}
+            />
+          </View>
           {progress.loading ? (
-            <ActivityIndicator color={Colors.primary} />
+            <ActivityIndicator color={CognitiveCalm.primary} />
           ) : (
-            <View style={styles.summaryRow}>
-              <SummaryStat label="Sesi" value={progress.totalSessions} />
-              <SummaryDivider />
-              <SummaryStat label="Soal Dijawab" value={progress.totalAnswered} />
-              <SummaryDivider />
-              <SummaryStat
-                label="Akurasi"
-                value={
-                  progress.totalAnswered > 0
-                    ? `${Math.round((progress.totalCorrect / progress.totalAnswered) * 100)}%`
-                    : '—'
-                }
-              />
+            <View style={styles.summaryGrid}>
+              <View style={styles.summaryTile}>
+                <Ionicons
+                  name="book-outline"
+                  size={20}
+                  color={CognitiveCalm.error}
+                />
+                <Text style={styles.summaryValue}>{progress.totalSessions}</Text>
+                <Text style={styles.summaryLabel}>Sesi Belajar</Text>
+              </View>
+              <View style={styles.summaryTile}>
+                <Ionicons
+                  name="help-circle-outline"
+                  size={20}
+                  color={CognitiveCalm.error}
+                />
+                <Text style={styles.summaryValue}>{progress.totalAnswered}</Text>
+                <Text style={styles.summaryLabel}>Soal Dijawab</Text>
+              </View>
+              <View style={[styles.summaryTile, styles.summaryTileWide]}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.summaryValue}>
+                    {progress.totalAnswered > 0 ? `${totalAcc}%` : '—'}
+                  </Text>
+                  <Text style={styles.summaryLabel}>Akurasi Keseluruhan</Text>
+                </View>
+                <CircularPct pct={totalAcc / 100} />
+              </View>
             </View>
           )}
         </View>
 
-        {/* Accuracy chart */}
-        <View style={styles.accuracyCard}>
-          <Text style={styles.sectionTitle}>Akurasi per Mata Pelajaran</Text>
+        {/* Bento: Akurasi per Mata Pelajaran */}
+        <View style={styles.bentoCard}>
+          <View style={styles.bentoHeaderRow}>
+            <Text style={styles.bentoLabel}>AKURASI PER MATA PELAJARAN</Text>
+            <Ionicons
+              name="library-outline"
+              size={18}
+              color={HyperMinimal.outline}
+            />
+          </View>
           {progress.loading ? (
-            <ActivityIndicator color={Colors.primary} />
+            <ActivityIndicator color={CognitiveCalm.primary} />
+          ) : progress.accuracyBySubject.length === 0 ? (
+            <Text style={styles.emptySubText}>
+              Belum ada data akurasi — selesaikan satu sesi untuk mengisi grafik.
+            </Text>
           ) : (
-            <AccuracyChart data={progress.accuracyBySubject} />
+            <View style={styles.accuracyList}>
+              {progress.accuracyBySubject.map((row) => (
+                <View key={row.subject} style={styles.accuracyRow}>
+                  <View style={styles.accuracyRowTop}>
+                    <Text style={styles.accuracyLabel}>
+                      {SUBJECT_LABELS[row.subject] ?? row.subject}
+                    </Text>
+                    <Text style={styles.accuracyPct}>{row.pct}%</Text>
+                  </View>
+                  <View style={styles.accuracyTrack}>
+                    <View
+                      style={[styles.accuracyFill, { width: `${row.pct}%` }]}
+                    />
+                  </View>
+                </View>
+              ))}
+            </View>
           )}
         </View>
 
-        {/* Empty CTA when truly nothing */}
+        {/* Streak summary mini */}
+        <View style={styles.bentoCard}>
+          <View style={styles.streakSummaryRow}>
+            <View style={styles.streakSummaryItem}>
+              <Text style={styles.streakSummaryValue}>{streakCurrent}</Text>
+              <Text style={styles.streakSummaryLabel}>Streak Saat Ini</Text>
+            </View>
+            <View style={styles.streakSummaryDivider} />
+            <View style={styles.streakSummaryItem}>
+              <Text style={styles.streakSummaryValue}>{streakLongest}</Text>
+              <Text style={styles.streakSummaryLabel}>Streak Terpanjang</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Empty state if nothing yet */}
         {!progress.loading && progress.totalSessions === 0 ? (
-          <View style={styles.emptyStateCard}>
-            <Ionicons name="bar-chart-outline" size={48} color={Colors.gray300} />
+          <View style={[styles.bentoCard, styles.emptyCard]}>
+            <Ionicons
+              name="bar-chart-outline"
+              size={48}
+              color={HyperMinimal.outlineVariant}
+            />
             <Text style={styles.emptyTitle}>Mulai sesi pertama</Text>
             <Text style={styles.emptyDesc}>
               Selesaikan satu sesi latihan untuk melihat statistik dan riwayat di sini.
@@ -152,7 +256,7 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
           </View>
         ) : null}
 
-        {/* History Quick Link */}
+        {/* History link */}
         <TouchableOpacity
           style={styles.historyLink}
           activeOpacity={0.85}
@@ -160,7 +264,7 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
         >
           <View style={styles.historyLinkLeft}>
             <View style={styles.historyIcon}>
-              <Ionicons name="time-outline" size={20} color={Colors.primary} />
+              <Ionicons name="time-outline" size={20} color={CognitiveCalm.error} />
             </View>
             <View>
               <Text style={styles.historyLinkTitle}>Riwayat Sesi</Text>
@@ -171,144 +275,406 @@ export function ProgressDashboardScreen({ navigation }: ProgressScreenProps<'Pro
               </Text>
             </View>
           </View>
-          <Ionicons name="chevron-forward" size={18} color={Colors.textMuted} />
+          <Ionicons
+            name="chevron-forward"
+            size={18}
+            color={HyperMinimal.outlineVariant}
+          />
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function SummaryStat({ label, value }: { label: string; value: string | number }) {
+function CircularPct({ pct }: { pct: number }) {
+  const clamped = Math.max(0, Math.min(1, pct));
+  const size = 44;
+  const stroke = 4;
+  // Approximated with two half-rings; SVG would be cleaner but adds a dep.
   return (
-    <View style={styles.summaryItem}>
-      <Text style={styles.summaryValue}>{value}</Text>
-      <Text style={styles.summaryLabel}>{label}</Text>
+    <View
+      style={[
+        styles.circularWrap,
+        { width: size, height: size, borderRadius: size / 2 },
+      ]}
+    >
+      <View
+        style={[
+          styles.circularRing,
+          {
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            borderWidth: stroke,
+          },
+        ]}
+      />
+      <View
+        style={[
+          styles.circularFill,
+          {
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            borderWidth: stroke,
+            opacity: 0.85,
+            transform: [{ rotateZ: `${clamped * 360 - 90}deg` }],
+          },
+        ]}
+      />
     </View>
   );
 }
 
-function SummaryDivider() {
-  return <View style={styles.summaryDivider} />;
-}
-
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+  safe: { flex: 1, backgroundColor: HyperMinimal.background },
 
-  header: {
-    backgroundColor: Colors.white,
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingVertical: 12,
+    backgroundColor: HyperMinimal.glassSurface,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: HyperMinimal.borderSubtle,
   },
-  headerTitle: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary, letterSpacing: -0.3 },
-  headerSubtitle: { fontSize: 13, color: Colors.textSecondary, marginTop: 2 },
+  avatarPlaceholder: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: HyperMinimal.surfaceContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  wordmark: {
+    fontFamily: Fonts.bold,
+    fontSize: 20,
+    color: CognitiveCalm.primary,
+    letterSpacing: -0.4,
+  },
+  iconBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
   scroll: { padding: 20, gap: 16, paddingBottom: 40 },
 
-  statsRow: { flexDirection: 'row', gap: 10 },
-
-  streakCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 18,
-    gap: 16,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+  intro: { gap: 4, marginBottom: 4 },
+  title: {
+    fontFamily: Fonts.bold,
+    fontSize: 28,
+    lineHeight: 36,
+    color: HyperMinimal.deepNavy,
   },
-  streakRow: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' },
-  streakItem: { alignItems: 'center', gap: 4 },
-  streakValue: { fontSize: 32, fontWeight: '900', color: Colors.streakFire },
-  streakLabel: { fontSize: 12, color: Colors.textSecondary },
-  streakDivider: { width: 1, height: 50, backgroundColor: Colors.border },
+  subtitle: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    lineHeight: 20,
+    color: HyperMinimal.onSurfaceVariant,
+  },
 
-  streakWeek: { flexDirection: 'row', justifyContent: 'space-around' },
-  streakDayItem: { alignItems: 'center', gap: 6 },
-  streakDayDot: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: Colors.gray100,
+  bentoCard: {
+    backgroundColor: '#FFFFFFCC',
+    borderRadius: 24,
+    padding: 18,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: HyperMinimal.borderSubtle,
+    gap: 12,
+    shadowColor: HyperMinimal.deepNavy,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    elevation: 2,
   },
-  streakDayDotActive: {
-    backgroundColor: Colors.streakFire,
-    borderColor: Colors.streakFire,
+  bentoLabel: {
+    fontFamily: Fonts.semibold,
+    fontSize: 11,
+    color: HyperMinimal.onSurfaceVariant,
+    letterSpacing: 1,
   },
-  streakDayLabel: { fontSize: 10, color: Colors.textSecondary },
-
-  summaryCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 18,
-    gap: 14,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' },
-  summaryItem: { alignItems: 'center', gap: 4 },
-  summaryValue: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary },
-  summaryLabel: { fontSize: 11, color: Colors.textSecondary },
-  summaryDivider: { width: 1, height: 36, backgroundColor: Colors.border },
-
-  accuracyCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 18,
-    gap: 14,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  sectionTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-
-  emptyStateCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 32,
+  bentoHeaderRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    justifyContent: 'space-between',
   },
-  emptyTitle: { fontSize: 16, fontWeight: '700', color: Colors.textPrimary, marginTop: 4 },
-  emptyDesc: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
 
-  historyLink: {
-    backgroundColor: Colors.white,
+  // Hero card
+  bentoHero: { gap: 16 },
+  heroTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  levelPill: {
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    backgroundColor: CognitiveCalm.error + '18',
+    borderRadius: 999,
+  },
+  levelPillText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 12,
+    color: CognitiveCalm.error,
+  },
+  streakPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: HyperMinimal.surfaceContainer,
+    borderRadius: 12,
+  },
+  streakPillText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 12,
+    color: HyperMinimal.deepNavy,
+  },
+  heroLevelTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 22,
+    lineHeight: 28,
+    color: HyperMinimal.deepNavy,
+  },
+  heroXpLabel: {
+    fontFamily: Fonts.semibold,
+    fontSize: 11,
+    color: HyperMinimal.onSurfaceVariant,
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  heroXpRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6 },
+  heroXpValue: {
+    fontFamily: Fonts.extrabold,
+    fontSize: 40,
+    lineHeight: 48,
+    color: CognitiveCalm.error,
+  },
+  heroXpUnit: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    color: HyperMinimal.onSurfaceVariant,
+  },
+  heroLevelBarMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  heroLevelBarLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: HyperMinimal.onSurfaceVariant,
+  },
+  heroLevelTrack: {
+    height: 8,
+    backgroundColor: HyperMinimal.surfaceContainer,
+    borderRadius: 999,
+    overflow: 'hidden',
+  },
+  heroLevelFill: {
+    height: '100%',
+    backgroundColor: CognitiveCalm.error,
+    borderRadius: 999,
+  },
+
+  // Weekly activity
+  weekRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    height: 110,
+  },
+  dayItem: {
+    alignItems: 'center',
+    gap: 8,
+    width: 36,
+  },
+  dayTodayBadge: {
+    position: 'absolute',
+    top: -18,
+    fontFamily: Fonts.bold,
+    fontSize: 10,
+    color: CognitiveCalm.error,
+  },
+  dayBarTrack: {
+    width: 24,
+    height: 72,
+    backgroundColor: CognitiveCalm.error + '18',
+    borderRadius: 6,
+    overflow: 'hidden',
+    justifyContent: 'flex-end',
+  },
+  dayBarTrackToday: {
+    borderWidth: 2,
+    borderColor: CognitiveCalm.error,
+  },
+  dayBarFill: {
+    width: '100%',
+    backgroundColor: CognitiveCalm.error,
+    borderRadius: 6,
+  },
+  dayLabel: {
+    fontFamily: Fonts.semibold,
+    fontSize: 12,
+    color: HyperMinimal.onSurfaceVariant,
+  },
+  dayLabelToday: { color: CognitiveCalm.error, fontFamily: Fonts.bold },
+  dayLabelDim: { color: HyperMinimal.outlineVariant },
+
+  // Ringkasan
+  summaryGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  summaryTile: {
+    flexBasis: '47%',
+    flexGrow: 1,
+    backgroundColor: HyperMinimal.surfaceContainerLowest,
+    borderWidth: 1,
+    borderColor: HyperMinimal.borderSubtle,
     borderRadius: 14,
+    padding: 14,
+    gap: 4,
+  },
+  summaryTileWide: {
+    flexBasis: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  summaryValue: {
+    fontFamily: Fonts.bold,
+    fontSize: 22,
+    color: HyperMinimal.deepNavy,
+  },
+  summaryLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: HyperMinimal.onSurfaceVariant,
+  },
+
+  // Circular pct (approximation)
+  circularWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: HyperMinimal.surfaceContainer,
+  },
+  circularRing: {
+    position: 'absolute',
+    borderColor: HyperMinimal.surfaceContainer,
+  },
+  circularFill: {
+    position: 'absolute',
+    borderColor: CognitiveCalm.error,
+    borderRightColor: 'transparent',
+    borderBottomColor: 'transparent',
+  },
+
+  // Accuracy
+  accuracyList: { gap: 14 },
+  accuracyRow: { gap: 6 },
+  accuracyRowTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  accuracyLabel: {
+    fontFamily: Fonts.medium,
+    fontSize: 12,
+    color: HyperMinimal.deepNavy,
+  },
+  accuracyPct: {
+    fontFamily: Fonts.bold,
+    fontSize: 12,
+    color: HyperMinimal.deepNavy,
+  },
+  accuracyTrack: {
+    height: 6,
+    backgroundColor: HyperMinimal.surfaceContainer,
+    borderRadius: 999,
+    overflow: 'hidden',
+  },
+  accuracyFill: {
+    height: '100%',
+    backgroundColor: CognitiveCalm.error,
+    borderRadius: 999,
+  },
+  emptySubText: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: HyperMinimal.onSurfaceVariant,
+    lineHeight: 18,
+  },
+
+  // Streak summary mini
+  streakSummaryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  streakSummaryItem: { alignItems: 'center', gap: 4 },
+  streakSummaryValue: {
+    fontFamily: Fonts.extrabold,
+    fontSize: 28,
+    color: CognitiveCalm.error,
+  },
+  streakSummaryLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: HyperMinimal.onSurfaceVariant,
+  },
+  streakSummaryDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: HyperMinimal.borderSubtle,
+  },
+
+  // Empty state
+  emptyCard: { alignItems: 'center', paddingVertical: 28, gap: 8 },
+  emptyTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+    color: HyperMinimal.deepNavy,
+    marginTop: 4,
+  },
+  emptyDesc: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: HyperMinimal.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 20,
+    paddingHorizontal: 12,
+  },
+
+  // History link
+  historyLink: {
+    backgroundColor: HyperMinimal.surfaceContainerLowest,
+    borderRadius: 16,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: HyperMinimal.borderSubtle,
   },
   historyLinkLeft: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   historyIcon: {
     width: 42,
     height: 42,
     borderRadius: 12,
-    backgroundColor: Colors.primary + '12',
+    backgroundColor: CognitiveCalm.error + '14',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  historyLinkTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  historyLinkDesc: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
+  historyLinkTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 14,
+    color: HyperMinimal.deepNavy,
+  },
+  historyLinkDesc: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: HyperMinimal.onSurfaceVariant,
+    marginTop: 2,
+  },
 });

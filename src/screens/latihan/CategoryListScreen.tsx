@@ -9,26 +9,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Stitch, Fonts } from '../../constants/colors';
+import { CognitiveCalm, Fonts } from '../../constants/colors';
 import {
   EXAM_CONFIGS,
+  SUBJECT_LABELS,
+  type ExamType,
   type SubjectType,
 } from '../../types/exam.types';
 import type { LatihanScreenProps } from '../../navigation/types';
 import type { QuestionPack } from '../../types/question.types';
 import { DownloadService } from '../../services/DownloadService';
-
-const SUBJECT_COLORS: Partial<Record<SubjectType, string>> = {
-  TWK: Colors.twk,
-  TIU: Colors.tiu,
-  TKP: Colors.tkp,
-  MATEMATIKA: Colors.math,
-  BAHASA_INDONESIA: Colors.indo,
-  PENGETAHUAN_UMUM: Colors.umum,
-  PSIKOTES: Colors.levelBadge,
-  KEDINASAN: Colors.tni,
-  PENGETAHUAN_HUKUM: Colors.hukum,
-};
 
 const SUBJECT_ICONS: Partial<Record<SubjectType, keyof typeof Ionicons.glyphMap>> = {
   TWK: 'flag-outline',
@@ -42,23 +32,15 @@ const SUBJECT_ICONS: Partial<Record<SubjectType, keyof typeof Ionicons.glyphMap>
   PENGETAHUAN_HUKUM: 'document-text-outline',
 };
 
-type Filter = 'ALL' | SubjectType;
+const EXAM_TABS: ExamType[] = ['CPNS', 'TNI', 'POLRI'];
 
 export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'CategoryList'>) {
   const { examType } = route.params;
   const config = EXAM_CONFIGS[examType];
 
-  const examColorMap: Record<string, string> = {
-    CPNS: Colors.cpns,
-    TNI: Colors.tni,
-    POLRI: Colors.polri,
-  };
-  const accentColor = examColorMap[examType] ?? Colors.primary;
-
   const [packs, setPacks] = useState<QuestionPack[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<Filter>('ALL');
 
   useEffect(() => {
     let cancelled = false;
@@ -81,330 +63,455 @@ export function CategoryListScreen({ route, navigation }: LatihanScreenProps<'Ca
     };
   }, [examType]);
 
-  const filteredPacks = useMemo(() => {
-    if (filter === 'ALL') return packs;
-    return packs.filter((p) => p.subject === filter);
-  }, [packs, filter]);
-
-  const totalSoal = useMemo(
-    () => filteredPacks.reduce((sum, p) => sum + (p.questionCount || 0), 0),
-    [filteredPacks],
-  );
+  const handleRandomStart = () => {
+    if (packs.length === 0) return;
+    const pick = packs[Math.floor(Math.random() * packs.length)];
+    navigation.navigate('PracticeSession', {
+      examType,
+      subject: pick.subject,
+      packId: pick.id,
+      questionCount: Math.max(1, pick.questionCount || 10),
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
+      {/* TopAppBar — glass surface with back + wordmark + bell */}
+      <View style={styles.topbar}>
+        <TouchableOpacity
+          style={styles.iconBtn}
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="arrow-back" size={22} color={CognitiveCalm.onSurface} />
         </TouchableOpacity>
-        <View style={styles.headerText}>
-          <View style={[styles.examBadge, { backgroundColor: accentColor }]}>
-            <Text style={styles.examBadgeText}>{config.label}</Text>
-          </View>
-          <Text style={styles.headerTitle}>Pilih Paket Soal</Text>
-          <Text style={styles.headerSubtitle}>{config.description}</Text>
-        </View>
+        <Text style={styles.wordmark}>Wirago Academy</Text>
+        <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
+          <Ionicons name="notifications-outline" size={22} color={CognitiveCalm.error} />
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.tabRowWrapper}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Page intro */}
+        <View style={styles.intro}>
+          <Text style={styles.title}>Latihan Soal</Text>
+          <Text style={styles.subtitle}>Pilih materi yang ingin kamu kuasai hari ini.</Text>
+        </View>
+
+        {/* ExamType pill tabs */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.tabRow}
         >
-          <FilterTab
-            label="Semua"
-            active={filter === 'ALL'}
-            accentColor={accentColor}
-            onPress={() => setFilter('ALL')}
-          />
-          {config.subjects.map((subject) => {
-            const color = SUBJECT_COLORS[subject] ?? accentColor;
+          {EXAM_TABS.map((t) => {
+            const active = t === examType;
             return (
-              <FilterTab
-                key={subject}
-                label={subject}
-                active={filter === subject}
-                accentColor={color}
-                onPress={() => setFilter(subject)}
-              />
+              <TouchableOpacity
+                key={t}
+                onPress={() => navigation.setParams({ examType: t })}
+                style={[styles.tabPill, active && styles.tabPillActive]}
+                activeOpacity={0.85}
+              >
+                <Text style={[styles.tabPillText, active && styles.tabPillTextActive]}>
+                  {EXAM_CONFIGS[t].label}
+                </Text>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
-      </View>
 
-      <View style={styles.listMeta}>
-        <Text style={styles.metaText}>
-          {filteredPacks.length} paket • {totalSoal} soal
-        </Text>
-      </View>
+        {/* Info banner */}
+        <View style={styles.banner}>
+          <Text style={styles.bannerTitle}>Tingkatkan Akurasi!</Text>
+          <Text style={styles.bannerBody}>
+            Latihan soal reguler terbukti meningkatkan kecepatan menjawab hingga 30%.
+            Mulai sesi fokusmu sekarang.
+          </Text>
+          <TouchableOpacity
+            style={[styles.bannerCta, packs.length === 0 && styles.bannerCtaDisabled]}
+            onPress={handleRandomStart}
+            disabled={packs.length === 0}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.bannerCtaText}>Mulai Acak</Text>
+            <Ionicons name="shuffle" size={16} color={CognitiveCalm.onTertiary} />
+          </TouchableOpacity>
+        </View>
 
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        {/* Subject / pack cards */}
         {loading ? (
           <View style={styles.center}>
-            <ActivityIndicator color={accentColor} />
-            <Text style={styles.centerText}>Memuat paket soal...</Text>
+            <ActivityIndicator color={CognitiveCalm.primary} />
+            <Text style={styles.centerText}>Memuat paket soal…</Text>
           </View>
         ) : error ? (
           <View style={styles.center}>
-            <Ionicons name="alert-circle-outline" size={36} color={Colors.error} />
+            <Ionicons name="alert-circle-outline" size={36} color={CognitiveCalm.error} />
             <Text style={styles.centerText}>{error}</Text>
           </View>
-        ) : filteredPacks.length === 0 ? (
+        ) : packs.length === 0 ? (
           <View style={styles.emptyState}>
             <View style={styles.emptyIllustration}>
-              <Ionicons name="bulb" size={72} color={Stitch.primary} />
+              <Ionicons name="bulb" size={72} color={CognitiveCalm.primary} />
             </View>
             <Text style={styles.emptyTitle}>Belum ada paket soal yang dibuka</Text>
             <Text style={styles.emptyDesc}>
-              Ayo mulai langkah pertamamu! Pilih paket soal persiapan {config.label} yang
-              tersedia dan ukur kemampuanmu sekarang.
+              Ayo mulai langkah pertamamu! Pilih paket soal persiapan {config.label} yang tersedia.
             </Text>
-            <TouchableOpacity
-              style={styles.emptyCta}
-              activeOpacity={0.85}
-              onPress={() => (filter === 'ALL' ? navigation.goBack() : setFilter('ALL'))}
-            >
-              <Text style={styles.emptyCtaText}>
-                {filter === 'ALL' ? 'Pilih Ujian Lain' : 'Lihat Semua Paket'}
-              </Text>
-              <Ionicons name="arrow-forward" size={20} color={Stitch.onPrimary} />
-            </TouchableOpacity>
           </View>
         ) : (
-          filteredPacks.map((pack) => {
-            const color = SUBJECT_COLORS[pack.subject] ?? accentColor;
-            const iconName = SUBJECT_ICONS[pack.subject] ?? 'document-text-outline';
-            return (
-              <TouchableOpacity
-                key={pack.id}
-                style={styles.packCard}
-                activeOpacity={0.85}
-                onPress={() =>
-                  navigation.navigate('PracticeSession', {
-                    examType,
-                    subject: pack.subject,
-                    packId: pack.id,
-                    questionCount: Math.max(1, pack.questionCount || 10),
-                  })
-                }
-              >
-                <View style={[styles.iconBox, { backgroundColor: color + '18' }]}>
-                  <Ionicons name={iconName} size={22} color={color} />
-                </View>
-                <View style={styles.packBody}>
-                  <View style={styles.titleRow}>
-                    <Text style={[styles.subjectChip, { backgroundColor: color + '20', color }]}>
-                      {pack.subject}
-                    </Text>
-                  </View>
-                  <Text style={styles.packTitle} numberOfLines={2}>
-                    {pack.title}
-                  </Text>
-                  {pack.description ? (
-                    <Text style={styles.packDesc} numberOfLines={2}>
-                      {pack.description}
-                    </Text>
-                  ) : null}
-                </View>
-                <View style={styles.packRight}>
-                  <Text style={[styles.packCount, { color }]}>{pack.questionCount || '-'}</Text>
-                  <Text style={styles.packCountLabel}>soal</Text>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={16}
-                    color={Colors.gray400}
-                    style={{ marginTop: 4 }}
-                  />
-                </View>
-              </TouchableOpacity>
-            );
-          })
+          <PackList packs={packs} examType={examType} navigation={navigation} />
         )}
-
-        {!loading && filteredPacks.length > 0 ? (
-          <View style={styles.infoBox}>
-            <Ionicons name="information-circle-outline" size={16} color={Colors.info} />
-            <Text style={styles.infoText}>
-              Tap paket untuk mulai latihan. Kamu bisa mengulang paket yang sama berkali-kali.
-            </Text>
-          </View>
-        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function FilterTab({
-  label,
-  active,
-  accentColor,
-  onPress,
+function PackList({
+  packs,
+  examType,
+  navigation,
 }: {
-  label: string;
-  active: boolean;
-  accentColor: string;
-  onPress: () => void;
+  packs: QuestionPack[];
+  examType: ExamType;
+  navigation: LatihanScreenProps<'CategoryList'>['navigation'];
 }) {
+  // Group packs by subject so the layout reads as one section per subject —
+  // mirip mockup "Tes Wawasan Kebangsaan / Intelegensia / Karakteristik Pribadi".
+  const grouped = useMemo(() => {
+    const map = new Map<SubjectType, QuestionPack[]>();
+    for (const p of packs) {
+      const arr = map.get(p.subject) ?? [];
+      arr.push(p);
+      map.set(p.subject, arr);
+    }
+    return Array.from(map.entries());
+  }, [packs]);
+
   return (
-    <TouchableOpacity
-      style={[
-        styles.filterTab,
-        active && { backgroundColor: accentColor, borderColor: accentColor },
-      ]}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
-      <Text style={[styles.filterTabText, active && styles.filterTabTextActive]}>{label}</Text>
-    </TouchableOpacity>
+    <View style={styles.packList}>
+      {grouped.map(([subject, subjectPacks]) => {
+        const totalSoal = subjectPacks.reduce((s, p) => s + (p.questionCount || 0), 0);
+        const iconName = SUBJECT_ICONS[subject] ?? 'document-text-outline';
+        const fullLabel = SUBJECT_LABELS[subject] ?? subject;
+        return (
+          <View key={subject} style={styles.subjectGroup}>
+            <View style={styles.packCard}>
+              <View style={styles.packTopRow}>
+                <View style={styles.subjectIconBox}>
+                  <Ionicons name={iconName} size={22} color={CognitiveCalm.primary} />
+                </View>
+                <Ionicons
+                  name="arrow-forward"
+                  size={20}
+                  color={CognitiveCalm.outlineVariant}
+                />
+              </View>
+              <Text style={styles.subjectTitle}>{fullLabel}</Text>
+              <View style={styles.subjectMetaRow}>
+                <Text style={styles.subjectChip}>{subject}</Text>
+                <Text style={styles.subjectMetaDot}>•</Text>
+                <Text style={styles.subjectMeta}>
+                  {totalSoal} soal • {subjectPacks.length} paket
+                </Text>
+              </View>
+              <View style={styles.packListInner}>
+                {subjectPacks.map((pack) => (
+                  <TouchableOpacity
+                    key={pack.id}
+                    style={styles.packRow}
+                    activeOpacity={0.8}
+                    onPress={() =>
+                      navigation.navigate('PracticeSession', {
+                        examType,
+                        subject: pack.subject,
+                        packId: pack.id,
+                        questionCount: Math.max(1, pack.questionCount || 10),
+                      })
+                    }
+                  >
+                    <View style={styles.packRowLeft}>
+                      <Text style={styles.packRowTitle} numberOfLines={1}>
+                        {pack.title}
+                      </Text>
+                      {pack.description ? (
+                        <Text style={styles.packRowDesc} numberOfLines={1}>
+                          {pack.description}
+                        </Text>
+                      ) : null}
+                    </View>
+                    <View style={styles.packRowRight}>
+                      <Text style={styles.packRowCount}>{pack.questionCount || '-'}</Text>
+                      <Text style={styles.packRowCountLabel}>soal</Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={16} color={CognitiveCalm.outline} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </View>
+        );
+      })}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+  safe: { flex: 1, backgroundColor: CognitiveCalm.surface },
 
-  header: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    gap: 8,
-  },
-  backBtn: { width: 36, height: 36, justifyContent: 'center' },
-  headerText: { gap: 4 },
-  examBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-    marginBottom: 4,
-  },
-  examBadgeText: { fontSize: 11, fontWeight: '800', color: Colors.white, letterSpacing: 1 },
-  headerTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, letterSpacing: -0.3 },
-  headerSubtitle: { fontSize: 13, color: Colors.textSecondary },
-
-  tabRowWrapper: {
-    backgroundColor: Colors.white,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  tabRow: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    alignItems: 'center',
-  },
-  filterTab: {
-    minHeight: 36,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    marginRight: 8,
-    borderRadius: 20,
-    borderWidth: 1.5,
-    borderColor: Colors.border,
-    backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  filterTabText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-    textAlign: 'center',
-    includeFontPadding: false,
-  },
-  filterTabTextActive: { color: '#FFFFFF' },
-
-  listMeta: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 8,
-  },
-  metaText: { fontSize: 12, color: Colors.textMuted, fontWeight: '600' },
-
-  scroll: { paddingHorizontal: 20, paddingBottom: 40, gap: 10 },
-
-  center: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 40,
-    gap: 10,
-  },
-  centerText: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', paddingHorizontal: 20 },
-
-  emptyState: { alignItems: 'center', justifyContent: 'center', paddingVertical: 48, paddingHorizontal: 8 },
-  emptyIllustration: {
-    width: 180, height: 180, borderRadius: 90,
-    backgroundColor: Stitch.surfaceContainerLowest,
-    alignItems: 'center', justifyContent: 'center', marginBottom: 28,
-    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.06, shadowRadius: 40, elevation: 4,
-  },
-  emptyTitle: {
-    fontFamily: Fonts.bold, fontSize: 20, lineHeight: 28,
-    color: Stitch.onSurface, textAlign: 'center', marginBottom: 12,
-  },
-  emptyDesc: {
-    fontFamily: Fonts.regular, fontSize: 14, lineHeight: 20,
-    color: Stitch.secondary, textAlign: 'center', maxWidth: 320, marginBottom: 32,
-  },
-  emptyCta: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: Stitch.primary, borderRadius: 8,
-    paddingVertical: 16, paddingHorizontal: 32, alignSelf: 'stretch',
-    shadowColor: Stitch.shadow, shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
-  },
-  emptyCtaText: { fontFamily: Fonts.semibold, fontSize: 14, color: Stitch.onPrimary, letterSpacing: 0.2 },
-
-  packCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 14,
-    padding: 14,
+  topbar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: CognitiveCalm.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: CognitiveCalm.surfaceContainerHigh,
   },
-  iconBox: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-    justifyContent: 'center',
+  iconBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  packBody: { flex: 1, gap: 4 },
-  titleRow: { flexDirection: 'row' },
-  subjectChip: {
-    alignSelf: 'flex-start',
-    fontSize: 10,
-    fontWeight: '700',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
+  wordmark: {
+    fontFamily: Fonts.bold,
+    fontSize: 22,
+    color: CognitiveCalm.primary,
+    letterSpacing: -0.4,
+  },
+
+  scroll: { paddingBottom: 32 },
+
+  intro: { paddingHorizontal: 20, paddingTop: 20, gap: 4 },
+  title: {
+    fontFamily: Fonts.bold,
+    fontSize: 24,
+    lineHeight: 32,
+    color: CognitiveCalm.onSurface,
+  },
+  subtitle: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+
+  tabRow: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 4,
+    gap: 12,
+  },
+  tabPill: {
+    paddingHorizontal: 22,
+    paddingVertical: 10,
+    borderRadius: 999,
+    backgroundColor: CognitiveCalm.surfaceContainer,
+    borderWidth: 1,
+    borderColor: CognitiveCalm.outlineVariant + '60',
+  },
+  tabPillActive: {
+    backgroundColor: CognitiveCalm.primary,
+    borderColor: CognitiveCalm.primary,
+    shadowColor: CognitiveCalm.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  tabPillText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 13,
+    color: CognitiveCalm.onSurface,
+    letterSpacing: 0.2,
+  },
+  tabPillTextActive: { color: CognitiveCalm.onPrimary },
+
+  banner: {
+    marginHorizontal: 20,
+    marginTop: 16,
+    padding: 20,
+    borderRadius: 24,
+    backgroundColor: CognitiveCalm.surfaceContainer,
+    borderWidth: 1,
+    borderColor: CognitiveCalm.tertiary + '20',
+    gap: 12,
     overflow: 'hidden',
   },
-  packTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary, lineHeight: 18 },
-  packDesc: { fontSize: 11, color: Colors.textSecondary, lineHeight: 15 },
-
-  packRight: { alignItems: 'center', minWidth: 40 },
-  packCount: { fontSize: 20, fontWeight: '800' },
-  packCountLabel: { fontSize: 9, color: Colors.textMuted },
-
-  infoBox: {
-    flexDirection: 'row',
-    gap: 8,
-    backgroundColor: '#EFF6FF',
-    borderRadius: 10,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#BFDBFE',
-    marginTop: 6,
+  bannerTitle: {
+    fontFamily: Fonts.semibold,
+    fontSize: 18,
+    color: CognitiveCalm.onSurface,
   },
-  infoText: { flex: 1, fontSize: 12, color: Colors.info, lineHeight: 18 },
+  bannerBody: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    lineHeight: 19,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+  bannerCta: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    backgroundColor: CognitiveCalm.tertiary,
+    borderRadius: 10,
+  },
+  bannerCtaDisabled: { backgroundColor: CognitiveCalm.outline + '60' },
+  bannerCtaText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 14,
+    color: CognitiveCalm.onTertiary,
+    letterSpacing: 0.2,
+  },
+
+  center: {
+    paddingVertical: 48,
+    alignItems: 'center',
+    gap: 10,
+  },
+  centerText: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: CognitiveCalm.onSurfaceVariant,
+    textAlign: 'center',
+    paddingHorizontal: 24,
+  },
+
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: 48,
+    paddingHorizontal: 24,
+  },
+  emptyIllustration: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+    shadowColor: CognitiveCalm.shadow,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.05,
+    shadowRadius: 24,
+    elevation: 2,
+  },
+  emptyTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 18,
+    lineHeight: 24,
+    color: CognitiveCalm.onSurface,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  emptyDesc: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    lineHeight: 20,
+    color: CognitiveCalm.onSurfaceVariant,
+    textAlign: 'center',
+  },
+
+  packList: { paddingHorizontal: 20, paddingTop: 16, gap: 16 },
+  subjectGroup: {},
+
+  packCard: {
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
+    borderRadius: 24,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    shadowColor: CognitiveCalm.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 16,
+    elevation: 2,
+    gap: 12,
+  },
+  packTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  subjectIconBox: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: CognitiveCalm.surfaceContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  subjectTitle: {
+    fontFamily: Fonts.semibold,
+    fontSize: 18,
+    lineHeight: 24,
+    color: CognitiveCalm.onSurface,
+  },
+  subjectMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  subjectChip: {
+    fontFamily: Fonts.semibold,
+    fontSize: 11,
+    color: CognitiveCalm.onSurfaceVariant,
+    backgroundColor: CognitiveCalm.surfaceContainerHigh,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  subjectMetaDot: { fontSize: 12, color: CognitiveCalm.outlineVariant },
+  subjectMeta: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+
+  packListInner: {
+    marginTop: 4,
+    borderTopWidth: 1,
+    borderTopColor: CognitiveCalm.outlineVariant + '40',
+    paddingTop: 12,
+    gap: 4,
+  },
+  packRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+  },
+  packRowLeft: { flex: 1, gap: 2 },
+  packRowTitle: {
+    fontFamily: Fonts.semibold,
+    fontSize: 13,
+    color: CognitiveCalm.onSurface,
+  },
+  packRowDesc: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+  packRowRight: { alignItems: 'flex-end', minWidth: 40 },
+  packRowCount: {
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+    color: CognitiveCalm.tertiary,
+  },
+  packRowCountLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 9,
+    color: CognitiveCalm.outline,
+  },
 });

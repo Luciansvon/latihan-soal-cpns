@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import { Colors, CognitiveCalm, Fonts } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
 import type { TryoutTemplate, ExamType } from '../../types/exam.types';
 import { supabase } from '../../services/supabase';
 import { useStore } from '../../store';
 
 const EXAM_COLORS: Record<ExamType, string> = {
-  CPNS: Colors.cpns,
+  CPNS: CognitiveCalm.primary,
   TNI: Colors.tni,
   POLRI: Colors.polri,
 };
@@ -34,6 +34,7 @@ export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [filterExam, setFilterExam] = useState<ExamType | 'ALL'>('ALL');
 
   const load = useCallback(async () => {
     setError(null);
@@ -64,11 +65,22 @@ export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>
     setRefreshing(false);
   }, [load]);
 
+  const filtered =
+    filterExam === 'ALL'
+      ? templates
+      : templates.filter((t) => t.examType === filterExam);
+
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Tryout Resmi</Text>
-        <Text style={styles.headerSubtitle}>Simulasi ujian lengkap dengan durasi & skor</Text>
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      {/* TopAppBar */}
+      <View style={styles.topbar}>
+        <View style={styles.avatarPlaceholder}>
+          <Ionicons name="person-outline" size={16} color={CognitiveCalm.onSurfaceVariant} />
+        </View>
+        <Text style={styles.wordmark}>Wirago Academy</Text>
+        <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
+          <Ionicons name="notifications-outline" size={22} color={CognitiveCalm.error} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -76,9 +88,29 @@ export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
+        {/* Page intro */}
+        <View style={styles.intro}>
+          <Text style={styles.title}>Tryout Resmi</Text>
+          <Text style={styles.subtitle}>
+            Simulasi ujian lengkap dengan durasi & skor untuk mematangkan persiapanmu.
+          </Text>
+        </View>
+
+        {/* Count + filter row */}
+        <View style={styles.metaRow}>
+          <Text style={styles.metaCount}>
+            {loading ? '…' : `${filtered.length} paket tersedia`}
+          </Text>
+          <FilterChip
+            label="Filter"
+            active={filterExam !== 'ALL'}
+            onPress={() => cycleFilter(filterExam, setFilterExam)}
+          />
+        </View>
+
         {!isOnline ? (
           <View style={styles.offlineBanner}>
-            <Ionicons name="cloud-offline-outline" size={18} color={Colors.warning} />
+            <Ionicons name="cloud-offline-outline" size={18} color={CognitiveCalm.error} />
             <Text style={styles.offlineText}>
               Mode offline. Daftar tryout mungkin tidak terbaru.
             </Text>
@@ -87,84 +119,216 @@ export function TryoutListScreen({ navigation }: TryoutScreenProps<'TryoutList'>
 
         {loading ? (
           <View style={styles.centerBox}>
-            <ActivityIndicator size="large" color={Colors.primary} />
+            <ActivityIndicator size="large" color={CognitiveCalm.primary} />
             <Text style={styles.loadingText}>Memuat daftar tryout…</Text>
           </View>
         ) : error ? (
           <View style={styles.errorBox}>
-            <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
+            <Ionicons name="alert-circle-outline" size={48} color={CognitiveCalm.error} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity style={styles.retryBtn} onPress={onRefresh}>
               <Text style={styles.retryBtnText}>Coba lagi</Text>
             </TouchableOpacity>
           </View>
-        ) : templates.length === 0 ? (
+        ) : filtered.length === 0 ? (
           <View style={styles.emptyBox}>
-            <Ionicons name="hourglass-outline" size={48} color={Colors.textMuted} />
+            <Ionicons name="hourglass-outline" size={48} color={CognitiveCalm.outline} />
             <Text style={styles.emptyTitle}>Belum ada tryout tersedia</Text>
             <Text style={styles.emptyDesc}>
-              Admin belum mempublish paket tryout. Coba kembali nanti atau pull-to-refresh.
+              Admin belum mempublish paket tryout untuk filter ini. Pull to refresh.
             </Text>
           </View>
         ) : (
-          <>
-            <Text style={styles.sectionTitle}>{templates.length} paket tersedia</Text>
-            {templates.map((tpl) => {
-              const color = EXAM_COLORS[tpl.examType] ?? Colors.primary;
-              const icon = EXAM_ICONS[tpl.examType] ?? 'document-text-outline';
-              const totalQuestions = tpl.sections.reduce((s, sec) => s + sec.questionCount, 0);
-              return (
-                <TouchableOpacity
-                  key={tpl.id}
-                  style={[styles.card, { borderLeftColor: color }]}
-                  activeOpacity={0.85}
-                  onPress={() => navigation.navigate('TryoutDetail', { templateId: tpl.id })}
-                >
-                  <View style={styles.cardHeader}>
-                    <View style={[styles.iconBox, { backgroundColor: color + '18' }]}>
-                      <Ionicons name={icon} size={24} color={color} />
-                    </View>
-                    <View style={styles.cardTitleGroup}>
-                      <Text style={styles.cardTitle}>{tpl.title}</Text>
-                      {tpl.description ? (
-                        <Text style={styles.cardSubtitle} numberOfLines={1}>
-                          {tpl.description}
-                        </Text>
-                      ) : null}
-                    </View>
-                    <View style={[styles.examBadge, { backgroundColor: color + '18' }]}>
-                      <Text style={[styles.examBadgeText, { color }]}>{tpl.examType}</Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.statsRow}>
-                    <View style={styles.statItem}>
-                      <Ionicons name="document-text-outline" size={13} color={Colors.textSecondary} />
-                      <Text style={styles.statText}>{totalQuestions} soal</Text>
-                    </View>
-                    <View style={styles.statDot} />
-                    <View style={styles.statItem}>
-                      <Ionicons name="time-outline" size={13} color={Colors.textSecondary} />
-                      <Text style={styles.statText}>{tpl.durationMinutes} menit</Text>
-                    </View>
-                    <View style={styles.statDot} />
-                    <View style={styles.statItem}>
-                      <Ionicons name="layers-outline" size={13} color={Colors.textSecondary} />
-                      <Text style={styles.statText}>{tpl.sections.length} bagian</Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.cardFooter}>
-                    <Text style={[styles.startText, { color }]}>Lihat Detail</Text>
-                    <Ionicons name="chevron-forward" size={16} color={color} />
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </>
+          filtered.map((tpl, idx) => (
+            <TryoutCard
+              key={tpl.id}
+              tpl={tpl}
+              featured={idx === 0 && filtered.length > 1}
+              onPress={() => navigation.navigate('TryoutDetail', { templateId: tpl.id })}
+            />
+          ))
         )}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function FilterChip({
+  label,
+  active,
+  onPress,
+}: {
+  label: string;
+  active: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.filterChip, active && styles.filterChipActive]}
+      activeOpacity={0.8}
+    >
+      <Ionicons
+        name="filter-outline"
+        size={14}
+        color={active ? CognitiveCalm.onPrimary : CognitiveCalm.primary}
+      />
+      <Text style={[styles.filterChipText, active && styles.filterChipTextActive]}>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+// Cycle filter: ALL → CPNS → TNI → POLRI → ALL
+function cycleFilter(
+  current: ExamType | 'ALL',
+  set: React.Dispatch<React.SetStateAction<ExamType | 'ALL'>>,
+) {
+  const order: (ExamType | 'ALL')[] = ['ALL', 'CPNS', 'TNI', 'POLRI'];
+  const next = order[(order.indexOf(current) + 1) % order.length];
+  set(next);
+}
+
+function TryoutCard({
+  tpl,
+  featured,
+  onPress,
+}: {
+  tpl: TryoutTemplate;
+  featured: boolean;
+  onPress: () => void;
+}) {
+  const color = EXAM_COLORS[tpl.examType] ?? CognitiveCalm.primary;
+  const icon = EXAM_ICONS[tpl.examType] ?? 'document-text-outline';
+  const totalQuestions = tpl.sections.reduce((s, sec) => s + sec.questionCount, 0);
+
+  if (featured) {
+    return (
+      <TouchableOpacity style={styles.cardFeatured} activeOpacity={0.9} onPress={onPress}>
+        <View style={[styles.featuredTopAccent, { backgroundColor: color }]} />
+        <View style={styles.cardBody}>
+          <View style={styles.cardHeader}>
+            <View style={[styles.cardIconBox, { backgroundColor: color + '18' }]}>
+              <Ionicons name={icon} size={26} color={color} />
+            </View>
+            <View style={styles.cardTitleGroup}>
+              <Text style={styles.cardTitle}>{tpl.title}</Text>
+              {tpl.description ? (
+                <Text style={styles.cardSubtitle} numberOfLines={2}>
+                  {tpl.description}
+                </Text>
+              ) : null}
+            </View>
+            <View style={styles.featuredBadges}>
+              <View style={styles.popularBadge}>
+                <Text style={styles.popularBadgeText}>POPULER</Text>
+              </View>
+              <View style={[styles.examChip, { backgroundColor: color + '18' }]}>
+                <Text style={[styles.examChipText, { color }]}>{tpl.examType}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.statsBox}>
+            <StatItem icon="document-text-outline" value={`${totalQuestions} Soal`} color={color} />
+            <View style={styles.statsDivider} />
+            <StatItem icon="time-outline" value={`${tpl.durationMinutes} Menit`} color={color} />
+            <View style={styles.statsDivider} />
+            <StatItem icon="layers-outline" value={`${tpl.sections.length} Bagian`} color={color} />
+          </View>
+
+          <View style={styles.featuredCtaRow}>
+            <View style={styles.pesertaStack}>
+              <View style={[styles.pesertaDot, { backgroundColor: color + '40', zIndex: 3 }]} />
+              <View style={[styles.pesertaDot, styles.pesertaDotMid, { zIndex: 2 }]} />
+              <View style={[styles.pesertaDot, styles.pesertaDotEnd, { zIndex: 1 }]} />
+              <Text style={styles.pesertaText}>Banyak peserta</Text>
+            </View>
+            <TouchableOpacity
+              style={[styles.featuredCta, { backgroundColor: color }]}
+              activeOpacity={0.9}
+              onPress={onPress}
+            >
+              <Text style={styles.featuredCtaText}>Lihat Detail</Text>
+              <Ionicons name="arrow-forward" size={16} color={CognitiveCalm.onPrimary} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  return (
+    <TouchableOpacity
+      style={[styles.cardRegular, { borderLeftColor: color }]}
+      activeOpacity={0.9}
+      onPress={onPress}
+    >
+      <View style={styles.cardHeader}>
+        <View style={[styles.cardIconBox, { backgroundColor: color + '14' }]}>
+          <Ionicons name={icon} size={24} color={color} />
+        </View>
+        <View style={styles.cardTitleGroup}>
+          <Text style={styles.cardTitle}>{tpl.title}</Text>
+          {tpl.description ? (
+            <Text style={styles.cardSubtitle} numberOfLines={1}>
+              {tpl.description}
+            </Text>
+          ) : null}
+        </View>
+        <View style={[styles.examChip, { backgroundColor: color + '14' }]}>
+          <Text style={[styles.examChipText, { color }]}>{tpl.examType}</Text>
+        </View>
+      </View>
+
+      <View style={styles.statsRow}>
+        <StatItem
+          icon="document-text-outline"
+          value={`${totalQuestions} soal`}
+          color={CognitiveCalm.onSurfaceVariant}
+          mini
+        />
+        <View style={styles.statDot} />
+        <StatItem
+          icon="time-outline"
+          value={`${tpl.durationMinutes} menit`}
+          color={CognitiveCalm.onSurfaceVariant}
+          mini
+        />
+        <View style={styles.statDot} />
+        <StatItem
+          icon="layers-outline"
+          value={`${tpl.sections.length} bagian`}
+          color={CognitiveCalm.onSurfaceVariant}
+          mini
+        />
+      </View>
+
+      <View style={styles.cardFooter}>
+        <Text style={[styles.detailLink, { color }]}>Lihat Detail</Text>
+        <Ionicons name="chevron-forward" size={14} color={color} />
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+function StatItem({
+  icon,
+  value,
+  color,
+  mini,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  value: string;
+  color: string;
+  mini?: boolean;
+}) {
+  return (
+    <View style={mini ? styles.statItemMini : styles.statItem}>
+      <Ionicons name={icon} size={mini ? 13 : 18} color={color} />
+      <Text style={[mini ? styles.statTextMini : styles.statText, { color }]}>{value}</Text>
+    </View>
   );
 }
 
@@ -189,95 +353,307 @@ function mapTemplate(row: any): TryoutTemplate {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+  safe: { flex: 1, backgroundColor: CognitiveCalm.surface },
 
-  header: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  headerTitle: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary, letterSpacing: -0.3 },
-  headerSubtitle: { fontSize: 13, color: Colors.textSecondary, marginTop: 2 },
-
-  scroll: { padding: 20, gap: 14, paddingBottom: 40 },
-  sectionTitle: { fontSize: 13, fontWeight: '600', color: Colors.textSecondary },
-
-  offlineBanner: {
+  topbar: {
     flexDirection: 'row',
-    gap: 8,
-    backgroundColor: '#FFFBEB',
-    borderRadius: 10,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#FDE68A',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: CognitiveCalm.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: CognitiveCalm.surfaceContainerHigh,
+  },
+  avatarPlaceholder: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: CognitiveCalm.surfaceContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  wordmark: {
+    fontFamily: Fonts.bold,
+    fontSize: 20,
+    color: CognitiveCalm.primary,
+    letterSpacing: -0.4,
+  },
+  iconBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  scroll: { paddingBottom: 40, gap: 16 },
+
+  intro: { paddingHorizontal: 20, paddingTop: 20, gap: 4 },
+  title: {
+    fontFamily: Fonts.bold,
+    fontSize: 24,
+    lineHeight: 32,
+    color: CognitiveCalm.onSurface,
+  },
+  subtitle: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    lineHeight: 20,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+
+  metaRow: {
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  offlineText: { flex: 1, fontSize: 12, color: Colors.warning, fontWeight: '500' },
+  metaCount: {
+    fontFamily: Fonts.medium,
+    fontSize: 13,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+
+  filterChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: CognitiveCalm.primary,
+    backgroundColor: 'transparent',
+  },
+  filterChipActive: {
+    backgroundColor: CognitiveCalm.primary,
+  },
+  filterChipText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 12,
+    color: CognitiveCalm.primary,
+  },
+  filterChipTextActive: { color: CognitiveCalm.onPrimary },
+
+  offlineBanner: {
+    marginHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: CognitiveCalm.errorContainer,
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: CognitiveCalm.error + '30',
+  },
+  offlineText: {
+    flex: 1,
+    fontFamily: Fonts.medium,
+    fontSize: 12,
+    color: CognitiveCalm.error,
+  },
 
   centerBox: { alignItems: 'center', gap: 12, paddingVertical: 48 },
-  loadingText: { fontSize: 13, color: Colors.textSecondary },
+  loadingText: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
 
   errorBox: { alignItems: 'center', gap: 12, paddingVertical: 32 },
-  errorText: { fontSize: 13, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
+  errorText: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: CognitiveCalm.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 20,
+    paddingHorizontal: 24,
+  },
   retryBtn: {
-    backgroundColor: Colors.primary,
+    backgroundColor: CognitiveCalm.primary,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
   },
-  retryBtnText: { fontSize: 13, fontWeight: '700', color: Colors.white },
+  retryBtnText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 13,
+    color: CognitiveCalm.onPrimary,
+  },
 
   emptyBox: { alignItems: 'center', gap: 8, paddingVertical: 48 },
-  emptyTitle: { fontSize: 15, fontWeight: '700', color: Colors.textPrimary, marginTop: 6 },
+  emptyTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 15,
+    color: CognitiveCalm.onSurface,
+    marginTop: 6,
+  },
   emptyDesc: {
+    fontFamily: Fonts.regular,
     fontSize: 13,
-    color: Colors.textSecondary,
+    color: CognitiveCalm.onSurfaceVariant,
     textAlign: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 32,
     lineHeight: 20,
   },
 
-  card: {
-    backgroundColor: Colors.white,
+  // Featured card (first item, popular)
+  cardFeatured: {
+    marginHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
+    overflow: 'hidden',
+    shadowColor: CognitiveCalm.shadow,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 3,
+  },
+  featuredTopAccent: { height: 6, width: '100%' },
+  cardBody: { padding: 18, gap: 16 },
+
+  cardHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
+  cardIconBox: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardTitleGroup: { flex: 1, gap: 2 },
+  cardTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 15,
+    lineHeight: 20,
+    color: CognitiveCalm.onSurface,
+  },
+  cardSubtitle: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    lineHeight: 17,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+
+  featuredBadges: { alignItems: 'flex-end', gap: 6 },
+  popularBadge: {
+    backgroundColor: '#0F0A08',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+  },
+  popularBadgeText: {
+    fontFamily: Fonts.bold,
+    fontSize: 9,
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
+  },
+  examChip: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  examChipText: { fontFamily: Fonts.bold, fontSize: 10, letterSpacing: 0.3 },
+
+  statsBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: CognitiveCalm.surfaceContainer,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+  },
+  statItem: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 4,
+  },
+  statText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 13,
+  },
+  statsDivider: {
+    width: 1,
+    height: 24,
+    backgroundColor: CognitiveCalm.outlineVariant + '50',
+  },
+
+  featuredCtaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  pesertaStack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  pesertaDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: CognitiveCalm.surfaceContainerLowest,
+    marginRight: -8,
+  },
+  pesertaDotMid: { backgroundColor: '#A7C7E720' },
+  pesertaDotEnd: { backgroundColor: '#FFDAD420' },
+  pesertaText: {
+    fontFamily: Fonts.medium,
+    fontSize: 11,
+    color: CognitiveCalm.onSurfaceVariant,
+    marginLeft: 8,
+  },
+  featuredCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  featuredCtaText: {
+    fontFamily: Fonts.bold,
+    fontSize: 14,
+    color: CognitiveCalm.onPrimary,
+    letterSpacing: 0.2,
+  },
+
+  // Regular card
+  cardRegular: {
+    marginHorizontal: 20,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
     borderRadius: 16,
     padding: 18,
-    gap: 14,
+    gap: 12,
     borderLeftWidth: 4,
-    shadowColor: Colors.black,
+    shadowColor: CognitiveCalm.shadow,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
+    shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
   },
-  cardHeader: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  iconBox: {
-    width: 50,
-    height: 50,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardTitleGroup: { flex: 1 },
-  cardTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary },
-  cardSubtitle: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
-  examBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-  examBadgeText: { fontSize: 11, fontWeight: '700' },
 
   statsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingTop: 6,
+    paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: Colors.gray100,
+    borderTopColor: CognitiveCalm.outlineVariant + '30',
     flexWrap: 'wrap',
   },
-  statItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  statText: { fontSize: 12, color: Colors.textSecondary },
-  statDot: { width: 3, height: 3, borderRadius: 1.5, backgroundColor: Colors.gray300 },
+  statItemMini: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  statTextMini: { fontFamily: Fonts.regular, fontSize: 12 },
+  statDot: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: CognitiveCalm.outlineVariant,
+  },
 
   cardFooter: {
     flexDirection: 'row',
@@ -285,5 +661,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     gap: 4,
   },
-  startText: { fontSize: 13, fontWeight: '700' },
+  detailLink: { fontFamily: Fonts.bold, fontSize: 13 },
 });
