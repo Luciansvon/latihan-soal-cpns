@@ -33,7 +33,7 @@ const EXAM_COLORS: Record<string, string> = {
 const DEFAULT_QUESTION_COUNT = 10;
 
 export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<'PracticeSession'>) {
-  const { examType, subject, packId, subtopic, questionCount, isDailyChallenge } = route.params;
+  const { examType, subject, packId, subtopic, questionCount, difficultyMode, isDailyChallenge } = route.params;
   const userId = useStore((s) => s.userId);
   const isOnline = useStore((s) => s.isOnline);
   const setXPAndLevel = useStore((s) => s.setXPAndLevel);
@@ -72,6 +72,7 @@ export function PracticeSessionScreen({ route, navigation }: LatihanScreenProps<
           examType,
           subject,
           subtopic,
+          difficultyMode,
           limit,
           isOnline,
         });
@@ -506,43 +507,70 @@ interface FetchArgs {
   examType: import('../../types/exam.types').ExamType;
   subject: import('../../types/exam.types').SubjectType;
   subtopic?: string;
+  difficultyMode?: 'random' | 'hardest-first' | 'easiest-first' | 'sering-keluar';
   limit: number;
   isOnline: boolean;
 }
 
 async function fetchQuestions(args: FetchArgs): Promise<Question[]> {
-  const { packId, examType, subject, subtopic, limit, isOnline } = args;
+  const { packId, examType, subject, subtopic, difficultyMode, limit, isOnline } = args;
 
   // Local SQLite first
   let local: Question[] = [];
   if (packId) {
-    local = await QuestionRepository.getQuestions(packId, limit);
+    local = await QuestionRepository.getQuestions(packId, limit * 3);
   } else {
-    local = await QuestionRepository.getQuestionsBySubject(examType, subject, limit);
+    local = await QuestionRepository.getQuestionsBySubject(examType, subject, limit * 3);
   }
 
   if (subtopic) {
     local = local.filter((q) => q.subtopic === subtopic);
   }
 
-  if (local.length > 0) return local;
+  if (local.length > 0) return applyDifficultyMode(local, difficultyMode, limit);
   if (!isOnline) return [];
 
-  // Fallback Supabase
+  // Fallback Supabase — over-fetch so difficulty sorting has enough candidates
   let query = supabase
     .from('questions')
     .select('*')
     .eq('exam_type', examType)
     .eq('subject', subject)
-    .limit(limit * 3); // over-fetch then shuffle/slice for variety
+    .limit(limit * 5);
   if (subtopic) query = query.eq('subtopic', subtopic);
   if (packId) query = query.eq('pack_id', packId);
 
   const { data, error } = await query;
   if (error) throw new Error(error.message);
   const mapped = (data ?? []).map(mapSupabaseRow);
-  shuffle(mapped);
-  return mapped.slice(0, limit);
+  return applyDifficultyMode(mapped, difficultyMode, limit);
+}
+
+function applyDifficultyMode(
+  questions: Question[],
+  mode: FetchArgs['difficultyMode'],
+  limit: number,
+): Question[] {
+  switch (mode) {
+    case 'hardest-first':
+      return [...questions]
+        .filter((q) => q.difficultyRank != null)
+        .sort((a, b) => (b.difficultyRank ?? 0) - (a.difficultyRank ?? 0))
+        .slice(0, limit);
+    case 'easiest-first':
+      return [...questions]
+        .filter((q) => q.difficultyRank != null)
+        .sort((a, b) => (a.difficultyRank ?? 0) - (b.difficultyRank ?? 0))
+        .slice(0, limit);
+    case 'sering-keluar':
+      const sering = questions.filter((q) => q.tags?.includes('sering-keluar'));
+      const pool = sering.length > 0 ? sering : questions;
+      shuffle(pool);
+      return pool.slice(0, limit);
+    default:
+      shuffle(questions);
+      return questions.slice(0, limit);
+  }
 }
 
 function mapSupabaseRow(row: any): Question {
@@ -554,6 +582,7 @@ function mapSupabaseRow(row: any): Question {
     subtopic: row.subtopic ?? undefined,
     questionType: row.question_type,
     difficulty: row.difficulty,
+    difficultyRank: row.difficulty_rank ?? undefined,
     questionText: row.question_text,
     questionImageUrl: row.question_image_url ?? undefined,
     options: row.options as QuestionOption[],

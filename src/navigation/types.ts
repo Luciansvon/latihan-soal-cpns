@@ -37,6 +37,7 @@ export type LatihanStackParams = {
     packId?: string;
     subtopic?: string;
     questionCount?: number;
+    difficultyMode?: 'random' | 'hardest-first' | 'easiest-first' | 'sering-keluar';
     /** Jika true, finalize akan tandai daily challenge sebagai done */
     isDailyChallenge?: boolean;
   };

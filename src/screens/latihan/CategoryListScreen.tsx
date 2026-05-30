@@ -226,11 +226,10 @@ function PackList({
                     style={styles.packRow}
                     activeOpacity={0.8}
                     onPress={() =>
-                      navigation.navigate('PracticeSession', {
+                      navigation.navigate('SubtopicList', {
                         examType,
                         subject: pack.subject,
                         packId: pack.id,
-                        questionCount: Math.max(1, pack.questionCount || 10),
                       })
                     }
                   >

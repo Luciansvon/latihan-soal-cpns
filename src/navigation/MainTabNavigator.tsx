@@ -12,6 +12,7 @@ import { BerandaScreen } from '../screens/beranda/BerandaScreen';
 // Screens - Latihan
 import { LatihanHomeScreen } from '../screens/latihan/LatihanHomeScreen';
 import { CategoryListScreen } from '../screens/latihan/CategoryListScreen';
+import { SubtopicListScreen } from '../screens/latihan/SubtopicListScreen';
 import { PracticeSessionScreen } from '../screens/latihan/PracticeSessionScreen';
 import { SessionResultScreen } from '../screens/latihan/SessionResultScreen';
 import { SkimTrainerScreen } from '../screens/latihan/SkimTrainerScreen';
@@ -47,6 +48,7 @@ function LatihanNavigator() {
     <LatihanStack.Navigator screenOptions={{ headerShown: false }}>
       <LatihanStack.Screen name="LatihanHome" component={LatihanHomeScreen} />
       <LatihanStack.Screen name="CategoryList" component={CategoryListScreen} />
+      <LatihanStack.Screen name="SubtopicList" component={SubtopicListScreen} />
       <LatihanStack.Screen name="PracticeSession" component={PracticeSessionScreen} />
       <LatihanStack.Screen name="SessionResult" component={SessionResultScreen} />
       <LatihanStack.Screen name="SkimTrainer" component={SkimTrainerScreen} />
