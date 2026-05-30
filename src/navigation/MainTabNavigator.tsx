@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Colors } from '../constants/colors';
+import { Colors, CognitiveCalm } from '../constants/colors';
 import type { MainTabParams, LatihanStackParams, TryoutStackParams, ProgressStackParams, ProfilStackParams } from './types';
 
 // Screens - Beranda
@@ -100,7 +100,7 @@ export function MainTabNavigator() {
         tabBarIcon: ({ focused, color }) => (
           <TabIcon name={route.name as any} focused={focused} color={color} />
         ),
-        tabBarActiveTintColor: Colors.primary,
+        tabBarActiveTintColor: CognitiveCalm.primary,
         tabBarInactiveTintColor: Colors.gray400,
         tabBarStyle: {
           backgroundColor: Colors.white,

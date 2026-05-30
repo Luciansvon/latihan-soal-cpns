@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import { Colors, CognitiveCalm, HyperMinimal, Fonts } from '../../constants/colors';
 import type { ProgressScreenProps } from '../../navigation/types';
 import type { PracticeSession, UserAnswer, SectionScore } from '../../types/session.types';
 import type { SubjectType } from '../../types/exam.types';
 import { SUBJECT_LABELS } from '../../types/exam.types';
 import { SessionRepository, AnswerRepository } from '../../db/repositories/SessionRepository';
 import { getScorePercentage } from '../../utils/ScoreCalculator';
+import { AppHeader } from '../../components/common/AppHeader';
 
 export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'SessionDetail'>) {
   const { sessionId } = route.params;
@@ -54,9 +55,10 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <AppHeader theme="navy" showBack onBackPress={() => navigation.goBack()} />
         <View style={styles.centerBox}>
-          <ActivityIndicator size="large" color={Colors.primary} />
+          <ActivityIndicator size="large" color={CognitiveCalm.primary} />
           <Text style={styles.loadingText}>Memuat detail sesi…</Text>
         </View>
       </SafeAreaView>
@@ -65,9 +67,10 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
 
   if (error || !session) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <AppHeader theme="navy" showBack onBackPress={() => navigation.goBack()} />
         <View style={styles.centerBox}>
-          <Ionicons name="alert-circle-outline" size={56} color={Colors.error} />
+          <Ionicons name="alert-circle-outline" size={56} color={CognitiveCalm.error} />
           <Text style={styles.errorText}>{error ?? 'Sesi tidak ditemukan.'}</Text>
           <TouchableOpacity style={styles.primaryBtn} onPress={() => navigation.goBack()}>
             <Text style={styles.primaryBtnText}>Kembali</Text>
@@ -84,32 +87,42 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
   const durationMin = session.durationSeconds ? Math.floor(session.durationSeconds / 60) : 0;
   const durationSec = session.durationSeconds ? session.durationSeconds % 60 : 0;
   const scoreColor =
-    pct >= 80 ? Colors.success : pct >= 60 ? Colors.warning : Colors.error;
-  const sectionScores = (session.sectionScores ?? null) as Record<SubjectType, SectionScore> | null;
+    pct >= 80 ? Colors.success : pct >= 60 ? Colors.warning : CognitiveCalm.error;
+  const sectionScores = (session.sectionScores ?? null) as Record<
+    SubjectType,
+    SectionScore
+  > | null;
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <View style={styles.headerText}>
-          <Text style={styles.headerTitle}>Detail Sesi</Text>
-          <Text style={styles.sessionDate}>{formatDateTime(session.startedAt)}</Text>
-        </View>
-      </View>
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <AppHeader theme="navy" showBack onBackPress={() => navigation.goBack()} />
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        <View style={styles.intro}>
+          <Text style={styles.title}>Detail Sesi</Text>
+          <Text style={styles.subtitle}>{formatDateTime(session.startedAt)}</Text>
+        </View>
+
         {/* Meta */}
-        <View style={styles.metaCard}>
+        <View style={styles.bentoCard}>
           <View style={styles.metaRow}>
-            <View style={[styles.badge, { backgroundColor: Colors.primary + '15' }]}>
-              <Text style={[styles.badgeText, { color: Colors.primary }]}>
+            <View
+              style={[
+                styles.badge,
+                { backgroundColor: CognitiveCalm.primary + '15' },
+              ]}
+            >
+              <Text style={[styles.badgeText, { color: CognitiveCalm.primary }]}>
                 {session.sessionType === 'TRYOUT' ? 'TRYOUT' : 'LATIHAN'}
               </Text>
             </View>
             {session.examType ? (
-              <View style={[styles.badge, { backgroundColor: Colors.gray100 }]}>
+              <View
+                style={[
+                  styles.badge,
+                  { backgroundColor: HyperMinimal.surfaceContainer },
+                ]}
+              >
                 <Text style={styles.badgeTextDark}>{session.examType}</Text>
               </View>
             ) : null}
@@ -121,7 +134,11 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
           </View>
           {session.durationSeconds ? (
             <View style={styles.metaRow}>
-              <Ionicons name="time-outline" size={14} color={Colors.textSecondary} />
+              <Ionicons
+                name="time-outline"
+                size={14}
+                color={HyperMinimal.onSurfaceVariant}
+              />
               <Text style={styles.metaText}>
                 Durasi {durationMin}m {durationSec}s
               </Text>
@@ -129,26 +146,33 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
           ) : null}
         </View>
 
-        {/* Score */}
-        <View style={styles.scoreCard}>
+        {/* Score hero */}
+        <View style={[styles.bentoCard, styles.scoreCard]}>
           <View style={[styles.scoreCircle, { borderColor: scoreColor }]}>
-            <Text style={[styles.scoreNumber, { color: scoreColor }]}>{session.totalScore}</Text>
+            <Text style={[styles.scoreNumber, { color: scoreColor }]}>
+              {session.totalScore}
+            </Text>
             <Text style={styles.scoreLabel}>/ {session.maxScore}</Text>
           </View>
           <View style={styles.scoreStats}>
             <Stat icon="checkmark-circle" color={Colors.success} value={correct} label="Benar" />
             <Divider />
-            <Stat icon="close-circle" color={Colors.error} value={wrong} label="Salah" />
+            <Stat icon="close-circle" color={CognitiveCalm.error} value={wrong} label="Salah" />
             <Divider />
-            <Stat icon="help-circle" color={Colors.textMuted} value={unanswered} label="Lewati" />
+            <Stat
+              icon="help-circle"
+              color={HyperMinimal.outline}
+              value={unanswered}
+              label="Lewati"
+            />
           </View>
           <Text style={[styles.pctBig, { color: scoreColor }]}>{pct}%</Text>
         </View>
 
-        {/* Per-section (kalau tryout) */}
+        {/* Per-section if tryout */}
         {sectionScores && Object.keys(sectionScores).length > 0 ? (
-          <View style={styles.reviewCard}>
-            <Text style={styles.reviewTitle}>Skor per Bagian</Text>
+          <View style={styles.bentoCard}>
+            <Text style={styles.cardTitle}>Skor per Bagian</Text>
             {(Object.entries(sectionScores) as Array<[SubjectType, SectionScore]>).map(
               ([subject, score]) => (
                 <View key={subject} style={styles.sectionRow}>
@@ -156,26 +180,30 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
                     {SUBJECT_LABELS[subject] ?? subject}
                   </Text>
                   <Text style={styles.sectionStat}>
-                    {score.correct}/{score.total} Â· skor {score.score}
+                    {score.correct}/{score.total} · skor {score.score}
                   </Text>
                 </View>
-              )
+              ),
             )}
           </View>
         ) : null}
 
-        {/* Per-question dots */}
-        <View style={styles.reviewCard}>
-          <Text style={styles.reviewTitle}>Tinjauan Soal</Text>
+        {/* Per-question */}
+        <View style={styles.bentoCard}>
+          <Text style={styles.cardTitle}>Tinjauan Soal</Text>
           <Text style={styles.reviewDesc}>
             Hijau = benar, merah = salah, abu-abu = tidak dijawab.
           </Text>
           <View style={styles.reviewGrid}>
             {Array.from({ length: session.totalQuestions }).map((_, i) => {
               const a = answers[i];
-              const color = !a ? Colors.gray300 : a.isCorrect ? Colors.success : Colors.error;
+              const color = !a
+                ? HyperMinimal.outlineVariant
+                : a.isCorrect
+                ? Colors.success
+                : CognitiveCalm.error;
               return (
-                <View key={i} style={[styles.reviewItem, { backgroundColor: color + '18' }]}>
+                <View key={i} style={[styles.reviewItem, { backgroundColor: color + '20' }]}>
                   <Text style={[styles.reviewItemNum, { color }]}>{i + 1}</Text>
                 </View>
               );
@@ -183,10 +211,10 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
           </View>
         </View>
 
-        {/* Sync status */}
+        {/* Sync banner */}
         {!session.isSynced ? (
           <View style={styles.syncBanner}>
-            <Ionicons name="cloud-upload-outline" size={16} color={Colors.warning} />
+            <Ionicons name="cloud-upload-outline" size={16} color="#D97706" />
             <Text style={styles.syncText}>
               Sesi ini belum tersinkron ke server. Akan ter-upload otomatis saat online.
             </Text>
@@ -198,7 +226,7 @@ export function SessionDetailScreen({ route, navigation }: ProgressScreenProps<'
           activeOpacity={0.85}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back-outline" size={16} color={Colors.primary} />
+          <Ionicons name="arrow-back-outline" size={16} color={CognitiveCalm.primary} />
           <Text style={styles.backToHistoryText}>Kembali ke Riwayat</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -235,76 +263,112 @@ function formatDateTime(ts: number): string {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
   const hh = String(d.getHours()).padStart(2, '0');
   const mm = String(d.getMinutes()).padStart(2, '0');
-  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} Â· ${hh}:${mm}`;
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} · ${hh}:${mm}`;
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+  safe: { flex: 1, backgroundColor: HyperMinimal.background },
 
-  centerBox: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24, gap: 12 },
-  loadingText: { fontSize: 13, color: Colors.textSecondary },
-  errorText: { fontSize: 14, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
-
-  header: {
-    backgroundColor: Colors.white,
-    flexDirection: 'row',
+  centerBox: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    gap: 14,
+    padding: 24,
+    gap: 12,
   },
-  backBtn: { width: 36, height: 36, justifyContent: 'center' },
-  headerText: { gap: 2 },
-  headerTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, letterSpacing: -0.3 },
-  sessionDate: { fontSize: 12, color: Colors.textSecondary },
+  loadingText: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: HyperMinimal.onSurfaceVariant,
+  },
+  errorText: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    color: HyperMinimal.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
 
   scroll: { padding: 20, gap: 16, paddingBottom: 40 },
 
-  metaCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 14,
-    padding: 14,
-    gap: 10,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
+  intro: { gap: 4, marginBottom: 4 },
+  title: {
+    fontFamily: Fonts.bold,
+    fontSize: 24,
+    lineHeight: 32,
+    color: HyperMinimal.deepNavy,
+  },
+  subtitle: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: HyperMinimal.onSurfaceVariant,
+  },
+
+  bentoCard: {
+    backgroundColor: '#FFFFFFCC',
+    borderRadius: 18,
+    padding: 16,
+    gap: 12,
+    borderWidth: 1,
+    borderColor: HyperMinimal.borderSubtle,
+    shadowColor: HyperMinimal.deepNavy,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 8,
     elevation: 1,
   },
+  cardTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 14,
+    color: HyperMinimal.deepNavy,
+  },
+
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  metaText: { fontSize: 12, color: Colors.textSecondary },
+  metaText: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: HyperMinimal.onSurfaceVariant,
+  },
   badge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
-  badgeText: { fontSize: 11, fontWeight: '800', letterSpacing: 0.5 },
-  badgeTextDark: { fontSize: 11, fontWeight: '700', color: Colors.textPrimary },
-  subjectText: { flex: 1, fontSize: 12, fontWeight: '600', color: Colors.textSecondary },
+  badgeText: {
+    fontFamily: Fonts.bold,
+    fontSize: 11,
+    letterSpacing: 0.5,
+  },
+  badgeTextDark: {
+    fontFamily: Fonts.bold,
+    fontSize: 11,
+    color: HyperMinimal.deepNavy,
+  },
+  subjectText: {
+    flex: 1,
+    fontFamily: Fonts.semibold,
+    fontSize: 12,
+    color: HyperMinimal.onSurfaceVariant,
+  },
 
   scoreCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 20,
     alignItems: 'center',
     gap: 14,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 2,
+    paddingVertical: 22,
   },
   scoreCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 104,
+    height: 104,
+    borderRadius: 52,
     borderWidth: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.bgSecondary,
+    backgroundColor: HyperMinimal.surfaceContainerLowest,
   },
-  scoreNumber: { fontSize: 28, fontWeight: '900' },
-  scoreLabel: { fontSize: 11, color: Colors.textSecondary, marginTop: -2 },
-  pctBig: { fontSize: 22, fontWeight: '800' },
+  scoreNumber: { fontFamily: Fonts.extrabold, fontSize: 28 },
+  scoreLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: HyperMinimal.onSurfaceVariant,
+    marginTop: -2,
+  },
+  pctBig: { fontFamily: Fonts.extrabold, fontSize: 22 },
   scoreStats: {
     width: '100%',
     flexDirection: 'row',
@@ -312,49 +376,70 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scoreStat: { alignItems: 'center', gap: 4, minWidth: 60 },
-  scoreStatLabel: { fontSize: 11, color: Colors.textSecondary },
-  scoreStatValue: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary },
-  scoreStatDivider: { width: 1, height: 36, backgroundColor: Colors.border },
-
-  reviewCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 18,
-    gap: 12,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+  scoreStatLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: HyperMinimal.onSurfaceVariant,
   },
-  reviewTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  reviewDesc: { fontSize: 12, color: Colors.textSecondary },
+  scoreStatValue: {
+    fontFamily: Fonts.bold,
+    fontSize: 20,
+    color: HyperMinimal.deepNavy,
+  },
+  scoreStatDivider: { width: 1, height: 36, backgroundColor: HyperMinimal.borderSubtle },
+
+  reviewDesc: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: HyperMinimal.onSurfaceVariant,
+  },
   reviewGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  reviewItem: { width: 40, height: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
-  reviewItemNum: { fontSize: 12, fontWeight: '800' },
+  reviewItem: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  reviewItemNum: { fontFamily: Fonts.bold, fontSize: 12 },
 
   sectionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
+    borderBottomColor: HyperMinimal.borderSubtle,
   },
-  sectionName: { flex: 1, fontSize: 13, fontWeight: '600', color: Colors.textPrimary },
-  sectionStat: { fontSize: 12, color: Colors.textSecondary, fontWeight: '500' },
+  sectionName: {
+    flex: 1,
+    fontFamily: Fonts.semibold,
+    fontSize: 13,
+    color: HyperMinimal.deepNavy,
+  },
+  sectionStat: {
+    fontFamily: Fonts.medium,
+    fontSize: 12,
+    color: HyperMinimal.onSurfaceVariant,
+  },
 
   syncBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     backgroundColor: '#FFFBEB',
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 12,
     borderWidth: 1,
     borderColor: '#FDE68A',
   },
-  syncText: { flex: 1, fontSize: 12, color: Colors.warning, lineHeight: 18 },
+  syncText: {
+    flex: 1,
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: '#92400E',
+    lineHeight: 18,
+  },
 
   backToHistoryBtn: {
     flexDirection: 'row',
@@ -362,18 +447,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     paddingVertical: 14,
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: Colors.primary,
-    backgroundColor: Colors.white,
+    borderColor: CognitiveCalm.primary,
+    backgroundColor: HyperMinimal.surfaceContainerLowest,
   },
-  backToHistoryText: { fontSize: 14, fontWeight: '700', color: Colors.primary },
+  backToHistoryText: {
+    fontFamily: Fonts.bold,
+    fontSize: 14,
+    color: CognitiveCalm.primary,
+  },
 
   primaryBtn: {
-    backgroundColor: Colors.primary,
+    backgroundColor: CognitiveCalm.primary,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
   },
-  primaryBtnText: { fontSize: 14, fontWeight: '700', color: Colors.white },
+  primaryBtnText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 14,
+    color: CognitiveCalm.onPrimary,
+  },
 });

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,15 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import { Colors, CognitiveCalm, Fonts } from '../../constants/colors';
 import type { TryoutScreenProps } from '../../navigation/types';
 import type { ExamType, TryoutTemplate } from '../../types/exam.types';
 import { SUBJECT_LABELS } from '../../types/exam.types';
 import { supabase } from '../../services/supabase';
+import { AppHeader } from '../../components/common/AppHeader';
 
 const EXAM_COLORS: Record<ExamType, string> = {
-  CPNS: Colors.cpns,
+  CPNS: CognitiveCalm.primary,
   TNI: Colors.tni,
   POLRI: Colors.polri,
 };
@@ -66,9 +67,10 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <AppHeader theme="warm" showBack onBackPress={() => navigation.goBack()} />
         <View style={styles.centerBox}>
-          <ActivityIndicator size="large" color={Colors.primary} />
+          <ActivityIndicator size="large" color={CognitiveCalm.primary} />
           <Text style={styles.loadingText}>Memuat detail tryout…</Text>
         </View>
       </SafeAreaView>
@@ -77,9 +79,10 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
 
   if (error || !template) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <AppHeader theme="warm" showBack onBackPress={() => navigation.goBack()} />
         <View style={styles.centerBox}>
-          <Ionicons name="alert-circle-outline" size={56} color={Colors.error} />
+          <Ionicons name="alert-circle-outline" size={56} color={CognitiveCalm.error} />
           <Text style={styles.errorText}>{error ?? 'Template tidak ditemukan.'}</Text>
           <TouchableOpacity style={styles.primaryBtn} onPress={() => navigation.goBack()}>
             <Text style={styles.primaryBtnText}>Kembali</Text>
@@ -89,49 +92,33 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
     );
   }
 
-  const accent = EXAM_COLORS[template.examType] ?? Colors.primary;
+  const accent = EXAM_COLORS[template.examType] ?? CognitiveCalm.primary;
   const totalQuestions = template.sections.reduce((sum, s) => sum + s.questionCount, 0);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={[styles.header, { borderBottomColor: accent + '30' }]}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <View style={styles.headerCenter}>
-          <View style={[styles.badge, { backgroundColor: accent }]}>
-            <Text style={styles.badgeText}>{template.examType}</Text>
-          </View>
-          <Text style={styles.headerTitle}>{template.title}</Text>
-        </View>
-      </View>
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <AppHeader theme="warm" showBack onBackPress={() => navigation.goBack()} />
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <View style={styles.statsRow}>
-          <View style={[styles.statCard, { borderTopColor: accent }]}>
-            <Ionicons name="document-text-outline" size={22} color={accent} />
-            <Text style={styles.statValue}>{totalQuestions}</Text>
-            <Text style={styles.statLabel}>Total Soal</Text>
+        {/* Hero */}
+        <View style={styles.hero}>
+          <View style={[styles.heroBadge, { backgroundColor: accent + '18' }]}>
+            <Text style={[styles.heroBadgeText, { color: accent }]}>{template.examType}</Text>
           </View>
-          <View style={[styles.statCard, { borderTopColor: accent }]}>
-            <Ionicons name="time-outline" size={22} color={accent} />
-            <Text style={styles.statValue}>{template.durationMinutes}</Text>
-            <Text style={styles.statLabel}>Menit</Text>
-          </View>
-          <View style={[styles.statCard, { borderTopColor: accent }]}>
-            <Ionicons name="layers-outline" size={22} color={accent} />
-            <Text style={styles.statValue}>{template.sections.length}</Text>
-            <Text style={styles.statLabel}>Bagian</Text>
-          </View>
+          <Text style={styles.heroTitle}>{template.title}</Text>
+          {template.description ? (
+            <Text style={styles.heroDesc}>{template.description}</Text>
+          ) : null}
         </View>
 
-        {template.description ? (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Tentang Tryout Ini</Text>
-            <Text style={styles.descText}>{template.description}</Text>
-          </View>
-        ) : null}
+        {/* Stat tiles */}
+        <View style={styles.statsRow}>
+          <StatTile icon="document-text-outline" value={totalQuestions} label="Total Soal" color={accent} />
+          <StatTile icon="time-outline" value={template.durationMinutes} label="Menit" color={accent} />
+          <StatTile icon="layers-outline" value={template.sections.length} label="Bagian" color={accent} />
+        </View>
 
+        {/* Distribusi */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Distribusi Soal</Text>
           {template.sections.map((section, i) => (
@@ -143,16 +130,17 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
                 </Text>
                 <Text style={styles.sectionMeta}>
                   {section.questionCount} soal
-                  {section.passingScore ? ` Â· Passing: ${section.passingScore}` : ''}
+                  {section.passingScore ? ` · Passing: ${section.passingScore}` : ''}
                 </Text>
               </View>
             </View>
           ))}
         </View>
 
+        {/* Rules */}
         <View style={styles.rulesCard}>
           <View style={styles.rulesHeader}>
-            <Ionicons name="alert-circle-outline" size={18} color={Colors.warning} />
+            <Ionicons name="alert-circle-outline" size={18} color="#D97706" />
             <Text style={styles.rulesTitle}>Perhatian</Text>
           </View>
           <View style={styles.rulesList}>
@@ -169,14 +157,34 @@ export function TryoutDetailScreen({ route, navigation }: TryoutScreenProps<'Try
       <View style={styles.footer}>
         <TouchableOpacity
           style={[styles.startBtn, { backgroundColor: accent }]}
-          activeOpacity={0.85}
+          activeOpacity={0.9}
           onPress={() => navigation.navigate('TryoutSession', { templateId })}
         >
-          <Ionicons name="play-circle-outline" size={20} color={Colors.white} />
+          <Ionicons name="play" size={18} color={CognitiveCalm.onPrimary} />
           <Text style={styles.startBtnText}>Mulai Tryout</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+  );
+}
+
+function StatTile({
+  icon,
+  value,
+  label,
+  color,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  value: string | number;
+  label: string;
+  color: string;
+}) {
+  return (
+    <View style={styles.statCard}>
+      <Ionicons name={icon} size={20} color={color} />
+      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statLabel}>{label}</Text>
+    </View>
   );
 }
 
@@ -201,7 +209,7 @@ function mapTemplate(row: any): TryoutTemplate {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+  safe: { flex: 1, backgroundColor: CognitiveCalm.surface },
 
   centerBox: {
     flex: 1,
@@ -210,104 +218,157 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 12,
   },
-  loadingText: { fontSize: 14, color: Colors.textSecondary },
-  errorText: { fontSize: 14, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
-
-  header: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    gap: 10,
+  loadingText: { fontFamily: Fonts.regular, fontSize: 14, color: CognitiveCalm.onSurfaceVariant },
+  errorText: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    color: CognitiveCalm.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 20,
   },
-  backBtn: { width: 36, height: 36, justifyContent: 'center' },
-  headerCenter: { gap: 6 },
-  badge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  badgeText: { fontSize: 10, fontWeight: '800', color: Colors.white, letterSpacing: 1 },
-  headerTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, letterSpacing: -0.3 },
 
   scroll: { padding: 20, gap: 16, paddingBottom: 32 },
 
-  statsRow: { flexDirection: 'row', gap: 12 },
+  hero: { gap: 8 },
+  heroBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  heroBadgeText: {
+    fontFamily: Fonts.bold,
+    fontSize: 10,
+    letterSpacing: 1,
+  },
+  heroTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 22,
+    lineHeight: 28,
+    color: CognitiveCalm.onSurface,
+  },
+  heroDesc: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: CognitiveCalm.onSurfaceVariant,
+    lineHeight: 20,
+  },
+
+  statsRow: { flexDirection: 'row', gap: 10 },
   statCard: {
     flex: 1,
-    backgroundColor: Colors.white,
-    borderRadius: 14,
-    padding: 16,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
+    borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 8,
     alignItems: 'center',
     gap: 6,
-    borderTopWidth: 3,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    shadowColor: CognitiveCalm.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
     elevation: 1,
   },
-  statValue: { fontSize: 22, fontWeight: '900', color: Colors.textPrimary },
-  statLabel: { fontSize: 11, color: Colors.textSecondary, textAlign: 'center' },
+  statValue: { fontFamily: Fonts.extrabold, fontSize: 22, color: CognitiveCalm.onSurface },
+  statLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: CognitiveCalm.onSurfaceVariant,
+    textAlign: 'center',
+  },
 
   card: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
+    borderRadius: 18,
     padding: 18,
     gap: 12,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    shadowColor: CognitiveCalm.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
     elevation: 1,
   },
-  cardTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
-  descText: { fontSize: 13, color: Colors.textSecondary, lineHeight: 22 },
+  cardTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 14,
+    color: CognitiveCalm.onSurface,
+  },
 
   sectionRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
-  sectionDot: { width: 8, height: 8, borderRadius: 4, marginTop: 5 },
+  sectionDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
   sectionInfo: { flex: 1 },
-  sectionName: { fontSize: 13, fontWeight: '600', color: Colors.textPrimary },
-  sectionMeta: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
+  sectionName: {
+    fontFamily: Fonts.semibold,
+    fontSize: 13,
+    color: CognitiveCalm.onSurface,
+  },
+  sectionMeta: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: CognitiveCalm.onSurfaceVariant,
+    marginTop: 2,
+  },
 
   rulesCard: {
     backgroundColor: '#FFFBEB',
-    borderRadius: 14,
+    borderRadius: 16,
     padding: 16,
     gap: 12,
     borderWidth: 1,
     borderColor: '#FDE68A',
   },
   rulesHeader: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  rulesTitle: { fontSize: 14, fontWeight: '700', color: Colors.warning },
+  rulesTitle: { fontFamily: Fonts.bold, fontSize: 14, color: '#D97706' },
   rulesList: { gap: 8 },
   ruleItem: { flexDirection: 'row', gap: 8 },
-  ruleBullet: { fontSize: 14, color: Colors.warning, lineHeight: 20 },
-  ruleText: { flex: 1, fontSize: 13, color: Colors.gray700, lineHeight: 20 },
+  ruleBullet: { fontSize: 14, color: '#D97706', lineHeight: 20 },
+  ruleText: {
+    flex: 1,
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    color: '#92400E',
+    lineHeight: 20,
+  },
 
   footer: {
-    backgroundColor: Colors.white,
+    backgroundColor: CognitiveCalm.surface,
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: Colors.border,
+    borderTopColor: CognitiveCalm.surfaceContainerHigh,
   },
   startBtn: {
-    borderRadius: 14,
+    borderRadius: 16,
     paddingVertical: 16,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
+    shadowColor: CognitiveCalm.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 3,
   },
-  startBtnText: { fontSize: 16, fontWeight: '800', color: Colors.white },
+  startBtnText: {
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+    color: CognitiveCalm.onPrimary,
+    letterSpacing: 0.2,
+  },
 
   primaryBtn: {
-    backgroundColor: Colors.primary,
+    backgroundColor: CognitiveCalm.primary,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
   },
-  primaryBtnText: { fontSize: 14, fontWeight: '700', color: Colors.white },
+  primaryBtnText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 14,
+    color: CognitiveCalm.onPrimary,
+  },
 });

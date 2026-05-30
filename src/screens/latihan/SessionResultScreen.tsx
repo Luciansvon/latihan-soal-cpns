@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/colors';
+import { Colors, CognitiveCalm, Fonts } from '../../constants/colors';
 import type { LatihanScreenProps } from '../../navigation/types';
 import type { PracticeSession, UserAnswer } from '../../types/session.types';
 import { SessionRepository, AnswerRepository } from '../../db/repositories/SessionRepository';
@@ -27,13 +27,13 @@ import {
 } from '../../constants/learningStrategyMap';
 import { useStore } from '../../store';
 import { SUBJECT_LABELS } from '../../types/exam.types';
+import { AppHeader } from '../../components/common/AppHeader';
 
 export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'SessionResult'>) {
   const { sessionId } = route.params;
   const userId = useStore((s) => s.userId);
   const userProfile = useStore((s) => s.profile);
 
-  // Aggregate semua sesi user untuk rekomendasi adaptive
   const progress = useProgressData({ userId, recentLimit: 50 });
 
   const [loading, setLoading] = useState(true);
@@ -75,9 +75,10 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <AppHeader theme="warm" title="Hasil Latihan" showBack={false} showBell={false} />
         <View style={styles.centerBox}>
-          <ActivityIndicator size="large" color={Colors.primary} />
+          <ActivityIndicator size="large" color={CognitiveCalm.primary} />
           <Text style={styles.loadingText}>Memuat hasil…</Text>
         </View>
       </SafeAreaView>
@@ -86,9 +87,10 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
 
   if (error || !session) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <AppHeader theme="warm" title="Hasil Latihan" showBack={false} showBell={false} />
         <View style={styles.centerBox}>
-          <Ionicons name="alert-circle-outline" size={56} color={Colors.error} />
+          <Ionicons name="alert-circle-outline" size={56} color={CognitiveCalm.error} />
           <Text style={styles.errorText}>{error ?? 'Sesi tidak ditemukan.'}</Text>
           <TouchableOpacity
             style={styles.primaryBtn}
@@ -110,19 +112,24 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
   const durationSec = session.durationSeconds ? session.durationSeconds % 60 : 0;
 
   const scoreColor =
-    percentage >= 80 ? Colors.success : percentage >= 60 ? Colors.warning : Colors.error;
+    percentage >= 80
+      ? Colors.success
+      : percentage >= 60
+      ? Colors.warning
+      : CognitiveCalm.error;
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Hasil Latihan</Text>
-        <Text style={styles.headerSubtitle}>
-          {session.examType} Â· {session.subject ?? '-'}
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <AppHeader theme="warm" title="Hasil Latihan" showBack={false} showBell={false} />
+
+      <View style={styles.subHeader}>
+        <Text style={styles.subHeaderText}>
+          {session.examType} · {session.subject ?? '-'}
         </Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Score */}
+        {/* Score hero */}
         <View style={styles.scoreCard}>
           <View style={[styles.scoreCircle, { borderColor: scoreColor }]}>
             <Text style={[styles.scoreNumber, { color: scoreColor }]}>{session.totalScore}</Text>
@@ -133,14 +140,19 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
           <View style={styles.statsRow}>
             <Stat icon="checkmark-circle" color={Colors.success} value={correct} label="Benar" />
             <Divider />
-            <Stat icon="close-circle" color={Colors.error} value={wrong} label="Salah" />
+            <Stat icon="close-circle" color={CognitiveCalm.error} value={wrong} label="Salah" />
             <Divider />
-            <Stat icon="help-circle" color={Colors.textMuted} value={unanswered} label="Lewati" />
+            <Stat
+              icon="help-circle"
+              color={CognitiveCalm.outline}
+              value={unanswered}
+              label="Lewati"
+            />
           </View>
 
           {session.durationSeconds ? (
             <View style={styles.durationRow}>
-              <Ionicons name="time-outline" size={14} color={Colors.textSecondary} />
+              <Ionicons name="time-outline" size={14} color={CognitiveCalm.onSurfaceVariant} />
               <Text style={styles.durationText}>
                 Durasi: {durationMin}m {durationSec}s
               </Text>
@@ -148,13 +160,13 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
           ) : null}
         </View>
 
-        {/* XP / Level awarded */}
+        {/* XP awarded */}
         {award ? (
           <View style={styles.awardCard}>
             <View style={styles.awardHeader}>
               <Ionicons name="star" size={20} color={Colors.xpGold} />
               <Text style={styles.awardText}>
-                +{award.xpEarned} XP{award.leveledUp ? ' Â· Naik level!' : ''}
+                +{award.xpEarned} XP{award.leveledUp ? ' · Naik level!' : ''}
               </Text>
             </View>
             <XPBar xpTotal={award.newXpTotal} level={award.newLevel} />
@@ -165,11 +177,17 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
         <View
           style={[
             styles.messageCard,
-            { backgroundColor: scoreColor + '12', borderColor: scoreColor + '30' },
+            { backgroundColor: scoreColor + '14', borderColor: scoreColor + '40' },
           ]}
         >
           <Ionicons
-            name={percentage >= 80 ? 'trophy-outline' : percentage >= 60 ? 'thumbs-up-outline' : 'refresh-outline'}
+            name={
+              percentage >= 80
+                ? 'trophy-outline'
+                : percentage >= 60
+                ? 'thumbs-up-outline'
+                : 'refresh-outline'
+            }
             size={20}
             color={scoreColor}
           />
@@ -182,7 +200,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
           </Text>
         </View>
 
-        {/* Adaptive recommendations: kategori prioritas + tip belajar VARK */}
+        {/* Adaptive recommendations */}
         {(() => {
           if (progress.loading) return null;
           const recs = recommendSubjects(progress.accuracyBySubject, 3);
@@ -192,7 +210,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
           return (
             <View style={styles.recoCard}>
               <View style={styles.recoHeader}>
-                <Ionicons name="bulb" size={18} color={Colors.info} />
+                <Ionicons name="bulb" size={18} color={CognitiveCalm.tertiary} />
                 <Text style={styles.recoTitle}>Saran Belajar Berikutnya</Text>
               </View>
               <Text style={styles.recoBody}>
@@ -203,7 +221,11 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
                 {' '}— {top.reason.toLowerCase()}.
               </Text>
               <View style={styles.recoTip}>
-                <Ionicons name="school-outline" size={14} color={Colors.textSecondary} />
+                <Ionicons
+                  name="school-outline"
+                  size={14}
+                  color={CognitiveCalm.onSurfaceVariant}
+                />
                 <Text style={styles.recoTipText}>
                   Profil <Text style={styles.recoEm}>{VARK_LABELS[vark]}</Text>:{' '}
                   {getStrategyTip(top.subject, vark)}
@@ -229,10 +251,10 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
             {Array.from({ length: total }).map((_, i) => {
               const a = answers[i];
               const color = !a
-                ? Colors.gray300
+                ? CognitiveCalm.outlineVariant
                 : a.isCorrect
                 ? Colors.success
-                : Colors.error;
+                : CognitiveCalm.error;
               return (
                 <View key={i} style={[styles.reviewDot, { backgroundColor: color }]}>
                   <Text style={styles.reviewDotText}>{i + 1}</Text>
@@ -249,11 +271,11 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
         <View style={styles.actions}>
           <TouchableOpacity
             style={styles.primaryBtnFull}
-            activeOpacity={0.85}
+            activeOpacity={0.9}
             onPress={() => navigation.navigate('LatihanHome')}
           >
-            <Ionicons name="refresh-outline" size={18} color={Colors.white} />
-            <Text style={styles.primaryBtnText}>Latihan Lagi</Text>
+            <Ionicons name="refresh-outline" size={18} color={CognitiveCalm.onPrimary} />
+            <Text style={styles.primaryBtnFullText}>Latihan Lagi</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.secondaryBtnFull}
@@ -262,7 +284,7 @@ export function SessionResultScreen({ route, navigation }: LatihanScreenProps<'S
               ShareService.shareToWhatsApp(ShareService.buildSessionMessage(session))
             }
           >
-            <Ionicons name="logo-whatsapp" size={18} color={Colors.primary} />
+            <Ionicons name="logo-whatsapp" size={18} color={CognitiveCalm.primary} />
             <Text style={styles.secondaryBtnText}>Bagikan ke WhatsApp</Text>
           </TouchableOpacity>
         </View>
@@ -303,7 +325,7 @@ function Divider() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bgSecondary },
+  safe: { flex: 1, backgroundColor: CognitiveCalm.surface },
 
   centerBox: {
     flex: 1,
@@ -312,46 +334,66 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 12,
   },
-  loadingText: { fontSize: 14, color: Colors.textSecondary, marginTop: 6 },
-  errorText: { fontSize: 14, color: Colors.textSecondary, textAlign: 'center', lineHeight: 20 },
+  loadingText: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    color: CognitiveCalm.onSurfaceVariant,
+    marginTop: 6,
+  },
+  errorText: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    color: CognitiveCalm.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
 
-  header: {
-    backgroundColor: Colors.white,
+  subHeader: {
     paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    paddingBottom: 8,
+    backgroundColor: CognitiveCalm.surface,
     alignItems: 'center',
   },
-  headerTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary },
-  headerSubtitle: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
+  subHeaderText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 12,
+    color: CognitiveCalm.onSurfaceVariant,
+    letterSpacing: 0.5,
+  },
 
   scroll: { padding: 20, gap: 16, paddingBottom: 40 },
 
   scoreCard: {
-    backgroundColor: Colors.white,
-    borderRadius: 20,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
+    borderRadius: 24,
     padding: 24,
     alignItems: 'center',
     gap: 16,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    shadowColor: CognitiveCalm.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
     elevation: 3,
   },
   scoreCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 124,
+    height: 124,
+    borderRadius: 62,
     borderWidth: 6,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.bgSecondary,
+    backgroundColor: CognitiveCalm.surface,
   },
-  scoreNumber: { fontSize: 38, fontWeight: '900', letterSpacing: -1 },
-  scoreLabel: { fontSize: 11, color: Colors.textSecondary, marginTop: -2 },
-  percentageText: { fontSize: 28, fontWeight: '800' },
+  scoreNumber: { fontFamily: Fonts.extrabold, fontSize: 38, letterSpacing: -1 },
+  scoreLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: CognitiveCalm.onSurfaceVariant,
+    marginTop: -2,
+  },
+  percentageText: { fontFamily: Fonts.extrabold, fontSize: 28 },
 
   statsRow: {
     width: '100%',
@@ -360,73 +402,112 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statItem: { alignItems: 'center', gap: 4, minWidth: 60 },
-  statValue: { fontSize: 22, fontWeight: '800', color: Colors.textPrimary },
-  statLabel: { fontSize: 11, color: Colors.textSecondary },
-  divider: { width: 1, height: 40, backgroundColor: Colors.border },
-
-  durationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
+  statValue: {
+    fontFamily: Fonts.bold,
+    fontSize: 22,
+    color: CognitiveCalm.onSurface,
   },
-  durationText: { fontSize: 12, color: Colors.textSecondary },
+  statLabel: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
+  divider: { width: 1, height: 40, backgroundColor: CognitiveCalm.outlineVariant + '60' },
+
+  durationRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  durationText: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: CognitiveCalm.onSurfaceVariant,
+  },
 
   awardCard: {
     backgroundColor: '#FFFBEB',
-    borderRadius: 14,
+    borderRadius: 16,
     padding: 14,
     gap: 10,
     borderWidth: 1,
     borderColor: '#FDE68A',
   },
   awardHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  awardText: { fontSize: 14, fontWeight: '800', color: Colors.xpGold },
+  awardText: { fontFamily: Fonts.extrabold, fontSize: 14, color: Colors.xpGold },
 
   recoCard: {
-    backgroundColor: '#EFF6FF',
-    borderRadius: 14,
+    backgroundColor: CognitiveCalm.tertiary + '12',
+    borderRadius: 16,
     padding: 14,
     gap: 10,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: CognitiveCalm.tertiary + '30',
   },
   recoHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  recoTitle: { fontSize: 13, fontWeight: '800', color: Colors.info },
-  recoBody: { fontSize: 13, lineHeight: 19, color: Colors.textPrimary },
-  recoEm: { fontWeight: '800' },
+  recoTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 13,
+    color: CognitiveCalm.tertiary,
+  },
+  recoBody: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+    lineHeight: 19,
+    color: CognitiveCalm.onSurface,
+  },
+  recoEm: { fontFamily: Fonts.bold },
   recoTip: {
     flexDirection: 'row',
     gap: 6,
-    backgroundColor: Colors.white,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: 'flex-start',
   },
-  recoTipText: { flex: 1, fontSize: 12, color: Colors.textSecondary, lineHeight: 18 },
-  recoMeta: { fontSize: 11, color: Colors.textMuted, fontStyle: 'italic' },
+  recoTipText: {
+    flex: 1,
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: CognitiveCalm.onSurfaceVariant,
+    lineHeight: 18,
+  },
+  recoMeta: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: CognitiveCalm.outline,
+    fontStyle: 'italic',
+  },
 
   messageCard: {
-    borderRadius: 12,
+    borderRadius: 14,
     padding: 14,
     flexDirection: 'row',
     gap: 10,
     alignItems: 'flex-start',
     borderWidth: 1,
   },
-  messageText: { flex: 1, fontSize: 13, fontWeight: '500', lineHeight: 20 },
+  messageText: {
+    flex: 1,
+    fontFamily: Fonts.medium,
+    fontSize: 13,
+    lineHeight: 20,
+  },
 
   reviewSection: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
+    borderRadius: 18,
     padding: 18,
     gap: 12,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    shadowColor: CognitiveCalm.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
     elevation: 1,
   },
-  reviewTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
+  reviewTitle: {
+    fontFamily: Fonts.bold,
+    fontSize: 14,
+    color: CognitiveCalm.onSurface,
+  },
   reviewGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   reviewDot: {
     width: 32,
@@ -435,36 +516,63 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  reviewDotText: { fontSize: 11, fontWeight: '700', color: Colors.white },
-  reviewLegend: { fontSize: 11, color: Colors.textMuted, lineHeight: 16 },
+  reviewDotText: {
+    fontFamily: Fonts.bold,
+    fontSize: 11,
+    color: CognitiveCalm.onPrimary,
+  },
+  reviewLegend: {
+    fontFamily: Fonts.regular,
+    fontSize: 11,
+    color: CognitiveCalm.outline,
+    lineHeight: 16,
+  },
 
   actions: { gap: 12, marginTop: 4 },
   primaryBtn: {
-    backgroundColor: Colors.primary,
+    backgroundColor: CognitiveCalm.primary,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 12,
   },
+  primaryBtnText: {
+    fontFamily: Fonts.semibold,
+    fontSize: 14,
+    color: CognitiveCalm.onPrimary,
+  },
   primaryBtnFull: {
-    backgroundColor: Colors.primary,
-    borderRadius: 14,
+    backgroundColor: CognitiveCalm.primary,
+    borderRadius: 16,
     paddingVertical: 16,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
+    shadowColor: CognitiveCalm.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 3,
   },
-  primaryBtnText: { fontSize: 16, fontWeight: '700', color: Colors.white },
+  primaryBtnFullText: {
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+    color: CognitiveCalm.onPrimary,
+  },
   secondaryBtnFull: {
-    borderRadius: 14,
+    borderRadius: 16,
     paddingVertical: 16,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
     borderWidth: 1.5,
-    borderColor: Colors.primary,
-    backgroundColor: Colors.white,
+    borderColor: CognitiveCalm.primary,
+    backgroundColor: CognitiveCalm.surfaceContainerLowest,
   },
-  secondaryBtnText: { fontSize: 16, fontWeight: '700', color: Colors.primary },
+  secondaryBtnText: {
+    fontFamily: Fonts.bold,
+    fontSize: 16,
+    color: CognitiveCalm.primary,
+  },
 });

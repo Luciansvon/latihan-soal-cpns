@@ -9,6 +9,7 @@ import { supabase } from '../../services/supabase';
 import { useStore } from '../../store';
 import { getLevelTitle } from '../../types/gamification.types';
 import type { ProfilScreenProps } from '../../navigation/types';
+import { AvatarService } from '../../services/AvatarService';
 
 type MenuItem = {
   label: string;
@@ -55,7 +56,11 @@ export function ProfileScreen({ navigation }: ProfilScreenProps<'Profile'>) {
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Identity card */}
         <View style={styles.identityCard}>
-          <View style={styles.avatarRing}>
+          <TouchableOpacity
+            style={styles.avatarRing}
+            activeOpacity={0.85}
+            onPress={() => { void AvatarService.changeAvatar(); }}
+          >
             {profile?.avatarUrl ? (
               <Image source={{ uri: profile.avatarUrl }} style={styles.avatarImg} />
             ) : (
@@ -63,7 +68,10 @@ export function ProfileScreen({ navigation }: ProfilScreenProps<'Profile'>) {
                 <Text style={styles.avatarInitial}>{initial}</Text>
               </View>
             )}
-          </View>
+            <View style={styles.avatarEditBadge}>
+              <Ionicons name="camera" size={14} color={Stitch.onPrimary} />
+            </View>
+          </TouchableOpacity>
           <Text style={styles.name}>{displayName}</Text>
           {email ? <Text style={styles.email}>{email}</Text> : null}
 
@@ -165,6 +173,13 @@ const styles = StyleSheet.create({
   avatarImg: { width: '100%', height: '100%' },
   avatarFallback: { flex: 1, backgroundColor: Stitch.primary, alignItems: 'center', justifyContent: 'center' },
   avatarInitial: { fontFamily: Fonts.extrabold, fontSize: 36, color: Stitch.onPrimary },
+  avatarEditBadge: {
+    position: 'absolute', right: -2, bottom: -2,
+    width: 30, height: 30, borderRadius: 15,
+    backgroundColor: Stitch.primary,
+    borderWidth: 3, borderColor: Stitch.surface,
+    alignItems: 'center', justifyContent: 'center',
+  },
 
   name: { fontFamily: Fonts.bold, fontSize: 20, color: Stitch.onSurface },
   email: { fontFamily: Fonts.regular, fontSize: 14, color: Stitch.onSurfaceVariant, marginTop: 2 },
