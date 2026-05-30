@@ -8,6 +8,10 @@ export type AuthStackParams = {
   Welcome: undefined;
   Login: undefined;
   Register: undefined;
+};
+
+// Onboarding stack (post-auth, pre-MainApp; gated by profile.learningStyle === null)
+export type OnboardingStackParams = {
   Onboarding: undefined;
   LearningStyleQuiz: undefined;
   HasilAnalisis: { profile: import('../types/user.types').LearningStyleProfile };
@@ -30,11 +34,15 @@ export type LatihanStackParams = {
   PracticeSession: {
     examType: ExamType;
     subject: SubjectType;
-    packId: string;
+    packId?: string;
     subtopic?: string;
     questionCount?: number;
+    difficultyMode?: 'random' | 'hardest-first' | 'easiest-first' | 'sering-keluar';
+    /** Jika true, finalize akan tandai daily challenge sebagai done */
+    isDailyChallenge?: boolean;
   };
   SessionResult: { sessionId: string };
+  SkimTrainer: undefined;
 };
 
 // Tryout stack
@@ -63,6 +71,7 @@ export type ProfilStackParams = {
 
 // Screen prop helpers
 export type AuthScreenProps<T extends keyof AuthStackParams> = NativeStackScreenProps<AuthStackParams, T>;
+export type OnboardingScreenProps<T extends keyof OnboardingStackParams> = NativeStackScreenProps<OnboardingStackParams, T>;
 export type LatihanScreenProps<T extends keyof LatihanStackParams> = NativeStackScreenProps<LatihanStackParams, T>;
 export type TryoutScreenProps<T extends keyof TryoutStackParams> = NativeStackScreenProps<TryoutStackParams, T>;
 export type ProgressScreenProps<T extends keyof ProgressStackParams> = NativeStackScreenProps<ProgressStackParams, T>;

@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
+﻿import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/colors';
 import type { AuthScreenProps } from '../../navigation/types';
 
@@ -10,11 +11,12 @@ export function WelcomeScreen({ navigation }: AuthScreenProps<'Welcome'>) {
 
       {/* Hero section */}
       <View style={styles.hero}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoEmoji}>🎯</Text>
-          <View style={styles.flagAccent} />
-        </View>
-        <Text style={styles.appName}>Latihan Soal</Text>
+        <Image
+          source={require('../../../assets/wirago-logo.png')}
+          style={styles.logoImage}
+          resizeMode="contain"
+        />
+        <Text style={styles.appName}>Wirago Academy</Text>
         <Text style={styles.appSubtitle}>CPNS · TNI · Polri</Text>
         <Text style={styles.tagline}>
           Persiapkan dirimu dengan cerdas.{'\n'}Belajar sesuai cara otakmu bekerja.
@@ -55,7 +57,7 @@ export function WelcomeScreen({ navigation }: AuthScreenProps<'Welcome'>) {
 const FEATURES = [
   { icon: '🧠', label: 'Analisis gaya belajar personal' },
   { icon: '📚', label: 'Bank soal CPNS, TNI, dan Polri' },
-  { icon: '⏱️', label: 'Simulasi tryout seperti ujian asli' },
+  { icon: '⏱', label: 'Simulasi tryout seperti ujian asli' },
   { icon: '📶', label: 'Bisa belajar offline' },
   { icon: '🤖', label: 'AI tutor adaptif' },
 ];
@@ -72,27 +74,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
   },
-  logoContainer: {
-    width: 88,
-    height: 88,
-    borderRadius: 24,
-    backgroundColor: Colors.gray100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    position: 'relative',
-  },
-  logoEmoji: {
-    fontSize: 44,
-  },
-  flagAccent: {
-    position: 'absolute',
-    bottom: -4,
-    right: -4,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: Colors.primary,
+  logoImage: {
+    width: 220,
+    height: 120,
+    marginBottom: 12,
   },
   appName: {
     fontSize: 30,

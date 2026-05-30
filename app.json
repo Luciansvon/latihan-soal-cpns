@@ -1,23 +1,19 @@
 {
   "expo": {
-    "name": "Latihan Soal CPNS",
+    "name": "Wirago Academy",
     "slug": "latihan-soal-cpns",
+    "owner": "kudaliarjeparas-organization",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#FFFFFF"
-    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.personal.latihansoalcpns"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#FAF7F0",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "package": "com.personal.latihansoalcpns",
@@ -38,11 +34,30 @@
           "icon": "./assets/icon.png",
           "color": "#CC0001"
         }
-      ]
+      ],
+      "expo-updates",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#FAF7F0"
+        }
+      ],
+      "expo-font"
     ],
+    "updates": {
+      "url": "https://u.expo.dev/8f6258df-e864-4d0f-b97c-e19f316a1fbe",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "extra": {
       "eas": {
-        "projectId": "your-eas-project-id"
+        "projectId": "8f6258df-e864-4d0f-b97c-e19f316a1fbe"
       }
     }
   }

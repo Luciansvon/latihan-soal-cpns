@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, TextInput, TouchableOpacity,
-  SafeAreaView, KeyboardAvoidingView, Platform, Alert, ScrollView,
+  View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../../services/supabase';
 import { Colors } from '../../constants/colors';
@@ -40,8 +40,8 @@ export function RegisterScreen({ navigation }: AuthScreenProps<'Register'>) {
       Alert.alert('Pendaftaran gagal', error.message);
       return;
     }
-    // Navigate to onboarding after successful register
-    navigation.navigate('Onboarding');
+    // After successful signup, RootNavigator akan auto-route ke OnboardingStack
+    // via gate (isAuthenticated && !profile.learningStyle).
   }
 
   return (

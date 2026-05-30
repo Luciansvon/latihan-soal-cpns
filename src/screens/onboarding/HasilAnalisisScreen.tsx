@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,
+  View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/colors';
 import { summarizeLearningStyle } from '../../utils/LearningStyleEngine';
-import type { AuthScreenProps } from '../../navigation/types';
-import type { LearningStyleProfile } from '../../types/user.types';
+import type { OnboardingScreenProps } from '../../navigation/types';
 import { supabase } from '../../services/supabase';
-import { UserStateRepository } from '../../db/repositories/UserStateRepository';
+import { bootstrapProfile } from '../../services/profileBootstrap';
 import { getDatabase } from '../../db/database';
 
 const STYLE_COLORS: Record<string, string> = {
@@ -21,35 +21,72 @@ const STYLE_COLORS: Record<string, string> = {
   pragmatist: '#B45309',
 };
 
-export function HasilAnalisisScreen({ route, navigation }: AuthScreenProps<'HasilAnalisis'>) {
+export function HasilAnalisisScreen({ route }: OnboardingScreenProps<'HasilAnalisis'>) {
   const { profile } = route.params;
   const summary = summarizeLearningStyle(profile);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     saveProfile();
   }, []);
 
   async function saveProfile() {
-    // Initialize SQLite
     await getDatabase();
-
-    // Save to Supabase
     const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      await supabase.from('profiles').update({ learning_style: profile }).eq('id', user.id);
-
-      // Save locally
-      const existing = await UserStateRepository.get(user.id);
-      await UserStateRepository.upsert({
-        userId: user.id,
-        username: existing?.username,
-        xpTotal: existing?.xpTotal ?? 0,
-        level: existing?.level ?? 1,
-        streakCurrent: existing?.streakCurrent ?? 0,
-        streakLongest: existing?.streakLongest ?? 0,
-        learningStyle: profile,
-      });
+    if (!user) {
+      setSaveError('Sesi tidak ditemukan. Coba login ulang.');
+      return;
     }
+    const { error } = await supabase
+      .from('profiles')
+      .update({ learning_style: profile })
+      .eq('id', user.id);
+    if (error) {
+      setSaveError(error.message);
+    }
+  }
+
+  async function handleFinish() {
+    if (saving) return;
+    setSaving(true);
+    setSaveError(null);
+
+    // Re-bootstrap profile dari Supabase: ambil semua field terbaru (target_exam,
+    // province, learning_style) → upsert ke local + set di Zustand store.
+    // Setelah ini, RootNavigator gate (learningStyle != null) akan switch ke MainApp.
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setSaving(false);
+      Alert.alert('Sesi tidak ditemukan', 'Coba login ulang.');
+      return;
+    }
+
+    // Pastikan learning_style sudah tersimpan di server (kalau useEffect sebelumnya
+    // gagal silent, retry di sini sebelum bootstrap).
+    if (saveError) {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ learning_style: profile })
+        .eq('id', user.id);
+      if (error) {
+        setSaving(false);
+        Alert.alert('Gagal menyimpan profil', error.message);
+        return;
+      }
+    }
+
+    const result = await bootstrapProfile(user.id);
+    setSaving(false);
+
+    if (!result || !result.learningStyle) {
+      Alert.alert(
+        'Gagal memuat profil',
+        'Coba lagi atau cek koneksi internet kamu.'
+      );
+    }
+    // Jika sukses, RootNavigator otomatis switch ke MainApp karena
+    // profile.learningStyle di store sekarang terisi.
   }
 
   // Sort dimensions by score for display
@@ -137,14 +174,14 @@ export function HasilAnalisisScreen({ route, navigation }: AuthScreenProps<'Hasi
 
         {/* CTA */}
         <TouchableOpacity
-          style={styles.startBtn}
-          onPress={() => {
-            // Navigate will be handled by auth state change (profile saved = authenticated)
-            // The RootNavigator will switch to MainApp
-          }}
+          style={[styles.startBtn, saving && { opacity: 0.6 }]}
+          onPress={handleFinish}
+          disabled={saving}
           activeOpacity={0.85}
         >
-          <Text style={styles.startBtnText}>Mulai Belajar Sekarang! 🚀</Text>
+          <Text style={styles.startBtnText}>
+            {saving ? 'Menyimpan...' : 'Mulai Belajar Sekarang! 🚀'}
+          </Text>
         </TouchableOpacity>
 
       </ScrollView>

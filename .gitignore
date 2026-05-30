@@ -42,3 +42,23 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# IDE / editor
+.vscode/
+.idea/
+*.iml
+
+# Claude Code local config
+.claude/settings.local.json
+
+# Raw asset archives (besar, biasanya source material yang akan di-process terpisah)
+*.7z
+*.zip
+*.tar.gz
+
+# Raw soal foto (hasil ekstrak 7z — source material untuk content mining, sensitif)
+Soal real cpns/
+
+# Source logo (besar, hanya untuk regenerate icon variants via scripts/generate-app-icons.mjs)
+logo_apk.png
+

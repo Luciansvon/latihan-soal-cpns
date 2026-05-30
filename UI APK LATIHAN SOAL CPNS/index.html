@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CPNS Latihan Soal — UI Prototype</title>
+
+<!-- React + Babel (pinned) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    /* Stage backdrop — slightly darker so the phone frame reads as a contained object */
+    background: radial-gradient(ellipse at 30% 20%, #D8D3C2 0%, #C9C4B3 60%, #B8B3A2 100%);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  #root { min-height: 100%; }
+  .stage {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 40px 24px;
+  }
+  .phone-shadow {
+    box-shadow: 0 50px 100px -30px rgba(0,0,0,0.35), 0 30px 60px -30px rgba(0,0,0,0.25);
+    border-radius: 0; transition: transform .3s ease;
+  }
+  .meta {
+    position: fixed; top: 16px; left: 20px; font-family: 'Inter';
+    font-size: 11px; color: rgba(0,0,0,0.45); letter-spacing: 0.4px; font-weight: 600;
+    text-transform: uppercase; pointer-events: none;
+  }
+  .meta b { color: rgba(0,0,0,0.7); font-weight: 700; letter-spacing: -0.1px; text-transform: none; font-size: 13px; display: block; margin-bottom: 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="proto-hangat.jsx"></script>
+
+<script type="text/babel">
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "lang": "id",
+    "fontSize": 15,
+    "dark": false,
+    "themeB": "azure"
+  }/*EDITMODE-END*/;
+
+  function App() {
+    const [tw, setTweak] = useTweaks(TWEAK_DEFAULTS);
+    const [jump, setJump] = React.useState({ screen: null, seq: 0 });
+    const goToScreen = (s) => setJump({ screen: s, seq: jump.seq + 1 });
+
+    const twB = { ...tw, theme: tw.themeB };
+
+    const screens = [
+      { v: 'onboarding', l: 'Onboarding' },
+      { v: 'login', l: 'Login / Daftar' },
+      { v: 'home', l: 'Beranda' },
+      { v: 'subtest', l: 'Pilih Subtes' },
+      { v: 'paket', l: 'Paket Soal' },
+      { v: 'soal', l: 'Halaman Soal' },
+      { v: 'result', l: 'Hasil' },
+      { v: 'pembahasan', l: 'Pembahasan' },
+      { v: 'riwayat', l: 'Riwayat Sesi' },
+      { v: 'stats', l: 'Statistik' },
+      { v: 'profile', l: 'Profil' },
+    ];
+
+    const paletteB = {
+      mint: '#1F8A6B', ocean: '#0F6D8A', azure: '#2F62D9',
+      terracotta: '#C25A3D', plum: '#7A3A6E', forest: '#365E3D',
+    };
+    const reverseB = Object.fromEntries(Object.entries(paletteB).map(([k, v]) => [v.toLowerCase(), k]));
+
+    return (
+      <>
+        <div className="meta">
+          <b>CPNS · Latihan Soal</b>
+          Hi-fi prototype · Android · Azure default
+        </div>
+
+        <div className="stage">
+          <div className="phone-shadow">
+            <PhoneFrame
+              chromeBg={twB.dark ? '#141210' : '#E5E1D2'}
+              chromeFg={twB.dark ? '#F2EEE6' : '#1A2A40'}
+              borderColor="rgba(0,0,0,0.18)"
+              width={412} height={892}>
+              <ProtoHangat tweaks={twB} jump={jump} />
+            </PhoneFrame>
+          </div>
+        </div>
+
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="Konten" />
+          <TweakRadio label="Bahasa" value={tw.lang}
+            options={[{ value: 'id', label: 'ID' }, { value: 'en', label: 'EN' }]}
+            onChange={(v) => setTweak('lang', v)} />
+          <TweakSelect label="Loncat ke layar" value={jump.screen || ''}
+            options={[{ value: '', label: '— pilih layar —' }, ...screens.map((s) => ({ value: s.v, label: s.l }))]}
+            onChange={(v) => v && goToScreen(v)} />
+
+          <TweakSection label="Tipografi" />
+          <TweakSlider label="Ukuran teks" value={tw.fontSize} min={13} max={18} unit="px"
+            onChange={(v) => setTweak('fontSize', v)} />
+
+          <TweakSection label="Mode" />
+          <TweakToggle label="Mode gelap" value={tw.dark} onChange={(v) => setTweak('dark', v)} />
+
+          <TweakSection label="Tema warna" />
+          <TweakColor label="Palette"
+            value={paletteB[tw.themeB] || paletteB.azure}
+            options={Object.values(paletteB)}
+            onChange={(v) => setTweak('themeB', reverseB[v.toLowerCase()])} />
+          <TweakButton label="Reset ke onboarding" onClick={() => goToScreen('onboarding')} />
+        </TweaksPanel>
+      </>
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<App />);
+</script>
+</body>
+</html>

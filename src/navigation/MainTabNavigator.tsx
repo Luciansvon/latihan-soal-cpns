@@ -2,7 +2,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
-import { Colors } from '../constants/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors, CognitiveCalm } from '../constants/colors';
 import type { MainTabParams, LatihanStackParams, TryoutStackParams, ProgressStackParams, ProfilStackParams } from './types';
 
 // Screens - Beranda
@@ -11,8 +12,10 @@ import { BerandaScreen } from '../screens/beranda/BerandaScreen';
 // Screens - Latihan
 import { LatihanHomeScreen } from '../screens/latihan/LatihanHomeScreen';
 import { CategoryListScreen } from '../screens/latihan/CategoryListScreen';
+import { SubtopicListScreen } from '../screens/latihan/SubtopicListScreen';
 import { PracticeSessionScreen } from '../screens/latihan/PracticeSessionScreen';
 import { SessionResultScreen } from '../screens/latihan/SessionResultScreen';
+import { SkimTrainerScreen } from '../screens/latihan/SkimTrainerScreen';
 
 // Screens - Tryout
 import { TryoutListScreen } from '../screens/tryout/TryoutListScreen';
@@ -45,8 +48,10 @@ function LatihanNavigator() {
     <LatihanStack.Navigator screenOptions={{ headerShown: false }}>
       <LatihanStack.Screen name="LatihanHome" component={LatihanHomeScreen} />
       <LatihanStack.Screen name="CategoryList" component={CategoryListScreen} />
+      <LatihanStack.Screen name="SubtopicList" component={SubtopicListScreen} />
       <LatihanStack.Screen name="PracticeSession" component={PracticeSessionScreen} />
       <LatihanStack.Screen name="SessionResult" component={SessionResultScreen} />
+      <LatihanStack.Screen name="SkimTrainer" component={SkimTrainerScreen} />
     </LatihanStack.Navigator>
   );
 }
@@ -84,6 +89,10 @@ function ProfilNavigator() {
 }
 
 export function MainTabNavigator() {
+  const insets = useSafeAreaInsets();
+  // Tambahin inset bottom (gesture navigation bar) ke padding & height tab bar
+  // supaya gak ketutupan tombol home/back Android.
+  const bottomInset = Platform.OS === 'ios' ? Math.max(insets.bottom, 20) : insets.bottom;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -91,15 +100,15 @@ export function MainTabNavigator() {
         tabBarIcon: ({ focused, color }) => (
           <TabIcon name={route.name as any} focused={focused} color={color} />
         ),
-        tabBarActiveTintColor: Colors.primary,
+        tabBarActiveTintColor: CognitiveCalm.primary,
         tabBarInactiveTintColor: Colors.gray400,
         tabBarStyle: {
           backgroundColor: Colors.white,
           borderTopColor: Colors.border,
           borderTopWidth: 1,
-          paddingBottom: Platform.OS === 'ios' ? 20 : 8,
+          paddingBottom: bottomInset + 8,
           paddingTop: 8,
-          height: Platform.OS === 'ios' ? 85 : 65,
+          height: 65 + bottomInset,
         },
         tabBarLabelStyle: {
           fontSize: 11,

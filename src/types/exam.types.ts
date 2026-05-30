@@ -33,6 +33,19 @@ export interface TryoutSection {
   passingScore: number;
 }
 
+export interface TryoutTemplate {
+  id: string;
+  examType: ExamType;
+  title: string;
+  description?: string;
+  durationMinutes: number;
+  passingScore?: number;
+  sections: TryoutSection[];
+  isFree: boolean;
+  isPublished: boolean;
+  createdAt: string;
+}
+
 export const SUBJECT_LABELS: Record<SubjectType, string> = {
   TWK: 'Tes Wawasan Kebangsaan',
   TIU: 'Tes Intelegensia Umum',
